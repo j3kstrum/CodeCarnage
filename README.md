@@ -10,3 +10,5 @@ ForceCode is an arena battle game where each side indirectly controls a robot. T
 ### Is there more?
 
 ForceCode intends on adding more features, including the ability to interact with the environment during the arena matchups to tilt the battle in favor of the user's robot. As the game develops, other intended features will be listed here.
+
+Contributions are always welcome!
