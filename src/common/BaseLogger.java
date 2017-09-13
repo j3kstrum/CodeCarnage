@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
  * @author jacob.ekstrum
  */
 public class BaseLogger {
-    private String _NAME;
-    private String _FORMAT;
-    private PrintStream _STREAM;
+    private String _name;
+    private String _format;
+    private PrintStream _stream;
 
     /**
      * Constructor for the logger. At its most basic, produces a logger with the given name
@@ -40,9 +40,9 @@ public class BaseLogger {
      * @param format The format to be used for the logger's output.
      */
     public BaseLogger(String name, PrintStream stream, String format) {
-        this._NAME = name;
-        this._STREAM = stream;
-        this._FORMAT = format;
+        this._name = name;
+        this._stream = stream;
+        this._format = format;
     }
 
     /**
@@ -91,13 +91,13 @@ public class BaseLogger {
      * @param level The level to log at.
      */
     private void print(String message, String level) {
-        String msg = this.format(this._FORMAT, level);
+        String msg = this.format(this._format, level);
         if (msg.contains("%(message)")) {
             msg = msg.replace("%(message)", message);
         } else {
             msg = msg + " " + message;
         }
-        this._STREAM.println(msg);
+        this._stream.println(msg);
     }
 
     /**
@@ -122,7 +122,7 @@ public class BaseLogger {
      */
     private String formatName(String formattable) {
         if (formattable.contains("%(name)")) {
-            return formattable.replace("%(name)", this._NAME);
+            return formattable.replace("%(name)", this._name);
         }
         return formattable;
     }
