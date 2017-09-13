@@ -1,5 +1,7 @@
-**
-!.gitignore
-!LICENSE
-!README.md
-!src/**
+!**
+out
+out/**
+.idea
+.idea/**
+*.iml
+.idea/
