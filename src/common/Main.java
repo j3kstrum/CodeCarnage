@@ -1,5 +1,6 @@
 package common;
 import engine.core.Engine;
+import gui.GUI;
 
 /**
  * Class responsible for initializing all core modules of the project.
@@ -11,13 +12,15 @@ import engine.core.Engine;
 public class Main {
 
     private static Engine _ENGINE;
+    private static GUI _GUI;
 
     /**
-     * Main method for the project. Responsible for initializing all core modules.
+     * GUI method for the project. Responsible for initializing all core modules.
      * @param args The system's command line arguments. This should be empty.
      */
-    public static void main(int[] args) {
+    public static void main(String[] args) {
         _ENGINE = new Engine();
+        _GUI = new GUI(args);
     }
 
 }
