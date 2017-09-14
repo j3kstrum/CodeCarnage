@@ -1,5 +1,7 @@
 package main.java.engine.core;
 
+import common.BaseLogger;
+
 /**
  * The main class for the main.java.engine.
  * This class will be initialized and will be responsible for game timing, acting as a game pipeline, etc.
@@ -11,13 +13,15 @@ public class Engine {
     // Hard shutdown boolean. Causes main loop to terminate with no chance for recovery.
     private static boolean _SHUTDOWN = false;
 
+    private static final BaseLogger _ENGINE_LOGGER = new BaseLogger("Engine");
+
     public Engine() {
+        _ENGINE_LOGGER.info("Engine logger created.");
         while (!_SHUTDOWN) {
-            System.out.println("Init");
             break;
         }
         if (!this.cleanup()) {
-            System.err.println("SERVER ERROR: Cleanup failed!");
+            _ENGINE_LOGGER.critical("Engine cleanup failed.");
         }
     }
 
