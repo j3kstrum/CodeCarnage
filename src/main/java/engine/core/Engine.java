@@ -1,6 +1,6 @@
 package main.java.engine.core;
 
-import common.BaseLogger;
+import main.java.common.BaseLogger;
 
 /**
  * The main class for the main.java.engine.

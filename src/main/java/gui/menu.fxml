@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="113.0" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="113.0" prefWidth="291.0" xmlns="http://javafx.com/javafx/8.0.102"
+      fx:controller="main.java.gui.Controller">
+    <children>
+        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity"
+                       prefHeight="35.0" prefWidth="302.0" text="Welcome to CodeCarnage!" textAlignment="CENTER"/>
+            </children>
+        </Pane>
+        <GridPane prefHeight="18.0" prefWidth="265.0">
+            <columnConstraints>
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0"
+                                   percentWidth="50.0" prefWidth="59.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="128.0" minWidth="10.0" percentWidth="50.0"
+                                   prefWidth="112.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <RadioButton fx:id="optionPlay" mnemonicParsing="false" prefHeight="17.0" prefWidth="60.0"
+                             selected="true" text="Play" GridPane.halignment="CENTER">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="toggleGroup"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="optionSettings" mnemonicParsing="false" text="Settings" toggleGroup="$toggleGroup"
+                             GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+            </children>
+            <VBox.margin>
+                <Insets top="10.0"/>
+            </VBox.margin>
+        </GridPane>
+        <ButtonBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                   prefHeight="48.0" prefWidth="281.0">
+            <buttons>
+                <Button fx:id="buttonPlay" defaultButton="true" minWidth="51.0" mnemonicParsing="false"
+                        onAction="#click" prefHeight="25.0" prefWidth="281.0" text="Play"/>
+            </buttons>
+            <VBox.margin>
+                <Insets right="10.0" top="10.0"/>
+            </VBox.margin>
+        </ButtonBar>
+    </children>
+</VBox>
