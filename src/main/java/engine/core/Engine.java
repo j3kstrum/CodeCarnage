@@ -1,7 +1,7 @@
-package engine.core;
+package main.java.engine.core;
 
 /**
- * The main class for the engine.
+ * The main class for the main.java.engine.
  * This class will be initialized and will be responsible for game timing, acting as a game pipeline, etc.
  *
  * Created by jacob.ekstrum on 9/11/17.

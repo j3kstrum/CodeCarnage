@@ -1,4 +1,4 @@
-package common;
+package main.java.common;
 
 public class BaseLogger {
     private String _NAME;
