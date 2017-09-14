@@ -1,6 +1,7 @@
 package common;
 import engine.core.Engine;
 import gui.GUI;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  * Class responsible for initializing all core modules of the project.
@@ -19,8 +20,10 @@ public class Main {
      * @param args The system's command line arguments. This should be empty.
      */
     public static void main(String[] args) {
+        new Thread(
+                () -> _GUI = new GUI(args)
+        ).start();
         _ENGINE = new Engine();
-        _GUI = new GUI(args);
     }
 
 }
