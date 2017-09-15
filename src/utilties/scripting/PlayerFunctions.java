@@ -7,7 +7,9 @@ import utilties.models.Map;
 public class PlayerFunctions {
 
     public static void Move(Map map, Location location, Player player){
-        map.setLocation(player, location);
+        if(!map.isOccupied(location)){
+            map.setLocation(player, location);
+        }
     }
 
 }

@@ -16,6 +16,14 @@ public class Map {
         initializeMap();
     }
 
+
+    public boolean isOccupied(Location location){
+        if(getTile(location).getEntityType() == IEntity.EntityType.EMPTY){
+            return  true;
+        }
+        return false;
+    }
+
     public int getNumberOfColumns(){
         return numberOfColumns;
     }
@@ -26,10 +34,10 @@ public class Map {
 
     public void setLocation(IEntity iEntity, Location location){
         Location previousLocation = iEntity.getLocation();
-        Tile previousTile = map[previousLocation.getX()][previousLocation.getY()];
+        Tile previousTile = getTile(location);
         iEntity.setLocation(location);
-        map[location.getX()][location.getY()] = previousTile;
-        map[previousLocation.getX()][previousLocation.getY()] = createBlankTile(location);
+        setTile(location, previousTile);
+        setTile(previousLocation, createBlankTile(location));
     }
 
     private void initializeMap() {
@@ -43,7 +51,19 @@ public class Map {
         }
     }
 
+    private void setTile(Location location, Tile tile){
+        map[location.getX()][location.getY()] = tile;
+    }
+
+    private Tile getTile(Location location){
+        return map[location.getX()][location.getY()];
+    }
+
     private Tile createBlankTile(Location location){
         return new Tile(location, new Empty(location));
+    }
+
+    public Tile[][] getMap() {
+        return this.map;
     }
 }

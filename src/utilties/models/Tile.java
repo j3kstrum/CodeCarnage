@@ -22,6 +22,6 @@ public class Tile {
     }
 
     public IEntity.EntityType getEntityType(){
-        return this.entity.getEntityType();
+        return entity.getEntityType();
     }
 }
