@@ -20,8 +20,10 @@ public class Main {
      * @param args The system's command line arguments. This should be empty.
      */
     public static void main(String[] args) {
+        new Thread(
+                () -> _GUI = new GUI(args)
+        ).start();
         _ENGINE = new Engine();
-        _GUI = new GUI(args);
     }
 
 }
