@@ -37,6 +37,30 @@ public class Engine {
     }
 
     /**
+     * Wrapper for shutdown(boolean now) that uses default argument now=false.
+     * @return The value returned by shutting down with now as false.
+     */
+    public boolean shutdown() {
+        return this.shutdown(false);
+    }
+
+    /**
+     * Safe shutdown handler for the engine that can be called from external functions.
+     * @param now Whether to immediately terminate the program at the end of the tick or to wait.
+     * @return true if successful, false if shutdown failed.
+     */
+    public boolean shutdown(boolean now) {
+        if (now) {
+            this._shutdown = true;
+        } else {
+            ENGINE_LOGGER.warning("Currently can not shutdown engine with delay. " +
+                    "Terminating immediately following current tick.");
+            this._shutdown = true;
+        }
+        return true;
+    }
+
+    /**
      * Ensures that the proper amount of time since the last tick has elapsed.
      * If not, sleeps until this condition is met.
      * @param lastTick The system time polled at the last tick.
@@ -61,7 +85,13 @@ public class Engine {
      */
     private void tick() {
         // TODO: Implement
+        // TODO: Consider moving to 'timing' package or 'tick' package.
         ENGINE_LOGGER.info("Tick at " + String.valueOf(System.currentTimeMillis()) + "...");
+        if (System.currentTimeMillis() % 100 == 64) {
+            ENGINE_LOGGER.info("Wow! How awesome! The engine ticked and ended in just the right 2-digit number!");
+            ENGINE_LOGGER.fatal("Shutting down due to awesomeness.");
+            this.shutdown();
+        }
     }
 
     /**
@@ -73,5 +103,4 @@ public class Engine {
         return true;
     }
 
-    // TODO: Populate
 }
