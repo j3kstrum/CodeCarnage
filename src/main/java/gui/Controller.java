@@ -10,7 +10,7 @@ public class Controller {
     ToggleGroup toggleGroup;
 
     /*
-    Click event handler for buttonGo on menu
+    Click event handler for Go button on menu
      */
     public void click(ActionEvent action) {
         RadioButton checked = (RadioButton) toggleGroup.getSelectedToggle();
