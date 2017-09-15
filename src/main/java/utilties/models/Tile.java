@@ -1,6 +1,6 @@
-package utilties.models;
+package main.java.utilties.models;
 
-import utilties.entities.IEntity;
+import main.java.utilties.entities.IEntity;
 
 public class Tile {
 

@@ -1,4 +1,4 @@
-package utilties.models;
+package main.java.utilties.models;
 
 public class Location {
 

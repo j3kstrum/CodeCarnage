@@ -1,6 +1,6 @@
-package utilties.entities;
+package main.java.utilties.entities;
 
-import utilties.models.Location;
+import main.java.utilties.models.Location;
 
 public class Player implements IEntity{
 

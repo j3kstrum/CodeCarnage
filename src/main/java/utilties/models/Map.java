@@ -1,7 +1,7 @@
-package utilties.models;
+package main.java.utilties.models;
 
-import utilties.entities.Empty;
-import utilties.entities.IEntity;
+import main.java.utilties.entities.Empty;
+import main.java.utilties.entities.IEntity;
 
 public class Map {
 
@@ -16,12 +16,15 @@ public class Map {
         initializeMap();
     }
 
+    private void initializeMap() {
+        map = new Tile[numberOfColumns][numberOfRows];
 
-    public boolean isOccupied(Location location){
-        if(getTile(location).getEntityType() == IEntity.EntityType.EMPTY){
-            return  true;
+        for (int x = 0; x < numberOfColumns; x++) {
+            for (int y = 0; y < numberOfRows; y++) {
+                Location location = new Location(x, y);
+                map[x][y] = createBlankTile(location);
+            }
         }
-        return false;
     }
 
     public int getNumberOfColumns(){
@@ -40,23 +43,19 @@ public class Map {
         setTile(previousLocation, createBlankTile(location));
     }
 
-    private void initializeMap() {
-        map = new Tile[numberOfColumns][numberOfRows];
-
-        for (int x = 0; x < numberOfColumns; x++) {
-            for (int y = 0; y < numberOfRows; y++) {
-                Location location = new Location(x, y);
-                map[x][y] = createBlankTile(location);
-            }
-        }
-    }
-
-    private void setTile(Location location, Tile tile){
+    public void setTile(Location location, Tile tile){
         map[location.getX()][location.getY()] = tile;
     }
 
-    private Tile getTile(Location location){
+    public Tile getTile(Location location){
         return map[location.getX()][location.getY()];
+    }
+
+    public boolean isTileOccupied(Location location){
+        if(getTile(location).getEntityType() == IEntity.EntityType.EMPTY){
+            return  true;
+        }
+        return false;
     }
 
     private Tile createBlankTile(Location location){
