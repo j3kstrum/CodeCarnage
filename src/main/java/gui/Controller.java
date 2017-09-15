@@ -9,7 +9,9 @@ public class Controller {
     @FXML
     ToggleGroup toggleGroup;
 
-    // Click event for buttonPlay
+    /*
+    Click event handler for buttonGo on menu
+     */
     public void click(ActionEvent action) {
         RadioButton checked = (RadioButton) toggleGroup.getSelectedToggle();
 
