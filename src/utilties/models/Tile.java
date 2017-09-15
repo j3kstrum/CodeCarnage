@@ -1,6 +1,6 @@
 package utilties.models;
 
-import utilties.models.entities.IEntity;
+import utilties.entities.IEntity;
 
 public class Tile {
 

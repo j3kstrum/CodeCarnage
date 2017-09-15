@@ -1,4 +1,4 @@
-package utilties.models.entities;
+package utilties.entities;
 
 import utilties.models.Location;
 
