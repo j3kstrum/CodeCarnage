@@ -5,6 +5,7 @@ An intuitive and simple arena battle game involving strategy.
 Sean Brais, Jacob Ekstrum, Nick Martin, and David Olsen.
 
 Jacob is responsible for working on the Game Engine.
+The game engine will handle recurring logic.
 
 Sean is reponsible for GameLogic / AI.
 
