@@ -14,16 +14,17 @@ public class Main {
 
     private static Engine _ENGINE;
     private static GUI _GUI;
+    private static final BaseLogger LOGGER = new BaseLogger("Main");
 
     /**
      * GUI method for the project. Responsible for initializing all core modules.
      * @param args The system's command line arguments. This should be empty.
      */
     public static void main(String[] args) {
-        new Thread(
-                () -> _GUI = new GUI(args)
-        ).start();
+        _GUI = new GUI(args);
         _ENGINE = new Engine();
+        LOGGER.debug("GUI and Engine created. Setting observer...");
+        _GUI.observe(_ENGINE);
     }
 
 }
