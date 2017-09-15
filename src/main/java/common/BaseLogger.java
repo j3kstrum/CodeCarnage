@@ -1,4 +1,4 @@
-package common;
+package main.java.common;
 
 import java.io.PrintStream;
 import java.time.LocalDateTime;

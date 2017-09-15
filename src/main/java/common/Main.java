@@ -1,7 +1,7 @@
-package common;
-import engine.core.Engine;
-import gui.GUI;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+package main.java.common;
+
+import main.java.engine.core.Engine;
+import main.java.gui.GUI;
 
 /**
  * Class responsible for initializing all core modules of the project.
