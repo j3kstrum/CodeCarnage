@@ -1,8 +1,10 @@
 package main.java.utilties.models;
 
+import main.java.interpreter.PlayerScriptCommand;
 import main.java.utilties.entities.Entity;
 import main.java.utilties.entities.Player;
-import main.java.utilties.scripting.PlayerFunctions;
+
+import java.util.ArrayList;
 
 /**
  * Model for Game.  Execute nextTurn to progress through game.
@@ -13,6 +15,9 @@ public class Game {
 
     private Player player;
     private Player opponent;
+
+    private ArrayList<PlayerScriptCommand> playerCommands;
+    private ArrayList<PlayerScriptCommand> opponentCommands;
 
     private boolean isGameComplete;
 
@@ -50,8 +55,11 @@ public class Game {
      * @return Updated Map
      */
     public Map nextTurn(){
-        PlayerFunctions.Move(map, new Location(player.getLocation().getX() + 1, player.getLocation().getY()), player);
-        PlayerFunctions.Move(map, new Location(opponent.getLocation().getX() - 1, opponent.getLocation().getY()), opponent);
+
+        // NOTE this is just an example of how the interpreter will work - using dummy values for now
+        playerCommands.get(0).performAction(map, new Location(player.getLocation().getX() + 1, player.getLocation().getY()), player);
+        opponentCommands.get(0).performAction(map, new Location(opponent.getLocation().getX() - 1, opponent.getLocation().getY()), opponent);
+
         return map;
     }
 
