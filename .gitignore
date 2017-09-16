@@ -2,7 +2,9 @@
 out
 out/**
 .idea
-.idea/**
 *.iml
 .idea/
-lib/
+.gradle/
+*.ipr
+*.iws
+build/

@@ -1,4 +1,4 @@
-package main.java.gui;
+package gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,9 @@ public class GUI extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
+        primaryStage.getScene().getStylesheets().add("/styles/sample.css");
         primaryStage.setResizable(false);
+
         primaryStage.show();
     }
 

@@ -17,3 +17,12 @@ CodeCarnage is an arena battle game where each side indirectly controls a robot.
 CodeCarnage intends on adding more features, including the ability to interact with the environment during the arena matchups to tilt the battle in favor of the user's robot. As the game develops, other intended features will be listed here.
 
 Contributions are always welcome!
+
+## Build Information for contributors
+Please use Gradle for best dependency support.  https://gradle.org/install/
+
+When building locally, simply run the command 
+
+'gradle idea'
+
+ from the root project directory to build all dependencies.
