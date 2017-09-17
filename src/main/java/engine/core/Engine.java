@@ -1,9 +1,9 @@
-package main.java.engine.core;
+package engine.core;
 
-import main.java.common.BaseLogger;
-import main.java.engine.access.extern.EngineToGUI;
-import main.java.engine.access.extern.EngineToScripting;
-import main.java.engine.data.EngineData;
+import common.BaseLogger;
+import engine.access.extern.EngineToGUI;
+import engine.access.extern.EngineToScripting;
+import engine.data.EngineData;
 
 /**
  * The main class for the main.java.engine.

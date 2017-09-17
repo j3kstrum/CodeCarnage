@@ -1,7 +1,7 @@
-package main.java.common;
+package common;
 
-import main.java.engine.core.Engine;
-import main.java.gui.GUI;
+import engine.core.Engine;
+import gui.GUI;
 
 /**
  * Class responsible for initializing all core modules of the project.

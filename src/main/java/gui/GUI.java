@@ -1,4 +1,4 @@
-package main.java.gui;
+package gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +25,8 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("menu.fxml"));
+        Parent root = loader.load();
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);

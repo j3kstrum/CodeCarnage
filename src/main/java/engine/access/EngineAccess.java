@@ -1,4 +1,4 @@
-package main.java.engine.access;
+package engine.access;
 
 /**
  * Class designed to allow other modules to access relevant and pertinent data from the main.java.engine.
