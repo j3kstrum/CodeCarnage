@@ -1,7 +1,7 @@
-package main.java.engine.access.extern;
+package engine.access.extern;
 
-import main.java.common.BaseLogger;
-import main.java.gui.access.GUIAccess;
+import common.BaseLogger;
+import gui.access.GUIAccess;
 
 
 /**
