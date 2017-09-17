@@ -4,11 +4,6 @@ An intuitive and simple arena battle game involving strategy.
 ## Who?
 Sean Brais, Jacob Ekstrum, Nick Martin, and David Olsen.
 
-Jacob is responsible for working on the Game Engine.
-The game engine will handle recurring logic.
-
-Sean is reponsible for GameLogic / AI.
-
 ## What?
 CodeCarnage is an arena battle game where each side indirectly controls a robot. The robot is manipulated through a custom script that the user creates through a drag-and-drop interface, allowing infinite customization.
 

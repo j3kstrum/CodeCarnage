@@ -5,8 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.java.common.BaseLogger;
-import main.java.engine.core.Engine;
+import common.BaseLogger;
+import engine.core.Engine;
 
 public class GUI extends Application {
 

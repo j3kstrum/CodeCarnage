@@ -1,4 +1,4 @@
-package main.java.common.data;
+package common.data;
 
 /**
  * The class representing the Game Map.
