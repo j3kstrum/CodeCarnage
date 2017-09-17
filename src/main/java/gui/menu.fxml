@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.GaussianBlur?>
@@ -10,16 +9,16 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-           minWidth="-Infinity" prefHeight="303.0" prefWidth="507.0" xmlns="http://javafx.com/javafx/8.0.102"
-           fx:controller="main.java.gui.Controller">
+           minWidth="-Infinity" prefHeight="303.0" prefWidth="507.0" stylesheets="/styles/sample.css"
+           xmlns="http://javafx.com/javafx/8.0.102" fx:controller="gui.Controller">
     <children>
-        <ImageView fitHeight="304.0" fitWidth="510.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../resources/map-image.png"/>
-            </image>
+        <ImageView id="imageView" fitHeight="304.0" fitWidth="510.0" pickOnBounds="true" preserveRatio="true">
             <effect>
                 <GaussianBlur radius="4.75"/>
             </effect>
+            <image>
+                <Image url="/map-image.png"/>
+            </image>
         </ImageView>
         <AnchorPane>
             <children>
@@ -30,9 +29,8 @@
                     </font>
                 </Label>
                 <JFXButton buttonType="RAISED" layoutX="113.0" layoutY="206.0" prefHeight="25.0" prefWidth="281.0"
-                           stylesheets="@../../resources/styles/sample.css" text="Start Game" textFill="WHITE"/>
-                <JFXButton layoutX="113.0" layoutY="249.0" prefHeight="25.0" prefWidth="281.0"
-                           stylesheets="@../../resources/styles/sample.css" text="Settings"/>
+                           text="Start Game" textFill="WHITE"/>
+                <JFXButton layoutX="113.0" layoutY="249.0" prefHeight="25.0" prefWidth="281.0" text="Settings"/>
             </children>
         </AnchorPane>
     </children>
