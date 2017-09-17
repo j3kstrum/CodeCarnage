@@ -1,4 +1,4 @@
-package main.java.gui.access;
+package gui.access;
 
 /**
  * GUI Access class. Allows for the engine to interface with the GUI.

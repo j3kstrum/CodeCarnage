@@ -1,8 +1,8 @@
-package main.java.engine.access.extern;
+package engine.access.extern;
 
-import main.java.common.BaseLogger;
-import main.java.common.data.GameMap;
-import main.java.scripting.access.ScriptingAccess;
+import common.BaseLogger;
+import common.data.GameMap;
+import scripting.access.ScriptingAccess;
 
 /**
  * Class that interfaces between the Engine and the Scripting framework. In particular, this

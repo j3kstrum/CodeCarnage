@@ -1,6 +1,6 @@
-package main.java.scripting.access;
+package scripting.access;
 
-import main.java.common.data.GameMap;
+import common.data.GameMap;
 
 /**
  * Class designed to be a listener for other modules requiring scripting data.

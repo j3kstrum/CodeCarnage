@@ -1,7 +1,7 @@
-package main.java.engine.data;
+package engine.data;
 
-import main.java.common.BaseLogger;
-import main.java.common.data.GameMap;
+import common.BaseLogger;
+import common.data.GameMap;
 
 /**
  * The class containing the Engine's Data. It handles all lower-level data objects pertaining to the engine.
