@@ -1,6 +1,9 @@
 package engine.core;
 
 import common.BaseLogger;
+import engine.access.extern.EngineToGUI;
+import engine.access.extern.EngineToScripting;
+import engine.data.EngineData;
 
 /**
  * The main class for the main.java.engine.
@@ -13,9 +16,12 @@ public class Engine {
     // Hard shutdown boolean. Causes main loop to terminate with no chance for recovery.
     private boolean _shutdown = false;
 
+    // The Engine's Database.
+    private final EngineData DATA;
+
     // The amount of time for each game tick.
     private static final long TICK_TIME = 250;
-    private boolean _inGame = false;
+    private boolean _inCoreGame = false;
 
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
@@ -23,6 +29,13 @@ public class Engine {
      * Initializes the Engine and performs the main ticking loop.
      */
     public Engine() {
+        DATA = new EngineData();
+        new Thread(
+                () -> this.start()
+        ).start();
+    }
+
+    private void start() {
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
         long lastTick = System.currentTimeMillis();
         while (!_shutdown) {
@@ -84,9 +97,16 @@ public class Engine {
      * Performs all of the necessary game logic for one tick, or turn, if currently in-game.
      */
     private void tick() {
-        // TODO: Implement
-        // TODO: Consider moving to 'timing' package or 'tick' package.
-        ENGINE_LOGGER.info("Tick at " + String.valueOf(System.currentTimeMillis()) + "...");
+
+        if (_inCoreGame) {
+            this.DATA.setMap(
+                    EngineToScripting.nextTurn(
+                            this.DATA.getMap()
+                    )
+            );
+            EngineToGUI.update();
+        }
+
         if (System.currentTimeMillis() % 100 == 64) {
             ENGINE_LOGGER.info("Wow! How awesome! The engine ticked and ended in just the right 2-digit number!");
             ENGINE_LOGGER.fatal("Shutting down due to awesomeness.");
@@ -100,7 +120,23 @@ public class Engine {
      */
     private boolean cleanup(){
         // TODO: Populate
+        ENGINE_LOGGER.warning("Currently have no engine cleanup code.");
         return true;
+    }
+
+    /**
+     * Starts the game from the engine's perspective.
+     * NOTE: This is a *hard* game start; that is, the battle is occurring here.
+     */
+    public void startGame() {
+        this._inCoreGame = true;
+    }
+
+    /**
+     * Stops the core battle from the engine's perspective.
+     */
+    public void stopGame() {
+        this._inCoreGame = false;
     }
 
 }
