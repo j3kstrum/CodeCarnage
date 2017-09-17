@@ -18,12 +18,11 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("menu.fxml"));
+        Parent root = loader.load();
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
-        primaryStage.getScene().getStylesheets().add("/styles/sample.css");
         primaryStage.setResizable(false);
-
         primaryStage.show();
     }
 
