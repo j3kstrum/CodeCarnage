@@ -1,24 +1,6 @@
-package main.java.gui;
-
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+package gui;
 
 public class Controller {
-    @FXML
-    ToggleGroup toggleGroup;
+    // To be populated once GUI is set up properly.
 
-    /*
-    Click event handler for Go button on menu
-     */
-    public void click(ActionEvent action) {
-        RadioButton checked = (RadioButton) toggleGroup.getSelectedToggle();
-
-        if (checked.getText().equals("Play")) {
-            //System.out.println("You selected: Play");
-        } else if (checked.getText().equals("Settings")) {
-            //System.out.println("You selected: Settings");
-        }
-    }
 }
