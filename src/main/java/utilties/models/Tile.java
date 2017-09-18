@@ -1,6 +1,6 @@
-package main.java.utilties.models;
+package utilties.models;
 
-import main.java.utilties.entities.Entity;
+import utilties.entities.Entity;
 
 /**
  * Model class for Tile.  Placed on Map a coordinate on a Map.

@@ -1,6 +1,6 @@
-package main.java.utilties.entities;
+package utilties.entities;
 
-import main.java.utilties.models.Location;
+import utilties.models.Location;
 
 /**
  * Player Entity

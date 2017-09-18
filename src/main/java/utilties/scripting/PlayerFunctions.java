@@ -1,8 +1,8 @@
-package main.java.utilties.scripting;
+package utilties.scripting;
 
-import main.java.utilties.entities.Player;
-import main.java.utilties.models.Location;
-import main.java.utilties.models.Map;
+import utilties.entities.Player;
+import utilties.models.Location;
+import utilties.models.Map;
 
 /**
  * Basic implementation of functions for Scripting Language
