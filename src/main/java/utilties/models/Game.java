@@ -1,8 +1,8 @@
-package main.java.utilties.models;
+package utilties.models;
 
-import main.java.utilties.entities.Entity;
-import main.java.utilties.entities.Player;
-import main.java.utilties.scripting.PlayerFunctions;
+import utilties.entities.Entity;
+import utilties.entities.Player;
+import utilties.scripting.PlayerFunctions;
 
 /**
  * Model for Game.  Execute nextTurn to progress through game.
