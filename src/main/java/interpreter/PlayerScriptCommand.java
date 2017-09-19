@@ -14,6 +14,6 @@ public interface PlayerScriptCommand {
     /*
     *  This function will be called by the class in order to modify the game in some way.
     * */
-    void performAction(Map map, Location location, Player player);
+    void performAction(InterpreterParameter p);
 
 }

@@ -1,5 +1,6 @@
 package main.java.utilties.models;
 
+import main.java.interpreter.InterpreterParameter;
 import main.java.interpreter.PlayerScriptCommand;
 import main.java.utilties.entities.Entity;
 import main.java.utilties.entities.Player;
@@ -57,8 +58,8 @@ public class Game {
     public Map nextTurn(){
 
         // NOTE this is just an example of how the interpreter will work - using dummy values for now
-        playerCommands.get(0).performAction(map, new Location(player.getLocation().getX() + 1, player.getLocation().getY()), player);
-        opponentCommands.get(0).performAction(map, new Location(opponent.getLocation().getX() - 1, opponent.getLocation().getY()), opponent);
+        playerCommands.get(0).performAction(new InterpreterParameter());
+        opponentCommands.get(0).performAction(new InterpreterParameter());
 
         return map;
     }
