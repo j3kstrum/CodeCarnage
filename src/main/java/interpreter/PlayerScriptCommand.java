@@ -1,9 +1,5 @@
-package main.java.interpreter;
+package interpreter;
 
-
-import main.java.utilties.entities.Player;
-import main.java.utilties.models.Location;
-import main.java.utilties.models.Map;
 
 /*
 *  A class that implements PlayerScriptCommand is added to a list when the drag-and-drop GUI is 'compiled',

@@ -1,10 +1,7 @@
-package main.java.interpreter.commands;
+package interpreter.commands;
 
-import main.java.interpreter.InterpreterParameter;
-import main.java.interpreter.PlayerScriptCommand;
-import main.java.utilties.entities.Player;
-import main.java.utilties.models.Location;
-import main.java.utilties.models.Map;
+import interpreter.InterpreterParameter;
+import interpreter.PlayerScriptCommand;
 
 public class MoveCommand implements PlayerScriptCommand{
 

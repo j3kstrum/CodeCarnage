@@ -1,9 +1,9 @@
-package main.java.utilties.models;
+package utilties.models;
 
-import main.java.interpreter.InterpreterParameter;
-import main.java.interpreter.PlayerScriptCommand;
-import main.java.utilties.entities.Entity;
-import main.java.utilties.entities.Player;
+import interpreter.InterpreterParameter;
+import interpreter.PlayerScriptCommand;
+import utilties.entities.Entity;
+import utilties.entities.Player;
 
 import java.util.ArrayList;
 

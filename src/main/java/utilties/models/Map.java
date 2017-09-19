@@ -1,7 +1,7 @@
-package main.java.utilties.models;
+package utilties.models;
 
-import main.java.utilties.entities.Empty;
-import main.java.utilties.entities.Entity;
+import utilties.entities.Empty;
+import utilties.entities.Entity;
 
 /**
  * Map in which Game is Played on.  Represented as a two dimensional array of tiles.

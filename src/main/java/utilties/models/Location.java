@@ -1,4 +1,4 @@
-package main.java.utilties.models;
+package utilties.models;
 
 /**
  * Model class for Location.  Contains X and Y coordinates
