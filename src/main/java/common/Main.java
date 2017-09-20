@@ -1,7 +1,7 @@
 package common;
 
 import engine.core.Engine;
-import gui.GUI;
+import gui.menu.GUI;
 
 /**
  * Class responsible for initializing all core modules of the project.
