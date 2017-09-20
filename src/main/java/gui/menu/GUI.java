@@ -1,17 +1,17 @@
-package gui;
+package gui.menu;
 
+import common.BaseLogger;
+import engine.core.Engine;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import common.BaseLogger;
-import engine.core.Engine;
 
 public class GUI extends Application {
 
-    private Engine _engine = null;
     private static final BaseLogger LOGGER = new BaseLogger("GUI");
+    private Engine _engine = null;
 
     public GUI() {
         super();
@@ -24,7 +24,7 @@ public class GUI extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("menu.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("Code Carnage");
@@ -35,8 +35,9 @@ public class GUI extends Application {
 
     /**
      * Sets the GUI's engine, which it will be observing.
-     * @throws IllegalStateException If the engine already exists and is trying to be re-assigned.
+     *
      * @param engine The engine which should be used as the target of the observer.
+     * @throws IllegalStateException If the engine already exists and is trying to be re-assigned.
      */
     public void observe(Engine engine) {
         if (this._engine != null) {
