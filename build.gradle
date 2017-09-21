@@ -8,6 +8,7 @@ repositories {
 
 dependencies {
     compile group: 'com.jfoenix', name: 'jfoenix', version: '1.8.0'
+    compile group: 'org.mapeditor', name: 'libtiled', version: '0.17'
 }
 
 sourceSets.main {

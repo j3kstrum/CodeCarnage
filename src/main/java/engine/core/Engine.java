@@ -1,9 +1,16 @@
 package engine.core;
 
 import common.BaseLogger;
+import common.data.GameMap;
 import engine.access.extern.EngineToGUI;
 import engine.access.extern.EngineToScripting;
 import engine.data.EngineData;
+import tiled.core.Map;
+import tiled.io.TMXMapReader;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * The main class for the main.java.engine.
@@ -35,7 +42,27 @@ public class Engine {
         ).start();
     }
 
+    private GameMap testLoad() {
+        URL url = getUrlFromResources("resave-test.tmx");
+        TMXMapReader tmr = new TMXMapReader();
+        try {
+            Map mp = tmr.readMap(url.getPath());
+        } catch (Exception e) {
+            ENGINE_LOGGER.fatal("Could not load game map.");
+            ENGINE_LOGGER.fatal(e.getMessage());
+        }
+        return new GameMap();
+    }
+
+    private URL getUrlFromResources(String filename) {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        return classLoader.getResource(filename);
+    }
+
     private void start() {
+        ENGINE_LOGGER.debug("REMOVE THE BELOW CODE");
+        GameMap mp = testLoad();
+
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
         long lastTick = System.currentTimeMillis();
         while (!_shutdown) {
