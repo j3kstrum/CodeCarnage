@@ -5,11 +5,9 @@ import common.data.GameMap;
 import engine.access.extern.EngineToGUI;
 import engine.access.extern.EngineToScripting;
 import engine.data.EngineData;
-import tiled.core.Map;
-import tiled.io.TMXMapReader;
+import org.mapeditor.core.Map;
+import org.mapeditor.io.TMXMapReader;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -42,26 +40,39 @@ public class Engine {
         ).start();
     }
 
-    private GameMap testLoad() {
+    /**
+     * Loads the Tiled static Map from disk.
+     * @return The initial GameMap, initialized to hold the static Tiled Map.
+     */
+    private GameMap loadGameMap() {
         URL url = getUrlFromResources("resave-test.tmx");
         TMXMapReader tmr = new TMXMapReader();
+        GameMap mp = null;
         try {
-            Map mp = tmr.readMap(url.getPath());
+            Map map = tmr.readMap(url.getPath());
+            mp = new GameMap(map);
         } catch (Exception e) {
             ENGINE_LOGGER.fatal("Could not load game map.");
+            // TODO: Don't just kill the program here. Download the game map that we know works from
+            // GitHub if we can get a connection, and then use that map instead.
             ENGINE_LOGGER.fatal(e.getMessage());
+            System.exit(1);
         }
-        return new GameMap();
+        return mp;
     }
 
+    /**
+     * BORROWED FROM Tiled MapEditor test code. Loads a filename from the project's resources.
+     * @param filename The relative path to be loaded for resources.
+     * @return The URL representing the full filepath to the desired resource.
+     */
     private URL getUrlFromResources(String filename) {
         ClassLoader classLoader = this.getClass().getClassLoader();
         return classLoader.getResource(filename);
     }
 
     private void start() {
-        ENGINE_LOGGER.debug("REMOVE THE BELOW CODE");
-        GameMap mp = testLoad();
+        this.DATA.setMap(loadGameMap());
 
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
         long lastTick = System.currentTimeMillis();
