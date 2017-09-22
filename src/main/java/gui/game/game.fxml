@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.stage.Screen?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           prefWidth="${screen.visualBounds.width}"
+           prefHeight="${screen.visualBounds.height}">
+    <fx:define>
+        <Screen fx:factory="getPrimary" fx:id="screen"/>
+    </fx:define>
+    <Label text="A maximized pane"/>
+</StackPane>
