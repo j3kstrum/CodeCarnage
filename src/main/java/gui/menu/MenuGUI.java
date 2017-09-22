@@ -52,7 +52,6 @@ public class MenuGUI extends Application {
                             e.printStackTrace();
                         }
 
-                        System.out.println("Woot. I'm a dumb sack of shit.");
                         primaryStage.getScene().getWindow().hide();
                     }
                 });
