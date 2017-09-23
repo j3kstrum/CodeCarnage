@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.mapeditor.core.Map;
+import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
 import org.mapeditor.io.TMXMapReader;
@@ -25,6 +26,7 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -35,7 +37,6 @@ public class GameGUI extends Application {
 
     TMXMapReader mapReader = new TMXMapReader();
     Map gameMap = null;
-    TileLayer groundLayer = null;
 
     public GameGUI() throws Exception {
         new Thread().start();
@@ -76,21 +77,24 @@ public class GameGUI extends Application {
         primaryStage.show();
 
         try {
-            gameMap = mapReader.readMap("./src/main/resources/carnage.tmx");
+            gameMap = mapReader.readMap("./src/main/resources/game-map.tmx");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        for (int layerIndex = 0; layerIndex < 4; layerIndex++) {
+        ArrayList<MapLayer> layerList = new ArrayList<MapLayer>(gameMap.getLayers());
 
-            groundLayer = (TileLayer) gameMap.getLayer(layerIndex);
-            if (groundLayer == null) {
+        for (MapLayer layer : layerList) {
+
+            TileLayer tileLayer = (TileLayer) layer;
+
+            if (tileLayer == null) {
                 System.out.println("can't get map layer");
                 System.exit(-1);
             }
 
-            int width = groundLayer.getBounds().width;
-            int height = groundLayer.getBounds().height;
+            int width = tileLayer.getBounds().width;
+            int height = tileLayer.getBounds().height;
 
             Tile tile = null;
             int tileID;
@@ -100,7 +104,7 @@ public class GameGUI extends Application {
 
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    tile = groundLayer.getTileAt(x, y);
+                    tile = tileLayer.getTileAt(x, y);
                     if (tile == null) {
                         continue;
                     }
@@ -127,15 +131,11 @@ public class GameGUI extends Application {
 
                     imagePane.getChildren().add(i);
 
-
                 }
             }
 
-            System.out.println("Tile image hash has " + tileHash.size() + " items");
-
             tileHash = null;
             gameMap = null;
-            groundLayer = null;
         }
 
 
