@@ -17,7 +17,6 @@ public class EngineData {
      * Initializes the game's data, including the game map.
      */
     public EngineData() {
-        this._map = new GameMap();
         LOGGER.info("Initialized EngineData.");
     }
 

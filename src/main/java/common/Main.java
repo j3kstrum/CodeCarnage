@@ -1,7 +1,7 @@
 package common;
 
 import engine.core.Engine;
-import gui.menu.GUI;
+import gui.menu.MenuGUI;
 
 /**
  * Class responsible for initializing all core modules of the project.
@@ -13,18 +13,18 @@ import gui.menu.GUI;
 public class Main {
 
     private static Engine _ENGINE;
-    private static GUI _GUI;
+    private static MenuGUI _GUI;
     private static final BaseLogger LOGGER = new BaseLogger("Main");
 
     /**
-     * GUI method for the project. Responsible for initializing all core modules.
+     * MenuGUI method for the project. Responsible for initializing all core modules.
      * @param args The system's command line arguments. This should be empty.
      */
     public static void main(String[] args) {
-        _GUI = new GUI(args);
-        _ENGINE = new Engine();
-        LOGGER.debug("GUI and Engine created. Setting observer...");
-        _GUI.observe(_ENGINE);
+        _GUI = new MenuGUI(args);
+        //_ENGINE = new Engine();
+        LOGGER.debug("MenuGUI and Engine created. Setting observer...");
+        //_GUI.observe(_ENGINE);
     }
 
 }

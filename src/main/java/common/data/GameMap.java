@@ -9,5 +9,10 @@ package common.data;
  */
 public class GameMap {
     // TODO: Populate. I think Sean started some work on this.
-    // Should have a nice constructor. This will take some work.
+
+    private org.mapeditor.core.Map _staticMap;
+
+    public GameMap(org.mapeditor.core.Map tiledMap) {
+        this._staticMap = tiledMap;
+    }
 }

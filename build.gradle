@@ -8,6 +8,7 @@ repositories {
 
 dependencies {
     compile group: 'com.jfoenix', name: 'jfoenix', version: '1.8.0'
+    compile files('lib/libtiled-1.0-SNAPSHOT.jar')
 }
 
 sourceSets.main {
