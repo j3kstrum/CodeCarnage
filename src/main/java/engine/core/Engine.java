@@ -45,7 +45,7 @@ public class Engine {
      * @return The initial GameMap, initialized to hold the static Tiled Map.
      */
     private GameMap loadGameMap() {
-        URL url = getUrlFromResources("resave-test.tmx");
+        URL url = getUrlFromResources("./src/main/resources/carnage.tmx");
         TMXMapReader tmr = new TMXMapReader();
         GameMap mp = null;
         try {
