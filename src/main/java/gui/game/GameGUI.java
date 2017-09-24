@@ -20,7 +20,6 @@ import org.mapeditor.core.Map;
 import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
-import org.mapeditor.io.TMXMapReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,8 +30,8 @@ public class GameGUI extends Application {
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
-    public Map map;
-    Pane _imagePane;
+    public Map _map;
+    private Pane _imagePane;
 
     public GameGUI() throws Exception {
         new Thread().start();
@@ -53,6 +52,7 @@ public class GameGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //Builds main panel to draw game on
         FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
         Parent root = loader.load();
 
@@ -76,6 +76,9 @@ public class GameGUI extends Application {
 
     }
 
+    /**
+     * Starts thread to update Game GUI
+     */
     private void startUIUpdateThread(){
         Task task = new Task<Void>() {
             @Override
@@ -94,12 +97,16 @@ public class GameGUI extends Application {
         th.start();
     }
 
+    /**
+     * Updates the GUI based on data read from Map
+     * Renderer code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
+     */
     public void updateGameGUI(){
 
-        if(map==null){
+        if(_map==null){
             return;
         }
-        ArrayList<MapLayer> layerList = new ArrayList<>(this.map.getLayers());
+        ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
 
         for (MapLayer layer : layerList) {
 
