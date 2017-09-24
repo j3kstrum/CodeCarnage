@@ -36,6 +36,11 @@ public class GameGUI extends Application {
     TMXMapReader mapReader = new TMXMapReader();
     Map gameMap = null;
 
+    /**
+     * Creates the game Engine and game GUI. Each on a separate thread.
+     *
+     * @throws Exception in start if failure to load game map file
+     */
     public GameGUI() throws Exception {
         new Thread().start();
 
@@ -47,19 +52,20 @@ public class GameGUI extends Application {
         start(new Stage());
     }
 
-    public GameGUI(String[] args) {
-        new Thread(
-                () -> launch(args)
-        ).start();
-    }
-
+    /**
+     * Creates the game window
+     * @param primaryStage JavaFX stage object to be rendered upon loading.
+     * @throws Exception on failure to load game Map
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // load ui element objects from fxml file
         FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
         Parent root = loader.load();
 
         ObservableMap namespace = loader.getNamespace();
 
+        // Access imagePane FXML object
         Pane imagePane = (Pane) namespace.get("imagePane");
 
         primaryStage.setTitle("Code Carnage");
@@ -75,6 +81,7 @@ public class GameGUI extends Application {
 
         ArrayList<MapLayer> layerList = new ArrayList<MapLayer>(gameMap.getLayers());
 
+        // Render the map, 1 layer at a time
         for (MapLayer layer : layerList) {
 
             TileLayer tileLayer = (TileLayer) layer;
@@ -90,9 +97,11 @@ public class GameGUI extends Application {
             Tile tile = null;
             int tileID;
 
+            // Create a Tile Map which stores Tile ID and Tile Image data for the layer
             HashMap<Integer, Image> tileHash = new HashMap<Integer, Image>();
             Image tileImage = null;
 
+            // Create the Image for each tile in the layer, add it as an ImageView in the UI
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     tile = tileLayer.getTileAt(x, y);
@@ -113,10 +122,6 @@ public class GameGUI extends Application {
 
                     ImageView i = new ImageView(tileImage);
 
-//                i.setFitHeight(64);
-//                i.setFitWidth(64);
-//                i.setPreserveRatio(true);
-
                     i.setTranslateX(x * 32);
                     i.setTranslateY(y * 32);
 
@@ -132,6 +137,14 @@ public class GameGUI extends Application {
 
     }
 
+    /**
+     * Creates a JavaFX Image based on the tile ID hash
+     * "borrowed" fragment from part of
+     * https://community.oracle.com/message/9655930#9655930
+     * @param image awt image of the current tile
+     * @return JavaFX Image for the particular tile in the map render.
+     * @throws IOException on failure to write to Image object
+     */
     private Image createImage(BufferedImage image) throws IOException {
         if (!(image instanceof RenderedImage)) {
             BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
