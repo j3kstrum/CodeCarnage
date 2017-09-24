@@ -4,7 +4,9 @@ import common.BaseLogger;
 import common.data.GameMap;
 import engine.core.Engine;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ObservableMap;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -37,14 +39,14 @@ public class GameGUI extends Application {
     private Engine _engine = null;
 
     TMXMapReader mapReader = new TMXMapReader();
-    Map gameMap = null;
-    Pane _imagePane;
+    public Map gameMap = null;
+    Pane _imagePane = null;
 
     public GameGUI() throws Exception {
         new Thread().start();
 
         //Create Engine
-        _engine = new Engine();
+        _engine = new Engine(this);
         LOGGER.info("Beginning core game battle...");
         this._engine.startGame();
 
@@ -84,7 +86,22 @@ public class GameGUI extends Application {
             ex.printStackTrace();
         }
 
-        updateGameGUI(gameMap);
+        Task task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception {
+
+        while (true)
+        {
+            Platform.runLater ( () -> updateGameGUI(gameMap));
+            Thread.sleep (1000);
+            nextTurn(gameMap);
+        }
+            }
+        };
+
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
     }
 
     private Image createImage(BufferedImage image) throws IOException {
@@ -156,6 +173,21 @@ public class GameGUI extends Application {
             tileHash = null;
             gameMap = null;
         }
+    }
+
+
+    public Map nextTurn(Map gameMap){
+        ArrayList<MapLayer> layerList = new ArrayList<>(gameMap.getLayers());
+        TileLayer tileLayer = (TileLayer) layerList.get(2);
+        Tile tile = tileLayer.getTileAt(1,7);
+        tileLayer.removeTile(tile);
+        tileLayer.setTileAt(4,13, tile);
+
+        Tile tileOpponent = tileLayer.getTileAt(23,7);
+        tileLayer.removeTile(tileOpponent);
+        tileLayer.setTileAt(22,7, tileOpponent);
+
+        return gameMap;
     }
 
 }
