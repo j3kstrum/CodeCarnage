@@ -41,8 +41,8 @@ public class Engine {
     }
 
     /**
-     * Loads the Tiled static Map from disk.
-     * @return The initial GameMap, initialized to hold the static Tiled Map.
+     * Loads the Tiled static EntityMap from disk.
+     * @return The initial GameMap, initialized to hold the static Tiled EntityMap.
      */
     private GameMap loadGameMap() {
         URL url = getUrlFromResources("./src/main/resources/game-map.tmx");

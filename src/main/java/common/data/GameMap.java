@@ -1,7 +1,7 @@
 package common.data;
 
 /**
- * The class representing the Game Map.
+ * The class representing the Game EntityMap.
  * This will contain all pertinent data and could eventually be used as a template for a
  * "GameMapDelta" object for efficiency.
  *

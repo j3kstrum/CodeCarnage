@@ -1,12 +1,12 @@
 package gui.game;
 
 import common.BaseLogger;
-import common.data.GameMap;
 import engine.core.Engine;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -21,14 +21,12 @@ import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
 import org.mapeditor.io.TMXMapReader;
+import utilties.entities.Player;
+import utilties.models.EntityMap;
+import utilties.models.EntityTile;
+import utilties.models.Game;
+import utilties.models.Location;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,6 +36,11 @@ public class GameGUI extends Application {
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
+    private static final int PLAYER_LAYER = 2;
+
+
+    private Game game;
+
     TMXMapReader mapReader = new TMXMapReader();
     public Map gameMap = null;
     Pane _imagePane = null;
@@ -46,7 +49,7 @@ public class GameGUI extends Application {
         new Thread().start();
 
         //Create Engine
-        _engine = new Engine(this);
+        _engine = new Engine();
         LOGGER.info("Beginning core game battle...");
         this._engine.startGame();
 
@@ -86,6 +89,9 @@ public class GameGUI extends Application {
             ex.printStackTrace();
         }
 
+        EntityMap entityMap = new EntityMap(gameMap, getPlayerTiles(gameMap));
+        game = new Game(entityMap);
+
         Task task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
@@ -94,7 +100,8 @@ public class GameGUI extends Application {
         {
             Platform.runLater ( () -> updateGameGUI(gameMap));
             Thread.sleep (1000);
-            nextTurn(gameMap);
+            game.nextTurn();
+            //nextTurn(gameMap);
         }
             }
         };
@@ -103,24 +110,6 @@ public class GameGUI extends Application {
         th.setDaemon(true);
         th.start();
     }
-
-    private Image createImage(BufferedImage image) throws IOException {
-        if (!(image instanceof RenderedImage)) {
-            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
-                    image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-            Graphics g = bufferedImage.createGraphics();
-            g.drawImage(image, 0, 0, null);
-            g.dispose();
-            image = bufferedImage;
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ImageIO.write((RenderedImage) image, "png", out);
-        out.flush();
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        return new javafx.scene.image.Image(in);
-    }
-
 
     public void updateGameGUI(Map gameMap){
         ArrayList<MapLayer> layerList = new ArrayList<>(gameMap.getLayers());
@@ -140,7 +129,7 @@ public class GameGUI extends Application {
             Tile tile = null;
             int tileID;
 
-            HashMap<Integer, Image> tileHash = new HashMap<Integer, Image>();
+            HashMap<Integer, Image> tileHash = new HashMap<>();
             Image tileImage = null;
 
             for (int y = 0; y < height; y++) {
@@ -154,7 +143,7 @@ public class GameGUI extends Application {
                         tileImage = tileHash.get(tileID);
                     } else {
                         try {
-                            tileImage = createImage(tile.getImage());
+                            tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -166,13 +155,56 @@ public class GameGUI extends Application {
                     i.setTranslateY(y * 32);
 
                     _imagePane.getChildren().add(i);
-
                 }
             }
-
-            tileHash = null;
-            gameMap = null;
         }
+    }
+
+
+    private ArrayList<EntityTile> getPlayerTiles(Map map){
+
+        ArrayList<Tile> playerTiles = new ArrayList<>();
+        TileLayer playerLayer = (TileLayer) map.getLayer(PLAYER_LAYER);
+        int height = playerLayer.getBounds().height;
+        int width = playerLayer.getBounds().width;
+
+        Location playerLocation  = null;
+        Location opponentLocation = null;
+
+        Tile tile;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                tile = playerLayer.getTileAt(x, y);
+                if (tile == null) {
+
+                    continue;
+                }
+                else{
+                    if(playerTiles.size() == 0){
+                        playerLocation = new Location(x, y);
+                    }
+                    else{
+                        opponentLocation = new Location(x, y);
+                    }
+                    playerTiles.add(tile);
+                }
+
+            }
+        }
+
+        Tile playerTile = playerTiles.get(0);
+        Tile opponentTile = playerTiles.get(1);
+
+
+        EntityTile playerEntityTile = new EntityTile(playerLocation, new Player(0, playerLocation), playerTile);
+        EntityTile opponentEntityTile = new EntityTile(opponentLocation, new Player(1, opponentLocation), opponentTile);
+
+        ArrayList<EntityTile> playerEntityTiles = new ArrayList<>();
+        playerEntityTiles.add(playerEntityTile);
+        playerEntityTiles.add(opponentEntityTile);
+
+        return playerEntityTiles;
+
     }
 
 
