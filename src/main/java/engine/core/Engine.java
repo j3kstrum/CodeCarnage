@@ -75,7 +75,7 @@ public class Engine {
 
             EntityMap entityMap = new EntityMap(map, getPlayerTiles(map));
             game = new Game(entityMap);
-            this.gameGUI.map = map;
+            this.gameGUI._map = map;
 
         } catch (Exception e) {
             ENGINE_LOGGER.fatal("Could not load game map.");

@@ -13,8 +13,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.mapeditor.core.Map;
 import org.mapeditor.core.MapLayer;
@@ -58,7 +58,7 @@ public class GameGUI extends Application {
 
         ObservableMap namespace = loader.getNamespace();
 
-        StackPane pane = (StackPane) namespace.get("pane");
+        AnchorPane pane = (AnchorPane) namespace.get("pane");
         Group group = new Group();
 
         _imagePane = new Pane();

@@ -1,0 +1,28 @@
+.jfx-button {
+    -fx-font-weight: bold;
+}
+
+VBox, FlowPane{
+    -fx-background-color: #373737;
+}
+
+.root {
+    -fx-background-color: #373737;
+}
+
+AnchorPane{
+    -fx-background-color: #8e8e8e;
+}
+
+.scroll-pane AnchorPane{
+    -fx-background-color: #8e8e8e;
+}
+
+.label {
+    -fx-text-fill: White;
+}
+
+#behaviors {
+    -fx-background-color: #616161;
+}
+
