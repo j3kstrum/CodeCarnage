@@ -32,9 +32,7 @@ public class Game {
             int opponentX = this.entityMap.getOpponentTile().getLocation().getX();
             int opponentY = this.entityMap.getOpponentTile().getLocation().getY();
             this.entityMap.setLocation(1, new Location(opponentX, opponentY + 1));
-
         }
-
         return entityMap;
     }
 }

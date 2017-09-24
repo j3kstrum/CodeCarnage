@@ -44,9 +44,11 @@ public class EntityMap {
 
         ArrayList<MapLayer> layerList = new ArrayList<>(this._gameMap.getLayers());
         TileLayer tileLayer = (TileLayer) layerList.get(2);
+
         Tile tile = tileLayer.getTileAt(playerX,playerY);
         tileLayer.removeTile(tile);
         tileLayer.setTileAt(location.getX(),location.getY(), tile);
+
         playerTile.getLocation().setX(location.getX());
         playerTile.getLocation().setY(location.getY());
     }

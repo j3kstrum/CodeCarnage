@@ -5,10 +5,19 @@ import common.data.GameMap;
 import engine.access.extern.EngineToGUI;
 import engine.access.extern.EngineToScripting;
 import engine.data.EngineData;
+import gui.game.GameGUI;
 import org.mapeditor.core.Map;
+import org.mapeditor.core.Tile;
+import org.mapeditor.core.TileLayer;
 import org.mapeditor.io.TMXMapReader;
+import utilties.entities.Player;
+import utilties.models.EntityMap;
+import utilties.models.EntityTile;
+import utilties.models.Game;
+import utilties.models.Location;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * The main class for the main.java.engine.
@@ -30,11 +39,18 @@ public class Engine {
 
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
+    public GameMap gameMap;
+    public Map map;
+    public Game game;
+    public GameGUI gameGUI;
+
     /**
      * Initializes the Engine and performs the main ticking loop.
      */
-    public Engine() {
+    public Engine(GameGUI gameGUI) {
+        this.gameGUI = gameGUI;
         DATA = new EngineData();
+
         new Thread(
                 () -> this.start()
         ).start();
@@ -45,12 +61,22 @@ public class Engine {
      * @return The initial GameMap, initialized to hold the static Tiled EntityMap.
      */
     private GameMap loadGameMap() {
+
         URL url = getUrlFromResources("./src/main/resources/game-map.tmx");
         TMXMapReader tmr = new TMXMapReader();
         GameMap mp = null;
         try {
-            Map map = tmr.readMap(url.getPath());
-            mp = new GameMap(map);
+            TMXMapReader mapReader = new TMXMapReader();
+            try {
+                this.map = mapReader.readMap("./src/main/resources/game-map.tmx");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            EntityMap entityMap = new EntityMap(map, getPlayerTiles(map));
+            game = new Game(entityMap);
+            this.gameGUI.map = map;
+
         } catch (Exception e) {
             ENGINE_LOGGER.fatal("Could not load game map.");
             // TODO: Don't just kill the program here. Download the game map that we know works from
@@ -58,6 +84,7 @@ public class Engine {
             ENGINE_LOGGER.fatal(e.getMessage());
             System.exit(1);
         }
+
         return mp;
     }
 
@@ -72,8 +99,7 @@ public class Engine {
     }
 
     private void start() {
-        //this.DATA.setMap(loadGameMap());
-
+        this.DATA.setMap(loadGameMap());
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
         long lastTick = System.currentTimeMillis();
         while (!_shutdown) {
@@ -137,12 +163,18 @@ public class Engine {
     private void tick() {
 
         if (_inCoreGame) {
+
+            game.nextTurn();
+
+            //TODO Implement cleaner version of updating UI
+            /*
             this.DATA.setMap(
                     EngineToScripting.nextTurn(
                             this.DATA.getMap()
                     )
             );
             EngineToGUI.update();
+            */
         }
 
 //        if (System.currentTimeMillis() % 100 == 64) {
@@ -177,4 +209,49 @@ public class Engine {
         this._inCoreGame = false;
     }
 
+
+    private ArrayList<EntityTile> getPlayerTiles(Map map){
+
+        ArrayList<Tile> playerTiles = new ArrayList<>();
+        TileLayer playerLayer = (TileLayer) map.getLayer(2);
+        int height = playerLayer.getBounds().height;
+        int width = playerLayer.getBounds().width;
+
+        Location playerLocation  = null;
+        Location opponentLocation = null;
+
+        Tile tile;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                tile = playerLayer.getTileAt(x, y);
+                if (tile == null) {
+
+                    continue;
+                }
+                else{
+                    if(playerTiles.size() == 0){
+                        playerLocation = new Location(x, y);
+                    }
+                    else{
+                        opponentLocation = new Location(x, y);
+                    }
+                    playerTiles.add(tile);
+                }
+
+            }
+        }
+
+        Tile playerTile = playerTiles.get(0);
+        Tile opponentTile = playerTiles.get(1);
+
+        EntityTile playerEntityTile = new EntityTile(playerLocation, new Player(0, playerLocation), playerTile);
+        EntityTile opponentEntityTile = new EntityTile(opponentLocation, new Player(1, opponentLocation), opponentTile);
+
+        ArrayList<EntityTile> playerEntityTiles = new ArrayList<>();
+        playerEntityTiles.add(playerEntityTile);
+        playerEntityTiles.add(opponentEntityTile);
+
+        return playerEntityTiles;
+
+    }
 }

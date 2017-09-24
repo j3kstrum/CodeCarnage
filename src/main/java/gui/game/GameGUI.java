@@ -21,11 +21,6 @@ import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
 import org.mapeditor.io.TMXMapReader;
-import utilties.entities.Player;
-import utilties.models.EntityMap;
-import utilties.models.EntityTile;
-import utilties.models.Game;
-import utilties.models.Location;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,20 +31,14 @@ public class GameGUI extends Application {
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
-    private static final int PLAYER_LAYER = 2;
-
-
-    private Game game;
-
-    TMXMapReader mapReader = new TMXMapReader();
-    public Map gameMap = null;
-    Pane _imagePane = null;
+    public Map map;
+    Pane _imagePane;
 
     public GameGUI() throws Exception {
         new Thread().start();
 
         //Create Engine
-        _engine = new Engine();
+        _engine = new Engine(this);
         LOGGER.info("Beginning core game battle...");
         this._engine.startGame();
 
@@ -83,26 +72,20 @@ public class GameGUI extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-        try {
-            gameMap = mapReader.readMap("./src/main/resources/game-map.tmx");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        startUIUpdateThread();
 
-        EntityMap entityMap = new EntityMap(gameMap, getPlayerTiles(gameMap));
-        game = new Game(entityMap);
+    }
 
+    private void startUIUpdateThread(){
         Task task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
 
-        while (true)
-        {
-            Platform.runLater ( () -> updateGameGUI(gameMap));
-            Thread.sleep (1000);
-            game.nextTurn();
-            //nextTurn(gameMap);
-        }
+                while (true)
+                {
+                    Platform.runLater ( () -> updateGameGUI());
+                    Thread.sleep (250);
+                }
             }
         };
 
@@ -111,8 +94,12 @@ public class GameGUI extends Application {
         th.start();
     }
 
-    public void updateGameGUI(Map gameMap){
-        ArrayList<MapLayer> layerList = new ArrayList<>(gameMap.getLayers());
+    public void updateGameGUI(){
+
+        if(map==null){
+            return;
+        }
+        ArrayList<MapLayer> layerList = new ArrayList<>(this.map.getLayers());
 
         for (MapLayer layer : layerList) {
 
@@ -126,7 +113,7 @@ public class GameGUI extends Application {
             int width = tileLayer.getBounds().width;
             int height = tileLayer.getBounds().height;
 
-            Tile tile = null;
+            Tile tile;
             int tileID;
 
             HashMap<Integer, Image> tileHash = new HashMap<>();
@@ -159,67 +146,4 @@ public class GameGUI extends Application {
             }
         }
     }
-
-
-    private ArrayList<EntityTile> getPlayerTiles(Map map){
-
-        ArrayList<Tile> playerTiles = new ArrayList<>();
-        TileLayer playerLayer = (TileLayer) map.getLayer(PLAYER_LAYER);
-        int height = playerLayer.getBounds().height;
-        int width = playerLayer.getBounds().width;
-
-        Location playerLocation  = null;
-        Location opponentLocation = null;
-
-        Tile tile;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                tile = playerLayer.getTileAt(x, y);
-                if (tile == null) {
-
-                    continue;
-                }
-                else{
-                    if(playerTiles.size() == 0){
-                        playerLocation = new Location(x, y);
-                    }
-                    else{
-                        opponentLocation = new Location(x, y);
-                    }
-                    playerTiles.add(tile);
-                }
-
-            }
-        }
-
-        Tile playerTile = playerTiles.get(0);
-        Tile opponentTile = playerTiles.get(1);
-
-
-        EntityTile playerEntityTile = new EntityTile(playerLocation, new Player(0, playerLocation), playerTile);
-        EntityTile opponentEntityTile = new EntityTile(opponentLocation, new Player(1, opponentLocation), opponentTile);
-
-        ArrayList<EntityTile> playerEntityTiles = new ArrayList<>();
-        playerEntityTiles.add(playerEntityTile);
-        playerEntityTiles.add(opponentEntityTile);
-
-        return playerEntityTiles;
-
-    }
-
-
-    public Map nextTurn(Map gameMap){
-        ArrayList<MapLayer> layerList = new ArrayList<>(gameMap.getLayers());
-        TileLayer tileLayer = (TileLayer) layerList.get(2);
-        Tile tile = tileLayer.getTileAt(1,7);
-        tileLayer.removeTile(tile);
-        tileLayer.setTileAt(4,13, tile);
-
-        Tile tileOpponent = tileLayer.getTileAt(23,7);
-        tileLayer.removeTile(tileOpponent);
-        tileLayer.setTileAt(22,7, tileOpponent);
-
-        return gameMap;
-    }
-
 }
