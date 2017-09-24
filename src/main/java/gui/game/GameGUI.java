@@ -62,14 +62,14 @@ public class GameGUI extends Application {
         Group group = new Group();
 
         _imagePane = new Pane();
-        _imagePane.setPrefSize(1600, 900);
+        _imagePane.setPrefSize(800, 480);
 
         pane.getChildren().add(group);
 
         group.getChildren().add(_imagePane);
 
         primaryStage.setTitle("Code Carnage");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(root, 800, 480));
         primaryStage.show();
 
         startUIUpdateThread();

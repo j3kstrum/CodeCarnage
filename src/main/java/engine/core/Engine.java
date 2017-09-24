@@ -164,6 +164,10 @@ public class Engine {
 
         if (_inCoreGame) {
 
+
+            if(game.getNumberOfTurnsCompleted() > 30){
+                this.shutdown();
+            }
             game.nextTurn();
 
             //TODO Implement cleaner version of updating UI
@@ -177,11 +181,13 @@ public class Engine {
             */
         }
 
-//        if (System.currentTimeMillis() % 100 == 64) {
-//            ENGINE_LOGGER.info("Wow! How awesome! The engine ticked and ended in just the right 2-digit number!");
-//            ENGINE_LOGGER.fatal("Shutting down due to awesomeness.");
-//            this.shutdown();
-//        }
+        /*
+        if (System.currentTimeMillis() % 100 == 64) {
+            ENGINE_LOGGER.info("Wow! How awesome! The engine ticked and ended in just the right 2-digit number!");
+            ENGINE_LOGGER.fatal("Shutting down due to awesomeness.");
+            this.shutdown();
+        }
+        */
     }
 
     /**
