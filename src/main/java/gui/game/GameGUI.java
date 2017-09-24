@@ -1,6 +1,7 @@
 package gui.game;
 
 import common.BaseLogger;
+import common.data.GameMap;
 import engine.core.Engine;
 import javafx.application.Application;
 import javafx.collections.ObservableMap;
@@ -37,6 +38,7 @@ public class GameGUI extends Application {
 
     TMXMapReader mapReader = new TMXMapReader();
     Map gameMap = null;
+    Pane _imagePane;
 
     public GameGUI() throws Exception {
         new Thread().start();
@@ -65,12 +67,12 @@ public class GameGUI extends Application {
         StackPane pane = (StackPane) namespace.get("pane");
         Group group = new Group();
 
-        Pane imagePane = new Pane();
-        imagePane.setPrefSize(1600, 900);
+        _imagePane = new Pane();
+        _imagePane.setPrefSize(1600, 900);
 
         pane.getChildren().add(group);
 
-        group.getChildren().add(imagePane);
+        group.getChildren().add(_imagePane);
 
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
@@ -82,7 +84,29 @@ public class GameGUI extends Application {
             ex.printStackTrace();
         }
 
-        ArrayList<MapLayer> layerList = new ArrayList<MapLayer>(gameMap.getLayers());
+        updateGameGUI(gameMap);
+    }
+
+    private Image createImage(BufferedImage image) throws IOException {
+        if (!(image instanceof RenderedImage)) {
+            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
+                    image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+            Graphics g = bufferedImage.createGraphics();
+            g.drawImage(image, 0, 0, null);
+            g.dispose();
+            image = bufferedImage;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write((RenderedImage) image, "png", out);
+        out.flush();
+        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        return new javafx.scene.image.Image(in);
+    }
+
+
+    public void updateGameGUI(Map gameMap){
+        ArrayList<MapLayer> layerList = new ArrayList<>(gameMap.getLayers());
 
         for (MapLayer layer : layerList) {
 
@@ -121,15 +145,10 @@ public class GameGUI extends Application {
                     }
 
                     ImageView i = new ImageView(tileImage);
-
-//                i.setFitHeight(64);
-//                i.setFitWidth(64);
-//                i.setPreserveRatio(true);
-
                     i.setTranslateX(x * 32);
                     i.setTranslateY(y * 32);
 
-                    imagePane.getChildren().add(i);
+                    _imagePane.getChildren().add(i);
 
                 }
             }
@@ -137,25 +156,6 @@ public class GameGUI extends Application {
             tileHash = null;
             gameMap = null;
         }
-
-
-    }
-
-    private Image createImage(BufferedImage image) throws IOException {
-        if (!(image instanceof RenderedImage)) {
-            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
-                    image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-            Graphics g = bufferedImage.createGraphics();
-            g.drawImage(image, 0, 0, null);
-            g.dispose();
-            image = bufferedImage;
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ImageIO.write((RenderedImage) image, "png", out);
-        out.flush();
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        return new javafx.scene.image.Image(in);
     }
 
 }
