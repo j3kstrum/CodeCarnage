@@ -45,7 +45,7 @@ public class Engine {
      * @return The initial GameMap, initialized to hold the static Tiled Map.
      */
     private GameMap loadGameMap() {
-        URL url = getUrlFromResources("resave-test.tmx");
+        URL url = getUrlFromResources("./src/main/resources/game-map.tmx");
         TMXMapReader tmr = new TMXMapReader();
         GameMap mp = null;
         try {
@@ -72,7 +72,7 @@ public class Engine {
     }
 
     private void start() {
-        this.DATA.setMap(loadGameMap());
+        //this.DATA.setMap(loadGameMap());
 
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
         long lastTick = System.currentTimeMillis();
