@@ -79,9 +79,46 @@ public class GameGUI extends Application {
             ex.printStackTrace();
         }
 
+        // Render the map, 1 layer at a time
+        renderMap(imagePane);
+
+    }
+
+    /**
+     * Creates a JavaFX Image based on the tile ID hash
+     * "borrowed" fragment from part of
+     * https://community.oracle.com/message/9655930#9655930
+     *
+     * @param image awt image of the current tile
+     * @return JavaFX Image for the particular tile in the map render.
+     * @throws IOException on failure to write to Image object
+     */
+    private Image createImage(BufferedImage image) throws IOException {
+        if (!(image instanceof RenderedImage)) {
+            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
+                    image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+            Graphics g = bufferedImage.createGraphics();
+            g.drawImage(image, 0, 0, null);
+            g.dispose();
+            image = bufferedImage;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write((RenderedImage) image, "png", out);
+        out.flush();
+        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        return new javafx.scene.image.Image(in);
+    }
+
+    /**
+     * Draw the map on the UI, layer by layer
+     *
+     * @param imagePane Container for all of the tiles to be rendered
+     */
+    private void renderMap(Pane imagePane) {
+
         ArrayList<MapLayer> layerList = new ArrayList<MapLayer>(gameMap.getLayers());
 
-        // Render the map, 1 layer at a time
         for (MapLayer layer : layerList) {
 
             TileLayer tileLayer = (TileLayer) layer;
@@ -133,33 +170,6 @@ public class GameGUI extends Application {
             tileHash = null;
             gameMap = null;
         }
-
-
-    }
-
-    /**
-     * Creates a JavaFX Image based on the tile ID hash
-     * "borrowed" fragment from part of
-     * https://community.oracle.com/message/9655930#9655930
-     * @param image awt image of the current tile
-     * @return JavaFX Image for the particular tile in the map render.
-     * @throws IOException on failure to write to Image object
-     */
-    private Image createImage(BufferedImage image) throws IOException {
-        if (!(image instanceof RenderedImage)) {
-            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
-                    image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-            Graphics g = bufferedImage.createGraphics();
-            g.drawImage(image, 0, 0, null);
-            g.dispose();
-            image = bufferedImage;
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ImageIO.write((RenderedImage) image, "png", out);
-        out.flush();
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-        return new javafx.scene.image.Image(in);
     }
 
 }
