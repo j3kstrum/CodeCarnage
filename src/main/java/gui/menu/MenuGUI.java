@@ -3,7 +3,7 @@ package gui.menu;
 import com.jfoenix.controls.JFXButton;
 import common.BaseLogger;
 import engine.core.Engine;
-import gui.game.GameGUI;
+import gui.scripting.ScriptingGUI;
 import javafx.application.Application;
 import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
@@ -47,7 +47,7 @@ public class MenuGUI extends Application {
                         System.out.println("You clicked Start!");
 
                         try {
-                            new GameGUI();
+                            new ScriptingGUI();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

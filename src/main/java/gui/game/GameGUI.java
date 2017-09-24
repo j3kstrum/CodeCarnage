@@ -5,13 +5,11 @@ import engine.core.Engine;
 import javafx.application.Application;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.mapeditor.core.Map;
 import org.mapeditor.core.MapLayer;
@@ -62,18 +60,11 @@ public class GameGUI extends Application {
 
         ObservableMap namespace = loader.getNamespace();
 
-        StackPane pane = (StackPane) namespace.get("pane");
-        Group group = new Group();
-
-        Pane imagePane = new Pane();
-        imagePane.setPrefSize(1600, 900);
-
-        pane.getChildren().add(group);
-
-        group.getChildren().add(imagePane);
+        Pane imagePane = (Pane) namespace.get("imagePane");
 
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
         primaryStage.show();
 
         try {
