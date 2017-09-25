@@ -31,6 +31,15 @@ However, should you have difficulties running *CodeCarnage*, please see https://
 3. Run the ***RUN-LINUX.sh*** file. You can do this by simply executing *./RUN-LINUX.sh* in the terminal window you have opened.
 4. Play!
 
+### Mac and Other Devices
+
+Mac and Other Devices are not directly supported by CodeCarnage.
+
+If you cannot access a Linux Device, we recommend using a Virtual Environment with Fedora, as this is a tested environment.
+To do this, see http://www.wikihow.com/Install-Fedora-17-in-Virtualbox (while the article is slightly outdated, the procedure is extremely similar).
+
+You could also try to follow the **Linux** instructions at your own risk.
+
 ## About
 
 ### Who?
