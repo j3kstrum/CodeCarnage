@@ -61,14 +61,12 @@ public class Engine {
      * @return The initial GameMap, initialized to hold the static Tiled EntityMap.
      */
     private GameMap loadGameMap() {
-
-        URL url = getUrlFromResources("./src/main/resources/game-map.tmx");
         TMXMapReader tmr = new TMXMapReader();
         GameMap mp = null;
         try {
             TMXMapReader mapReader = new TMXMapReader();
             try {
-                this.map = mapReader.readMap("./src/main/resources/game-map.tmx");
+                this.map = mapReader.readMap("../resources/main/game-map.tmx");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

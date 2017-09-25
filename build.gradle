@@ -2,13 +2,24 @@ apply plugin: 'idea'
 
 apply plugin: 'java'
 
+// Create a single Jar file with all dependencies
+task buildjar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'common.Main',
+                'Implementation-Title': 'CodeCarnage'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     compile group: 'com.jfoenix', name: 'jfoenix', version: '1.8.0'
-    compile files('lib/libtiled-1.0-SNAPSHOT.jar')
+    compile fileTree(dir: 'src/main/lib', include: '*.jar')
 }
 
 sourceSets.main {
