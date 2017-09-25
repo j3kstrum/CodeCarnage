@@ -80,12 +80,14 @@ public class GameGUI extends Application {
      * Starts thread to update Game GUI
      */
     private void startUIUpdateThread(){
+        //TODO Think about how often rendering should happen
         Task task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
 
                 while (true)
                 {
+                    //Currently renders 4 frames per second, which quicker than engine ticks ensuring each turn is accounted for
                     Platform.runLater ( () -> updateGameGUI());
                     Thread.sleep (250);
                 }

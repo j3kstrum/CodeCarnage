@@ -214,8 +214,14 @@ public class Engine {
     }
 
 
+    /**
+     * Gets player tiles from Player layer
+     * Will need to refactor.  Basically first two objects found are added to list.
+     * 0 being player, 1 being opponent
+     * @param map
+     * @return
+     */
     private ArrayList<EntityTile> getPlayerTiles(Map map){
-
         ArrayList<Tile> playerTiles = new ArrayList<>();
         TileLayer playerLayer = (TileLayer) map.getLayer(2);
         int height = playerLayer.getBounds().height;
@@ -224,6 +230,7 @@ public class Engine {
         Location playerLocation  = null;
         Location opponentLocation = null;
 
+        //Iterate through player layer to find player tiles
         Tile tile;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -233,6 +240,7 @@ public class Engine {
                     continue;
                 }
                 else{
+                    //If we haven't found a player yet, then tile found is player
                     if(playerTiles.size() == 0){
                         playerLocation = new Location(x, y);
                     }
@@ -245,12 +253,15 @@ public class Engine {
             }
         }
 
+        //Grab references
         Tile playerTile = playerTiles.get(0);
         Tile opponentTile = playerTiles.get(1);
 
+        //Add tiles to corresponding entity tile
         EntityTile playerEntityTile = new EntityTile(playerLocation, new Player(0, playerLocation), playerTile);
         EntityTile opponentEntityTile = new EntityTile(opponentLocation, new Player(1, opponentLocation), opponentTile);
 
+        //Build list and return
         ArrayList<EntityTile> playerEntityTiles = new ArrayList<>();
         playerEntityTiles.add(playerEntityTile);
         playerEntityTiles.add(opponentEntityTile);
