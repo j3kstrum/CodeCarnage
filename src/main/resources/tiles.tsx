@@ -2,15 +2,15 @@
 <tileset name="tiles" tilewidth="32" tileheight="32" tilecount="4" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="1">
-  <image width="32" height="32" source="./src/main/resources/grass1.png"/>
+  <image width="32" height="32" source="../resources/main/grass1.png"/>
  </tile>
  <tile id="2">
-  <image width="32" height="32" source="./src/main/resources/player-black.png"/>
+  <image width="32" height="32" source="../resources/main/player-black.png"/>
  </tile>
  <tile id="3">
-  <image width="32" height="32" source="./src/main/resources/player-blue.png"/>
+  <image width="32" height="32" source="../resources/main/player-blue.png"/>
  </tile>
  <tile id="4">
-  <image width="32" height="32" source="./src/main/resources/stone2.png"/>
+  <image width="32" height="32" source="../resources/main/stone2.png"/>
  </tile>
 </tileset>

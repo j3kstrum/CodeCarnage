@@ -74,7 +74,7 @@ public class GameGUI extends Application {
         primaryStage.show();
 
         try {
-            gameMap = mapReader.readMap("./src/main/resources/game-map.tmx");
+            gameMap = mapReader.readMap("../resources/main/game-map.tmx");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
