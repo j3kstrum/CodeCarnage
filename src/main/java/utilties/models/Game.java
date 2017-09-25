@@ -1,98 +1,74 @@
 package utilties.models;
 
-import interpreter.InterpreterParameter;
-import interpreter.PlayerScriptCommand;
-import utilties.entities.Entity;
-import utilties.entities.Player;
-
-import java.util.ArrayList;
-
 /**
  * Model for Game.  Execute nextTurn to progress through game.
  */
 public class Game {
 
-    private Map map;
+    private EntityMap _entityMap;
+    private boolean _hasReachedEnd = true;
+    private int _numberOfTurnsCompleted = 0;
 
-    private Player player;
-    private Player opponent;
-
-    private ArrayList<PlayerScriptCommand> playerCommands;
-    private ArrayList<PlayerScriptCommand> opponentCommands;
-
-    private boolean isGameComplete;
-
-    public Map getMap() {
-        return map;
-    }
-
-    public Game(){
-        initializeGame();
-    }
-
-    private void initializeGame(){
-
-        isGameComplete = false;
-
-        //Create Map
-        map = new Map(20,20);
-
-        //Set Locations For Players
-        Location playerLocation = new Location(0,0);
-        Location opponentLocation = new Location(19,19);
-
-
-        //Create Tiles for Players
-        Tile playerTile = new Tile(playerLocation, new Player(1, playerLocation));
-        Tile opponentTile = new Tile(opponentLocation, new Player(2, opponentLocation));
-
-        //Set tiles on Map object
-        map.setTile(playerLocation, playerTile);
-        map.setTile(opponentLocation, opponentTile);
+    /**
+     * Gets EntityMap object
+     * @return EntityMap
+     */
+    public EntityMap getEntityMap() {
+        return _entityMap;
     }
 
     /**
-     * Computes all game events for next turn.  Returns updated map.
-     * @return Updated Map
+     * Computes all game events for next turn.  Returns updated entityMap.
+     * @return Updated EntityMap
      */
-    public Map nextTurn(){
+    public EntityMap nextTurn(){
+        int playerX = this._entityMap.getPlayerTile().getLocation().getX();
+        int playerY = this._entityMap.getPlayerTile().getLocation().getY();
 
-        // NOTE this is just an example of how the interpreter will work - using dummy values for now
-        playerCommands.get(0).performAction(new InterpreterParameter());
-        opponentCommands.get(0).performAction(new InterpreterParameter());
+        if(this._hasReachedEnd){
+            if(playerX == 1){
+                this._hasReachedEnd = false;
+            }
+            this._entityMap.setLocation(0, new Location(playerX - 1, playerY));
 
-        return map;
+        }
+        else {
+            if(playerX == 24){
+                this._hasReachedEnd = true;
+            }
+            this._entityMap.setLocation(0, new Location(playerX + 1, playerY));
+        }
+
+        int opponentX = this._entityMap.getOpponentTile().getLocation().getX();
+        int opponentY = this._entityMap.getOpponentTile().getLocation().getY();
+
+
+        if(opponentX - playerX == 2){
+            this._entityMap.setLocation(1, new Location(opponentX, opponentY + 1));
+        }
+        else if(opponentX - playerX == -1){
+            this._entityMap.setLocation(1, new Location(opponentX, opponentY - 1));
+        }
+        _numberOfTurnsCompleted++;
+
+        return this._entityMap;
     }
 
     /**
-     * Getter for Player
-     * @return Player
+     *
+     * @param entityMap
      */
-    public Entity getPlayer() {
-        return player;
+    public Game(EntityMap entityMap){
+        this._entityMap = entityMap;
     }
 
     /**
-     * Getter for Opponent
-     * @return Opponent
+     * Gets count of number of turns that game has gone through
+     * @return
      */
-    public Entity getOpponent() {
-        return opponent;
+    public int getNumberOfTurnsCompleted() {
+        return _numberOfTurnsCompleted;
     }
 
-    /**
-     * Getter for GameCompletion
-     * @return Is Game Complete
-     */
-    public boolean isGameComplete() {
-        return isGameComplete;
-    }
-
-    /**
-     * Setter for Game Completion
-     * @param gameComplete Is game complete
-     */
-    public void setGameComplete(boolean gameComplete) {
-        isGameComplete = gameComplete;
-    }
 }
+
