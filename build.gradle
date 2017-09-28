@@ -1,10 +1,10 @@
 plugins {
+    id 'java'
+    id 'idea'
     id 'jacoco'
+    id 'net.saliman.cobertura' version '2.2.5'
     id 'com.github.kt3k.coveralls' version '2.6.3'
 }
-
-apply plugin: 'idea'
-apply plugin: 'java'
 
 // Create a single Jar file with all dependencies
 task buildjar(type: Jar) {
@@ -21,13 +21,6 @@ repositories {
     mavenCentral()
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-}
-
 dependencies {
     compile group: 'com.jfoenix', name: 'jfoenix', version: '1.8.0'
     compile fileTree(dir: 'src/main/lib', include: '*.jar')
@@ -42,3 +35,5 @@ sourceSets.main {
         exclude "**/*.java"
     }
 }
+
+cobertura.coverageFormats = ['html', 'xml']
