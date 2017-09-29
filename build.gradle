@@ -1,6 +1,10 @@
-apply plugin: 'idea'
-
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'idea'
+    id 'jacoco'
+    id 'net.saliman.cobertura' version '2.2.5'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
 
 // Create a single Jar file with all dependencies
 task buildjar(type: Jar) {
@@ -31,3 +35,5 @@ sourceSets.main {
         exclude "**/*.java"
     }
 }
+
+cobertura.coverageFormats = ['html', 'xml']
