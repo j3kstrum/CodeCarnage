@@ -7,6 +7,5 @@ script:
     - gradle clean cleanidea idea buildJar
 
 after_success:
-    - gradle clean coberturaCheck test
-    - gradle cobertura coveralls
+    - gradle clean test cobertura coveralls
 
