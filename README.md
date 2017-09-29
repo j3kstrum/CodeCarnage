@@ -1,6 +1,11 @@
 # CodeCarnage
 An intuitive and simple arena battle game involving strategy.
 
+Current Build Status:
+**Ekstrum** [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=ekstrum)](https://travis-ci.org/j3kstrum/CodeCarnage)
+**Develop** [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=develop)](https://travis-ci.org/j3kstrum/CodeCarnage)
+**Master** [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=master)](https://travis-ci.org/j3kstrum/CodeCarnage)
+
 ## How To Play
 
 ### Prerequisites
