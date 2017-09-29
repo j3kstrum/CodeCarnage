@@ -1,7 +1,7 @@
 # CodeCarnage
 An intuitive and simple arena battle game involving strategy.
 
-Current Build Status:
+## Current Build Status
 
 | **Branch** | **Build Status** | **Code Test Coverage** |
 |------------|------------------|------------------------|
