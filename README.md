@@ -1,13 +1,13 @@
 # CodeCarnage
 An intuitive and simple arena battle game involving strategy.
 
-Current Build Status:
+## Current Build Status
 
-**Ekstrum** [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=ekstrum)](https://travis-ci.org/j3kstrum/CodeCarnage)
-
-**Develop** [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=develop)](https://travis-ci.org/j3kstrum/CodeCarnage)
-
-**Master** [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=master)](https://travis-ci.org/j3kstrum/CodeCarnage)
+| **Branch** | **Build Status** | **Code Test Coverage** |
+|------------|------------------|------------------------|
+| **Ekstrum** | [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=ekstrum)](https://travis-ci.org/j3kstrum/CodeCarnage) | [![Coverage Status](https://coveralls.io/repos/github/j3kstrum/CodeCarnage/badge.svg?branch=ekstrum)](https://coveralls.io/github/j3kstrum/CodeCarnage?branch=ekstrum) |
+| **Develop** | [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=develop)](https://travis-ci.org/j3kstrum/CodeCarnage) | [![Coverage Status](https://coveralls.io/repos/github/j3kstrum/CodeCarnage/badge.svg?branch=develop)](https://coveralls.io/github/j3kstrum/CodeCarnage?branch=develop) |
+| **Master** | [![Build Status](https://travis-ci.org/j3kstrum/CodeCarnage.svg?branch=master)](https://travis-ci.org/j3kstrum/CodeCarnage) | [![Coverage Status](https://coveralls.io/repos/github/j3kstrum/CodeCarnage/badge.svg?branch=master)](https://coveralls.io/github/j3kstrum/CodeCarnage?branch=master) |
 
 ## How To Play
 
