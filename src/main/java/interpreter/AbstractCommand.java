@@ -1,4 +1,4 @@
-package main.java.interpreter;
+package interpreter;
 
 
 // The actual command will be defined when implmenting the abstract class
