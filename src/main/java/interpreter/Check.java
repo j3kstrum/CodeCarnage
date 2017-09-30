@@ -1,4 +1,4 @@
-package main.java.interpreter;
+package interpreter;
 
 public class Check {
 
