@@ -1,4 +1,4 @@
-package main.java.interpreter;
+package interpreter;
 
 public enum Operator {
     LessThan, GreaterThan, EqualTo, LessThanOrEqualTo, GreaterThanOrEqualTo
