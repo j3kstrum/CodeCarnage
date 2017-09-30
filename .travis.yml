@@ -1,0 +1,11 @@
+language: java
+
+jdk:
+    - oraclejdk8
+
+script:
+    - gradle clean cleanidea idea buildJar
+
+after_success:
+    - gradle clean test cobertura coveralls
+
