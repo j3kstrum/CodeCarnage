@@ -1,14 +1,16 @@
 package interpreter;
 
 
+import javafx.scene.control.Toggle;
+
 // The actual command will be defined when implmenting the abstract class
-public abstract class AbstractCommand {
+public abstract class AbstractCommand implements Toggle {
 
     private int priority;
-    private Check check;
+    private List<Check> checks;
 
-    public AbstractCommand(Check check, int priority){
-        this.check = check;
+    public AbstractCommand(List<Check> checks, int priority){
+        this.checks = checks;
         this.priority = priority;
     }
     
