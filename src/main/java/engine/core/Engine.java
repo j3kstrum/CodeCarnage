@@ -66,7 +66,8 @@ public class Engine {
         try {
             TMXMapReader mapReader = new TMXMapReader();
             try {
-                this.map = mapReader.readMap("../resources/main/game-map.tmx");
+                URL mapPath = getClass().getResource("/game-map.tmx");
+                this.map = mapReader.readMap(mapPath.toString());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
