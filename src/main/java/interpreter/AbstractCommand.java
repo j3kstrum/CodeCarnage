@@ -1,6 +1,6 @@
 package interpreter;
 
-
+import java.util.List;
 import javafx.scene.control.Toggle;
 
 // The actual command will be defined when implmenting the abstract class
