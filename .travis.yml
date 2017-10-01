@@ -9,5 +9,5 @@ script:
     - if [ "$TRAVIS_BRANCH" = "master" ]; then gradle clean test; fi
 
 after_success:
-    - gradle clean test cobertura coveralls
+    - gradle clean test jacocoTestReport coveralls
 
