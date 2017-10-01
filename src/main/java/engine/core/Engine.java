@@ -236,19 +236,16 @@ public class Engine {
             for (int x = 0; x < width; x++) {
                 tile = playerLayer.getTileAt(x, y);
                 if (tile == null) {
-
                     continue;
                 }
-                else{
-                    //If we haven't found a player yet, then tile found is player
-                    if(playerTiles.size() == 0){
-                        playerLocation = new Location(x, y);
-                    }
-                    else{
-                        opponentLocation = new Location(x, y);
-                    }
-                    playerTiles.add(tile);
+                //If we haven't found a player yet, then tile found is player
+                if(playerTiles.size() == 0){
+                    playerLocation = new Location(x, y);
                 }
+                else{
+                    opponentLocation = new Location(x, y);
+                }
+                playerTiles.add(tile);
 
             }
         }
