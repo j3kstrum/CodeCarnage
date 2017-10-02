@@ -29,7 +29,6 @@ public class Game {
         return _entityMap;
     }
 
-
     /**
      * Computes all game events for next turn.  Returns updated entityMap.
      * @return Updated EntityMap
@@ -109,6 +108,18 @@ public class Game {
      */
     public Player getPlayer(int id){
         return (Player) this._entityMap.getPlayers().get(id).getEntity();
+    }
+
+    /**
+     * Returns a double of the distance between the players specified
+     * @param playerId
+     * @param opponentId
+     * @return
+     */
+    public double distanceToOpponent(int playerId, int opponentId){
+        Point playerLocation = getPlayer(playerId).getLocation();
+        Point opponentLocation = getPlayer(opponentId).getLocation();
+        return Math.hypot(playerLocation.x - opponentLocation.x, playerLocation.y - opponentLocation.y);
     }
 }
 
