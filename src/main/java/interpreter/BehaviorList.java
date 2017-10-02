@@ -5,7 +5,7 @@ import javafx.scene.layout.VBox;
 
 public class BehaviorList extends VBox {
 
-    public ToggleGroup toggleGroup;
+    private ToggleGroup toggleGroup;
 
     public BehaviorList() {
         super();
@@ -50,10 +50,16 @@ public class BehaviorList extends VBox {
         );
     }
 
+    /**
+     * @return Returns the ToggleGroup object corresponding to the BehaviorList
+     */
     public ToggleGroup getToggleGroup() {
         return toggleGroup;
     }
 
+    /**
+     * @param toggleGroup ToggleGroup to be set
+     */
     public void setToggleGroup(ToggleGroup toggleGroup) {
         this.toggleGroup = toggleGroup;
     }

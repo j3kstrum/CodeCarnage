@@ -1,22 +1,29 @@
 package gui.scripting;
 
 import com.jfoenix.controls.JFXButton;
-import interpreter.BehaviorList;
 import javafx.css.PseudoClass;
-import javafx.fxml.FXML;
 
 public class ChoiceButton extends JFXButton {
+
+    /**
+     * PseudoClass that refers to the choiceButton css class
+     */
     private static final PseudoClass
             CHOICE_BUTTON_PSEUDO_CLASS = PseudoClass.getPseudoClass("choiceButton");
 
-    @FXML
-    private BehaviorList behaviorList;
-
+    /**
+     * JFXButton with a predefined css class for style and type inference
+     */
     public ChoiceButton() {
         super();
         this.pseudoClassStateChanged(CHOICE_BUTTON_PSEUDO_CLASS, true);
     }
 
+    /**
+     * JFXButton with a predefined css class for style and type inference
+     *
+     * @param text String that will appear on the button object
+     */
     public ChoiceButton(String text) {
         super(text);
         this.pseudoClassStateChanged(CHOICE_BUTTON_PSEUDO_CLASS, true);
