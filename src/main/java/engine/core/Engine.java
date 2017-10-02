@@ -2,8 +2,6 @@ package engine.core;
 
 import common.BaseLogger;
 import common.data.GameMap;
-import engine.access.extern.EngineToGUI;
-import engine.access.extern.EngineToScripting;
 import engine.data.EngineData;
 import gui.game.GameGUI;
 import org.mapeditor.core.Map;
@@ -84,16 +82,6 @@ public class Engine {
         }
 
         return mp;
-    }
-
-    /**
-     * BORROWED FROM Tiled MapEditor test code. Loads a filename from the project's resources.
-     * @param filename The relative path to be loaded for resources.
-     * @return The URL representing the full filepath to the desired resource.
-     */
-    private URL getUrlFromResources(String filename) {
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        return classLoader.getResource(filename);
     }
 
     private void start() {
