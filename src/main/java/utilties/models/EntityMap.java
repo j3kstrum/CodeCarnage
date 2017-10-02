@@ -151,8 +151,7 @@ public class EntityMap {
     public boolean setLocation(EntityTile entity, Point locationToMoveTo){
 
         //If outside of player bounds return false
-        if(locationToMoveTo.x >= this._numberOfColumns || locationToMoveTo.x <0
-                || locationToMoveTo.y >= this._numberOfRows || locationToMoveTo.y < 0){
+        if(!isInsideMap(locationToMoveTo)){
             return false;
         }
 
@@ -188,6 +187,14 @@ public class EntityMap {
         }
     }
 
+    public boolean isInsideMap(Point point){
+        if(point.x >= this._numberOfColumns || point.x <0
+                || point.y >= this._numberOfRows || point.y < 0){
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Get tile object for Player
      * @return
@@ -202,6 +209,14 @@ public class EntityMap {
      */
     public EntityTile getOpponentTile() {
         return _opponentTile;
+    }
+
+    public ArrayList<EntityTile> getPlayers() {
+        return _players;
+    }
+
+    public EntityTile[][] getEntityTiles() {
+        return _entityTiles;
     }
 }
 
