@@ -20,7 +20,7 @@ public class Behavior extends FlowPane implements Toggle {
     /**
      * Sets up an association between the selected property and the Behavior's underlying css class
      */
-    public BooleanProperty selected =
+    private BooleanProperty selected =
             new BooleanPropertyBase(false) {
 
                 /**

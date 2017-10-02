@@ -24,11 +24,11 @@ public class ScriptingController {
     @FXML
     private JFXButton add, subtract, submit;
 
-    EventHandler choiceButtonClick = new EventHandler() {
+    private EventHandler choiceButtonClick = new EventHandler() {
         /**
          * Handles click events for choice buttons.  Attempts to add the selected item to the selected behavior
          * in the list.
-         * @param event
+         * @param event Click event to be handled
          */
         @Override
         public void handle(Event event) {
