@@ -1,6 +1,6 @@
 package utilties.entities;
 
-import utilties.models.Location;
+import java.awt.*;
 
 /* Entity Abstract Class
  *
@@ -10,7 +10,7 @@ public abstract class Entity {
 
     protected EntityType entityType = null;
 
-    protected Location location;
+    protected Point location;
 
     /*
     Entity Type enum
@@ -18,16 +18,17 @@ public abstract class Entity {
     public enum EntityType {EMPTY, PLAYER}
 
 
-    public void setLocation(Location location){
+    public void setLocation(Point location){
         this.location = location;
     }
 
-    public Location getLocation(){
+    public Point getLocation(){
         return this.location;
     }
 
     public EntityType getEntityType() {
         return this.entityType;
     }
+
 
 }

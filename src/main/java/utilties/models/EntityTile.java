@@ -3,12 +3,14 @@ package utilties.models;
 import org.mapeditor.core.Tile;
 import utilties.entities.Entity;
 
+import java.awt.*;
+
 /**
  * Model class for EntityTile.  Holds location of tile and corresponding tile object
  */
 public class EntityTile {
 
-    private Location _location;
+    private Point _location;
 
     private Entity _entity;
 
@@ -20,7 +22,7 @@ public class EntityTile {
      * @param location Location to place EntityTile
      * @param entity Entity on EntityTile
      */
-    public EntityTile(Location location, Entity entity, Tile tile){
+    public EntityTile(Point location, Entity entity, Tile tile){
         this._location = location;
         this._entity = entity;
         this._tile = tile;
@@ -30,7 +32,7 @@ public class EntityTile {
      * Getter for _location of EntityTile
      * @return Location
      */
-    public Location getLocation() {
+    public Point getLocation() {
         return this._location;
     }
 

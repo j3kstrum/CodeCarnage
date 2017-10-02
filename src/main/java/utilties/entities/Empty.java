@@ -1,6 +1,6 @@
 package utilties.entities;
 
-import utilties.models.Location;
+import java.awt.*;
 
 public class Empty extends Entity {
 
@@ -8,7 +8,7 @@ public class Empty extends Entity {
     /**
     Empty Entity.  Placed in a tile without any Objects
      */
-    public Empty(Location location){
+    public Empty(Point location){
         this.location = location;
         this.entityType = EntityType.EMPTY;
     }

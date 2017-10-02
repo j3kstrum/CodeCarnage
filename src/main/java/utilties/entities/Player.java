@@ -1,6 +1,6 @@
 package utilties.entities;
 
-import utilties.models.Location;
+import java.awt.*;
 
 /**
  * Player Entity
@@ -16,7 +16,7 @@ public class Player extends Entity {
      * @param id Player ID
      * @param location Location of where Player will be added
      */
-    public Player(int id, Location location){
+    public Player(int id, Point location){
         this.id = id;
         this.health = 100;
         this.location = location;
