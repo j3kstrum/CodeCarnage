@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package common;
 
 import java.io.PrintStream;
@@ -17,6 +24,7 @@ public class BaseLogger {
     /**
      * Constructor for the logger. At its most basic, produces a logger with the given name
      * piped to standard error with the default format.
+     *
      * @param name The name to be used for logging statements with this logger.
      */
     public BaseLogger(String name) {
@@ -26,7 +34,8 @@ public class BaseLogger {
     /**
      * Constructor for the logger. Uses the basic format, but pipes output to the specified stream
      * with the specified name.
-     * @param name The name to be used when producing output.
+     *
+     * @param name   The name to be used when producing output.
      * @param stream The stream to which output should be sent.
      */
     public BaseLogger(String name, PrintStream stream) {
@@ -35,7 +44,8 @@ public class BaseLogger {
 
     /**
      * Constructor for the logger.
-     * @param name The name to be used when producing output.
+     *
+     * @param name   The name to be used when producing output.
      * @param stream The stream that output should be sent to.
      * @param format The format to be used for the logger's output.
      */
@@ -47,6 +57,7 @@ public class BaseLogger {
 
     /**
      * Outputs a message using the level string "DEBUG".
+     *
      * @param message The message to be sent.
      */
     public void debug(String message) {
@@ -55,6 +66,7 @@ public class BaseLogger {
 
     /**
      * Outputs a message using the level string "INFO".
+     *
      * @param message The message to be sent.
      */
     public void info(String message) {
@@ -63,6 +75,7 @@ public class BaseLogger {
 
     /**
      * Outputs a message using the level string "WARNING".
+     *
      * @param message The message to be sent.
      */
     public void warning(String message) {
@@ -71,6 +84,7 @@ public class BaseLogger {
 
     /**
      * Outputs a message using the level string "CRITICAL".
+     *
      * @param message The message to be sent.
      */
     public void critical(String message) {
@@ -79,6 +93,7 @@ public class BaseLogger {
 
     /**
      * Outputs a message using the level string "FATAL".
+     *
      * @param message The message to be sent.
      */
     public void fatal(String message) {
@@ -87,8 +102,9 @@ public class BaseLogger {
 
     /**
      * Generates and outputs the logging string containing the specified message.
+     *
      * @param message The message to be attached to the logging string, or placed inside if formatting approves.
-     * @param level The level to log at.
+     * @param level   The level to log at.
      */
     private void print(String message, String level) {
         String msg = this.format(this._format, level);
@@ -102,8 +118,9 @@ public class BaseLogger {
 
     /**
      * Formats the provided malleable string with the specified level.
+     *
      * @param formattable The string optionally containing formattable characters that must be formatted.
-     * @param level The level to be placed in the formattable string, if appropriate.
+     * @param level       The level to be placed in the formattable string, if appropriate.
      * @return The formatted string.
      */
     private String format(String formattable, String level) {
@@ -117,6 +134,7 @@ public class BaseLogger {
 
     /**
      * Places the logger's name in the formattable string, if appropriate.
+     *
      * @param formattable The string that may or may not have the name inserted.
      * @return The formattable string with all name tokens formatted.
      */
@@ -129,6 +147,7 @@ public class BaseLogger {
 
     /**
      * Places the logger's level in the formattable string, if appropriate.
+     *
      * @param formattable The string that may or may not have the level inserted.
      * @return The formattable string with all level tokens formatted.
      */
@@ -141,6 +160,7 @@ public class BaseLogger {
 
     /**
      * Places the time of the call in the formattable string, if appropriate.
+     *
      * @param formattable The string that may or may not have the time inserted.
      * @return The formattable string with all time tokens formatted.
      */

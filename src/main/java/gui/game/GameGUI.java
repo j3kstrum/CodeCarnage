@@ -1,11 +1,17 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package gui.game;
 
 import common.BaseLogger;
 import engine.core.Engine;
+import engine.core.TickingService;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.ObservableMap;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -23,6 +29,9 @@ import org.mapeditor.core.TileLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.locks.Lock;
+
+import static java.lang.Thread.sleep;
 
 
 public class GameGUI extends Application {
@@ -30,24 +39,20 @@ public class GameGUI extends Application {
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
+    private ArrayList<ImageView> addChildBuffer = new ArrayList<>();
+
+    private static final Object bufferLock = new Object();
+
     public Map _map;
     private Pane _imagePane;
 
     public GameGUI() throws Exception {
-        new Thread().start();
-
         //Create Engine
         _engine = new Engine(this);
-        LOGGER.info("Beginning core game battle...");
+        LOGGER.info("Beginning game gui and engine...");
         this._engine.startGame();
 
         start(new Stage());
-    }
-
-    public GameGUI(String[] args) {
-        new Thread(
-                () -> launch(args)
-        ).start();
     }
 
     @Override
@@ -79,78 +84,102 @@ public class GameGUI extends Application {
     /**
      * Starts thread to update Game GUI
      */
-    private void startUIUpdateThread(){
-        //TODO Think about how often rendering should happen
-        Task task = new Task<Void>() {
-            @Override
-            public Void call() throws Exception {
+    private void startUIUpdateThread() {
 
-                while (true)
-                {
-                    //Currently renders 4 frames per second, which quicker than engine ticks ensuring each turn is accounted for
-                    Platform.runLater ( () -> updateGameGUI());
-                    Thread.sleep (250);
+        TickingService ts = new TickingService(_engine);
+
+        ts.setOnSucceeded(
+                (event) -> {
+                    _map = ts.getValue();
+                    uiTick(ts);
                 }
-            }
-        };
+        );
 
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
+        uiTick(ts);
+    }
+
+    /**
+     * Performs all of the required actions for the UI to tick.
+     * @param ts The ticking service to be used for engine tick calls.
+     */
+    private void uiTick(TickingService ts) {
+        if (!_engine.isRunning()) {
+            LOGGER.info("Engine not running.");
+
+            if (!_engine.cleanup()) {
+                LOGGER.critical("Engine cleanup failed.");
+                System.exit(1);
+            }
+            System.exit(0);
+        }
+
+        new Thread(this::updateGameGUI).start();
+        ts.restart();
+        synchronized (bufferLock) {
+            ArrayList<ImageView> purgable = new ArrayList<>();
+            for (ImageView child : addChildBuffer) {
+                // This can no longer be done in updateGameGUI,
+                // as it is called from a non-FX thread.
+                _imagePane.getChildren().add(child);
+                purgable.add(child);
+            }
+            addChildBuffer.removeAll(purgable);
+        }
     }
 
     /**
      * Updates the GUI based on data read from Map
      * Renderer code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
      */
-    public void updateGameGUI(){
-
-        if(_map==null){
-            return;
-        }
-        ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
-
-        for (MapLayer layer : layerList) {
-
-            TileLayer tileLayer = (TileLayer) layer;
-
-            if (tileLayer == null) {
-                System.out.println("can't get map layer");
-                System.exit(-1);
+    public void updateGameGUI() {
+        synchronized (bufferLock) {
+            if (_map == null) {
+                return;
             }
+            ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
 
-            int width = tileLayer.getBounds().width;
-            int height = tileLayer.getBounds().height;
+            for (MapLayer layer : layerList) {
 
-            Tile tile;
-            int tileID;
+                TileLayer tileLayer = (TileLayer) layer;
 
-            HashMap<Integer, Image> tileHash = new HashMap<>();
-            Image tileImage = null;
+                if (tileLayer == null) {
+                    System.out.println("can't get map layer");
+                    System.exit(-1);
+                }
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    tile = tileLayer.getTileAt(x, y);
-                    if (tile == null) {
-                        continue;
-                    }
-                    tileID = tile.getId();
-                    if (tileHash.containsKey(tileID)) {
-                        tileImage = tileHash.get(tileID);
-                    } else {
-                        try {
-                            tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                int width = tileLayer.getBounds().width;
+                int height = tileLayer.getBounds().height;
+
+                Tile tile;
+                int tileID;
+
+                HashMap<Integer, Image> tileHash = new HashMap<>();
+                Image tileImage = null;
+
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        tile = tileLayer.getTileAt(x, y);
+                        if (tile == null) {
+                            continue;
                         }
-                        tileHash.put(tileID, tileImage);
+                        tileID = tile.getId();
+                        if (tileHash.containsKey(tileID)) {
+                            tileImage = tileHash.get(tileID);
+                        } else {
+                            try {
+                                tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            tileHash.put(tileID, tileImage);
+                        }
+
+                        ImageView i = new ImageView(tileImage);
+                        i.setTranslateX(x * 32);
+                        i.setTranslateY(y * 32);
+
+                        addChildBuffer.add(i);
                     }
-
-                    ImageView i = new ImageView(tileImage);
-                    i.setTranslateX(x * 32);
-                    i.setTranslateY(y * 32);
-
-                    _imagePane.getChildren().add(i);
                 }
             }
         }
