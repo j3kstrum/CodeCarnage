@@ -1,4 +1,4 @@
-package interpreter;
+package gui.scripting;
 
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;

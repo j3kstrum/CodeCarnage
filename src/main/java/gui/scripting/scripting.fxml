@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import gui.scripting.*?>
-<?import interpreter.BehaviorList?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
@@ -53,7 +52,7 @@
                                     </VBox.margin>
                                 </ChoiceButton>
                                 <ChoiceButton layoutX="89.0" layoutY="30.0" style="-fx-background-color: #88ffff;"
-                                              text="Else">
+                                              text="Else If">
                                     <VBox.margin>
                                         <Insets bottom="10.0" top="10.0"/>
                                     </VBox.margin>

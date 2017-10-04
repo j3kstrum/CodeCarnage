@@ -2,8 +2,6 @@ package gui.scripting;
 
 import com.jfoenix.controls.JFXButton;
 import gui.game.GameGUI;
-import interpreter.Behavior;
-import interpreter.BehaviorList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
