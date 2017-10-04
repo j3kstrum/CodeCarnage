@@ -12,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.ArrayList;
+
 public class ScriptingController {
 
 
@@ -145,10 +147,45 @@ public class ScriptingController {
     }
 
     /**
-     * @return returns whether or not the ChoiceButton may be added to the selcted behavior to keep well-formedness
+     * Should be called whenever the toggle is changed, to get all potential ChoiceButtons
      */
-    private boolean isValidAdd() {
+    private void getValidChoices() {
+        Behavior behavior = (Behavior) behaviorList.getToggleGroup().getSelectedToggle();
+        ArrayList<ScriptButton> currentScript = new ArrayList<>();
+
+        behavior.getChildren().filtered(b -> b instanceof ScriptButton).addAll(currentScript);
+
+        ScriptButton lastButton = currentScript.get(currentScript.size() - 1);
+        String lastButtonText = lastButton.getText().toLowerCase().trim();
+
+        if (currentScript.isEmpty()) {
+            // enforce 'if'
+        } else if (lastButtonText.equals("if") || lastButtonText.equals("and") || lastButtonText.equals("operator")) {
+            // enforce data
+        } else if (lastButtonText.equals("data") && (currentScript.size() % 4) - 2 == 0) {
+            // enforce operator
+        } else if (lastButtonText.equals("data")) {
+            // enforce and or then
+        } else if (lastButtonText.equals("then")) {
+            // enforce command
+        }
+
         throw new NotImplementedException();
+    }
+
+    /**
+     * @param behavior Behavior to be checked for completeness
+     * @return Returns true if behavior is well formed
+     */
+    private boolean isCompleteBehavior(Behavior behavior) {
+        ScriptButton lastButton = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size() - 1);
+
+        // we can do this since validity is enforced along the way
+        if (lastButton.getText().equals("command")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

@@ -37,25 +37,19 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
         </AnchorPane>
-        <ScrollPane layoutX="71.0" layoutY="28.0" prefHeight="824.0" prefWidth="262.0">
+        <ScrollPane layoutX="71.0" layoutY="28.0" prefHeight="824.0">
             <content>
-                <AnchorPane fx:id="choicesPane" minHeight="0.0" minWidth="0.0">
+                <AnchorPane fx:id="choicesPane" minHeight="0.0">
                     <children>
-                        <VBox alignment="TOP_CENTER" layoutX="15.0" layoutY="8.0" prefHeight="209.0" prefWidth="233.0">
+                        <VBox alignment="TOP_CENTER" layoutX="-2.0" layoutY="8.0" prefHeight="166.0" prefWidth="250.0">
                             <children>
-                                <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="260.0" text="Conditionals"
+                                <Label alignment="TOP_CENTER" prefHeight="27.0" text="Conditionals"
                                        textAlignment="CENTER">
                                     <font>
                                         <Font name="System Bold Italic" size="18.0"/>
                                     </font>
                                 </Label>
                                 <ChoiceButton style="-fx-background-color: #88ffff;" text="If">
-                                    <VBox.margin>
-                                        <Insets bottom="10.0" top="10.0"/>
-                                    </VBox.margin>
-                                </ChoiceButton>
-                                <ChoiceButton layoutX="89.0" layoutY="30.0" style="-fx-background-color: #88ffff;"
-                                              text="Else If">
                                     <VBox.margin>
                                         <Insets bottom="10.0" top="10.0"/>
                                     </VBox.margin>
@@ -74,9 +68,9 @@
                                 </ChoiceButton>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" layoutY="217.0" prefHeight="252.0" prefWidth="260.0">
+                        <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="174.0" prefHeight="252.0" prefWidth="250.0">
                             <children>
-                                <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="260.0" text="Operators"
+                                <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="111.0" text="Operators"
                                        textAlignment="CENTER">
                                     <font>
                                         <Font name="System Bold Italic" size="18.0"/>
@@ -109,10 +103,9 @@
                                 </ChoiceButton>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="469.0" prefHeight="216.0"
-                              prefWidth="233.0">
+                        <VBox alignment="TOP_CENTER" layoutX="7.0" layoutY="426.0" prefHeight="216.0" prefWidth="250.0">
                             <children>
-                                <Label alignment="TOP_CENTER" prefHeight="32.0" prefWidth="233.0" text="Data"
+                                <Label alignment="TOP_CENTER" prefHeight="32.0" prefWidth="117.0" text="Data"
                                        textAlignment="CENTER">
                                     <font>
                                         <Font name="System Bold Italic" size="18.0"/>
@@ -143,9 +136,9 @@
                                 </ChoiceButton>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="685.0" prefHeight="262.0" prefWidth="260.0">
+                        <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="642.0" prefHeight="342.0" prefWidth="250.0">
                             <children>
-                                <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="260.0" text="Commands"
+                                <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="189.0" text="Commands"
                                        textAlignment="CENTER">
                                     <font>
                                         <Font name="System Bold Italic" size="18.0"/>
