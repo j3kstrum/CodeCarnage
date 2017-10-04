@@ -124,6 +124,7 @@ public class Engine {
      * @return true if successful, false if shutdown failed.
      */
     public boolean shutdown(boolean now) {
+        System.out.println("Shutting down...");
         if (now) {
             this._shutdown = true;
         } else {
@@ -160,10 +161,15 @@ public class Engine {
      */
     public Map tick() {
 
+        System.out.println("Engine tick call received.");
+        if (game == null) {
+            System.out.println("Game was null. Returning null.");
+            return null;
+        }
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
-
+        System.out.println("We didn't shut down...");
         return game.nextTurn();
     }
 

@@ -47,6 +47,7 @@ public class Game {
      */
     public Map nextTurn() {
         this._numberOfTurnsCompleted++;
+        System.out.println("Returning the next map...");
         return null;
 //        return this._entityMap;
     }

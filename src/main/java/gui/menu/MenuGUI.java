@@ -34,8 +34,6 @@ public class MenuGUI extends Application {
         ).start();
     }
 
-    private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
-
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("menu.fxml"));

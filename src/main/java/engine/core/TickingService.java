@@ -11,8 +11,6 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import org.mapeditor.core.Map;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Ticking service used by JavaFX. Used to compute the next turn
  * and other tick elements on a JavaFX slave thread.
@@ -23,16 +21,12 @@ public class TickingService extends Service<Map> {
     private long lastTick = 0;
     private Map _nextTurn = null;
 
-    private AtomicBoolean _resultReady;
-
     /**
      * Initialize the service.
      * @param engine The engine to use for ticking.
      */
     public TickingService(Engine engine) {
         _engine = engine;
-        _resultReady = new AtomicBoolean();
-        _resultReady.set(false);
     }
 
     /**
@@ -48,36 +42,11 @@ public class TickingService extends Service<Map> {
              * @return The Map representing the next turn.
              */
             @Override protected Map call() throws Exception {
-                _resultReady.set(false);
                 _nextTurn = _engine.tick();
                 lastTick = _engine.performWait(lastTick);
-                _resultReady.set(true);
                 return _nextTurn;
             }
         };
-    }
-
-    /**
-     * Forces the service to register the result as not being ready.
-     */
-    public void forceResultNotReady() {
-        this._resultReady.set(false);
-    }
-
-    /**
-     *
-     * @return The time that the last tick began at.
-     */
-    public long tickStart() {
-        return lastTick;
-    }
-
-    /**
-     *
-     * @return True if the computed result is ready, False otherwise.
-     */
-    public boolean resultReady() {
-        return _resultReady.get();
     }
 
 }

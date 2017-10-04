@@ -83,32 +83,33 @@ public class GameGUI extends Application {
 
         TickingService ts = new TickingService(_engine);
 
-        while (_engine.isRunning()) {
-            ts.forceResultNotReady();
-            new Thread(
-                () -> ts.restart()
-            ).start();
-            new Thread(
-                () -> updateGameGUI()
-            ).start();
-            while (!ts.resultReady()) {
-                // Sleep for half of the time difference between now and the final tick time.
-                long sleepMS = (ts.tickStart() + Engine.TICK_TIME - System.currentTimeMillis()) / 2;
-                try {
-                    // Always ensure we sleep for at least 5 ms to allow for some computation.
-                    Thread.sleep(sleepMS > 500 ? sleepMS : 500);
-                } catch (InterruptedException ie) {
-                    LOGGER.warning("Interrupted tick result waiting sleeping!");
+        ts.setOnSucceeded(
+                (event) -> {
+                    _map = ts.getValue();
+                    uiTick(ts);
                 }
+        );
+
+        uiTick(ts);
+    }
+
+    /**
+     * Performs all of the required actions for the UI to tick.
+     * @param ts The ticking service to be used for engine tick calls.
+     */
+    private void uiTick(TickingService ts) {
+        if (!_engine.isRunning()) {
+            LOGGER.info("Engine not running.");
+
+            if (!_engine.cleanup()) {
+                LOGGER.critical("Engine cleanup failed.");
+                System.exit(1);
             }
-            _map = ts.getValue();
+            System.exit(0);
         }
 
-        if (!_engine.cleanup()) {
-            LOGGER.critical("Engine cleanup failed.");
-            System.exit(1);
-        }
-        System.exit(0);
+        new Thread(this::updateGameGUI).start();
+        ts.restart();
     }
 
     /**
