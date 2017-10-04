@@ -34,8 +34,6 @@ public class GameGUI extends Application {
     private Pane _imagePane;
 
     public GameGUI() throws Exception {
-        new Thread().start();
-
         //Create Engine
         _engine = new Engine(this);
         LOGGER.info("Beginning core game battle...");

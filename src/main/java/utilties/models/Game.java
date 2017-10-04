@@ -29,17 +29,14 @@ public class Game {
         return _entityMap;
     }
 
+
+    //TODO How are we going to implement scripting?
     /**
-     * Computes all game events for next turn.  Returns updated entityMap.
+     * Returns updated entityMap.
      * @return Updated EntityMap
      */
     public EntityMap nextTurn(){
-        int playerX = this._entityMap.getPlayerTile().getLocation().x;
-        int playerY = this._entityMap.getPlayerTile().getLocation().y;
-
-        this._entityMap.setLocation(_entityMap.getPlayerTile(), new Point(playerX + 1, playerY));
-
-        this._numberOfTurnsCompleted += 1;
+        this._numberOfTurnsCompleted++;
         return this._entityMap;
     }
 
@@ -89,6 +86,41 @@ public class Game {
         }
     }
 
+    /**
+     *  Sets the players state to defending
+     * @param playerId
+     */
+    public void defend(int playerId){
+        this.getPlayer(playerId).setShielding(true);
+    }
+
+    /**
+     * Sets the players state to stop defending
+     * @param playerId
+     */
+    public void stopDefending(int playerId){
+        this.getPlayer(playerId).setShielding(false);
+    }
+
+    /**
+     * Heals the players to a maximum of 100.  Adds 3 health to the player
+     * @param playerId
+     */
+    public void heal(int playerId){
+        Player player = this.getPlayer(playerId);
+        if(player.getHealth() + 3 >100){
+            player.setHealth(100);
+        }
+        else{
+            player.setHealth(player.getHealth() + 3);
+        }
+    }
+
+    /**
+     * Gets entity at specified location
+     * @param location
+     * @return
+     */
     public Entity getEntityAtLocation(Point location){
         return this._entityMap.getEntityTiles()[location.x][location.y].getEntity();
     }
@@ -121,5 +153,6 @@ public class Game {
         Point opponentLocation = getPlayer(opponentId).getLocation();
         return Math.hypot(playerLocation.x - opponentLocation.x, playerLocation.y - opponentLocation.y);
     }
+
 }
 
