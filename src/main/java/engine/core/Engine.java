@@ -161,15 +161,13 @@ public class Engine {
      */
     public Map tick() {
 
-        System.out.println("Engine tick call received.");
         if (game == null) {
-            System.out.println("Game was null. Returning null.");
+            ENGINE_LOGGER.critical("Game was null. Returning null.");
             return null;
         }
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
-        System.out.println("We didn't shut down...");
         return game.nextTurn();
     }
 

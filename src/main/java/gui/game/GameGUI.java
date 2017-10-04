@@ -29,6 +29,7 @@ import org.mapeditor.core.TileLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.locks.Lock;
 
 import static java.lang.Thread.sleep;
 
@@ -38,7 +39,9 @@ public class GameGUI extends Application {
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
-    private ArrayList<ImageView> addChildBuffer;
+    private ArrayList<ImageView> addChildBuffer = new ArrayList<>();
+
+    private static final Object bufferLock = new Object();
 
     public Map _map;
     private Pane _imagePane;
@@ -110,13 +113,17 @@ public class GameGUI extends Application {
             System.exit(0);
         }
 
-        addChildBuffer = new ArrayList<>();
         new Thread(this::updateGameGUI).start();
         ts.restart();
-        for (ImageView child : addChildBuffer) {
-            // This can no longer be done in updateGameGUI,
-            // as it is called from a non-FX thread.
-            _imagePane.getChildren().add(child);
+        synchronized (bufferLock) {
+            ArrayList<ImageView> purgable = new ArrayList<>();
+            for (ImageView child : addChildBuffer) {
+                // This can no longer be done in updateGameGUI,
+                // as it is called from a non-FX thread.
+                _imagePane.getChildren().add(child);
+                purgable.add(child);
+            }
+            addChildBuffer.removeAll(purgable);
         }
     }
 
@@ -125,53 +132,54 @@ public class GameGUI extends Application {
      * Renderer code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
      */
     public void updateGameGUI() {
-
-        if (_map == null) {
-            return;
-        }
-        ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
-
-        for (MapLayer layer : layerList) {
-
-            TileLayer tileLayer = (TileLayer) layer;
-
-            if (tileLayer == null) {
-                System.out.println("can't get map layer");
-                System.exit(-1);
+        synchronized (bufferLock) {
+            if (_map == null) {
+                return;
             }
+            ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
 
-            int width = tileLayer.getBounds().width;
-            int height = tileLayer.getBounds().height;
+            for (MapLayer layer : layerList) {
 
-            Tile tile;
-            int tileID;
+                TileLayer tileLayer = (TileLayer) layer;
 
-            HashMap<Integer, Image> tileHash = new HashMap<>();
-            Image tileImage = null;
+                if (tileLayer == null) {
+                    System.out.println("can't get map layer");
+                    System.exit(-1);
+                }
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    tile = tileLayer.getTileAt(x, y);
-                    if (tile == null) {
-                        continue;
-                    }
-                    tileID = tile.getId();
-                    if (tileHash.containsKey(tileID)) {
-                        tileImage = tileHash.get(tileID);
-                    } else {
-                        try {
-                            tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
+                int width = tileLayer.getBounds().width;
+                int height = tileLayer.getBounds().height;
+
+                Tile tile;
+                int tileID;
+
+                HashMap<Integer, Image> tileHash = new HashMap<>();
+                Image tileImage = null;
+
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        tile = tileLayer.getTileAt(x, y);
+                        if (tile == null) {
+                            continue;
                         }
-                        tileHash.put(tileID, tileImage);
+                        tileID = tile.getId();
+                        if (tileHash.containsKey(tileID)) {
+                            tileImage = tileHash.get(tileID);
+                        } else {
+                            try {
+                                tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                            tileHash.put(tileID, tileImage);
+                        }
+
+                        ImageView i = new ImageView(tileImage);
+                        i.setTranslateX(x * 32);
+                        i.setTranslateY(y * 32);
+
+                        addChildBuffer.add(i);
                     }
-
-                    ImageView i = new ImageView(tileImage);
-                    i.setTranslateX(x * 32);
-                    i.setTranslateY(y * 32);
-
-                    addChildBuffer.add(i);
                 }
             }
         }
