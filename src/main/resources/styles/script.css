@@ -2,8 +2,15 @@
     -fx-font-weight: bold;
 }
 
-VBox, FlowPane{
+BehaviorList, Behavior{
     -fx-background-color: #373737;
+    -fx-padding: 15;
+}
+
+Behavior{
+    -fx-pref-width: 1065;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
 }
 
 .root {
@@ -22,7 +29,24 @@ AnchorPane{
     -fx-text-fill: White;
 }
 
-#behaviors {
+#behaviorList {
     -fx-background-color: #616161;
+}
+
+.behavior:hover {
+    -fx-scale-y: 1.1;
+}
+
+.behavior:selected {
+    -fx-border-width: 3;
+    -fx-border-style: solid;
+    -fx-border-color: #80deea;
+    -fx-border-radius: 3;
+}
+
+.jfx-button:choiceButton {
+    -fx-margin-top: 10;
+    -fx-margin-bottom: 10;
+    -fx-padding: 3 10 3 10;
 }
 
