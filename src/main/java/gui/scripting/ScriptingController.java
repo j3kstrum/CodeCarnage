@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ScriptingController {
 
@@ -141,6 +142,13 @@ public class ScriptingController {
                 " If you have not yet created a behavior, select the green 'plus' button " +
                 "to do so.");
         alert.showAndWait();
+    }
+
+    /**
+     * @return returns whether or not the ChoiceButton may be added to the selcted behavior to keep well-formedness
+     */
+    private boolean isValidAdd() {
+        throw new NotImplementedException();
     }
 
 }

@@ -9,30 +9,33 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: #8e8e8e;"
+            minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: #373737;"
             xmlns="http://javafx.com/javafx/8.0.141" fx:controller="gui.scripting.ScriptingController">
     <children>
-        <AnchorPane layoutX="387.0" layoutY="29.0" prefHeight="282.0" prefWidth="826.0">
+        <AnchorPane layoutX="404.0" layoutY="28.0" style="-fx-background-color: #373737;" AnchorPane.leftAnchor="404.0">
             <children>
-                <Label layoutX="222.0" text="Create Your Script" textFill="WHITE">
+                <Label layoutX="135.0" text="Create Your Script" textFill="WHITE">
                     <font>
                         <Font size="48.0"/>
                     </font>
                 </Label>
-                <Text fill="WHITE" layoutX="94.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                <Text fill="WHITE" layoutX="14.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0"
                       text="Welcome to the Code Carnage Scripting Menu! Here you will be asked to make several important decisions as you prepare your character for battle.  Below, you will see three groups of keywords.  Each of these groups will be used in a modular fashion to build your preferred tactics!  To start, click '+' to create a new behavior for your character.  Then simply drag and drop the pieces of the word banks to create a behavior of the following structure."
                       textAlignment="JUSTIFY" wrappingWidth="637.0000123977661">
                     <font>
                         <Font size="18.0"/>
                     </font>
                 </Text>
-                <Text fill="WHITE" layoutX="154.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                <Text fill="WHITE" layoutX="77.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0"
                       text="if &lt;data&gt; &lt;operator&gt; &lt;data&gt; then &lt;command&gt;">
                     <font>
                         <Font size="24.0"/>
                     </font>
                 </Text>
             </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
         </AnchorPane>
         <ScrollPane layoutX="71.0" layoutY="28.0" prefHeight="824.0" prefWidth="262.0">
             <content>
