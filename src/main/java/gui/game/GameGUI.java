@@ -38,6 +38,8 @@ public class GameGUI extends Application {
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
+    private ArrayList<ImageView> addChildBuffer;
+
     public Map _map;
     private Pane _imagePane;
 
@@ -108,8 +110,14 @@ public class GameGUI extends Application {
             System.exit(0);
         }
 
+        addChildBuffer = new ArrayList<>();
         new Thread(this::updateGameGUI).start();
         ts.restart();
+        for (ImageView child : addChildBuffer) {
+            // This can no longer be done in updateGameGUI,
+            // as it is called from a non-FX thread.
+            _imagePane.getChildren().add(child);
+        }
     }
 
     /**
@@ -163,7 +171,7 @@ public class GameGUI extends Application {
                     i.setTranslateX(x * 32);
                     i.setTranslateY(y * 32);
 
-                    _imagePane.getChildren().add(i);
+                    addChildBuffer.add(i);
                 }
             }
         }
