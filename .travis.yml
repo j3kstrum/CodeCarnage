@@ -5,7 +5,12 @@ jdk:
 
 script:
     - gradle clean cleanidea idea buildJar
+    - if [ "$TRAVIS_BRANCH" = "develop" ]; then gradle clean test; fi
+    - if [ "$TRAVIS_BRANCH" = "master" ]; then gradle clean test; fi
 
 after_success:
-    - gradle clean test cobertura coveralls
+    - gradle clean test jacocoTestReport coveralls
+
+notifications:
+    email: false
 

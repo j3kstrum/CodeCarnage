@@ -15,9 +15,6 @@ import javafx.stage.Stage;
 
 public class MenuGUI extends Application {
 
-    private Engine _engine = null;
-    private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
-
     public MenuGUI() {
         super();
     }
@@ -28,6 +25,7 @@ public class MenuGUI extends Application {
         ).start();
     }
 
+    private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -41,41 +39,25 @@ public class MenuGUI extends Application {
 
         loader.setController(controller);
 
-        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                new EventHandler<MouseEvent>() {
-                    public void handle(MouseEvent m) {
-                        System.out.println("You clicked Start!");
+        startButton.addEventHandler(
+            MouseEvent.MOUSE_CLICKED,
+            m -> {
+                LOGGER.info("You clicked Start!");
 
-                        try {
-                            new ScriptingGUI();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                try {
+                    new ScriptingGUI();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                        primaryStage.getScene().getWindow().hide();
-                    }
-                });
+                primaryStage.getScene().getWindow().hide();
+            }
+        );
 
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
-    }
-
-    /**
-     * Sets the MenuGUI's engine, which it will be observing.
-     * @throws IllegalStateException If the engine already exists and is trying to be re-assigned.
-     * @param engine The engine which should be used as the target of the observer.
-     */
-    public void observe(Engine engine) {
-//        if (this._engine != null) {
-//            throw new IllegalStateException("Engine already exists for MenuGUI, but attempted to re-specify.");
-//        }
-//        LOGGER.debug("Assigning Engine to MenuGUI.");
-//        this._engine = engine;
-        // TODO: Remove the below! We aren't in the game just yet!!!
-//        LOGGER.info("Beginning core game battle...");
-//        this._engine.startGame();
     }
 
 }
