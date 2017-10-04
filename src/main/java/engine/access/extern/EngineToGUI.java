@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package engine.access.extern;
 
 import common.BaseLogger;
@@ -18,7 +25,7 @@ public class EngineToGUI {
 
     /**
      * Updates the GUI by connecting to the socket and requesting it to update.
-     *
+     * <p>
      * Ideally, if possible, this will force the GUI to read all information that it needs
      * from the Engine and its EngineData without requiring any explicit parameters.
      */

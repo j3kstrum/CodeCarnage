@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package utilties.models;
 
 import org.mapeditor.core.Tile;
@@ -19,10 +26,11 @@ public class EntityTile {
     /**
      * Creates EntityTile object with passed in _location, _entity and corresponding _tile
      * Currently only used to store _location of the _entity
+     *
      * @param location Location to place EntityTile
-     * @param entity Entity on EntityTile
+     * @param entity   Entity on EntityTile
      */
-    public EntityTile(Point location, Entity entity, Tile tile){
+    public EntityTile(Point location, Entity entity, Tile tile) {
         this._location = location;
         this._entity = entity;
         this._tile = tile;
@@ -30,6 +38,7 @@ public class EntityTile {
 
     /**
      * Getter for _location of EntityTile
+     *
      * @return Location
      */
     public Point getLocation() {
@@ -38,6 +47,7 @@ public class EntityTile {
 
     /**
      * Getter for Entity
+     *
      * @return Entity
      */
     public Entity getEntity() {
@@ -46,14 +56,16 @@ public class EntityTile {
 
     /**
      * Getter for Entity Type of EntityTile
+     *
      * @return EntityType
      */
-    public Entity.EntityType getEntityType(){
+    public Entity.EntityType getEntityType() {
         return this._entity.getEntityType();
     }
 
     /**
      * Gets Tile for Entity
+     *
      * @return _tile
      */
     public Tile getTile() {
@@ -62,9 +74,10 @@ public class EntityTile {
 
     /**
      * Sets Tile for Entity
+     *
      * @param tile Tile to set
      */
-    public void setTile(Tile tile){
+    public void setTile(Tile tile) {
         this._tile = tile;
     }
 

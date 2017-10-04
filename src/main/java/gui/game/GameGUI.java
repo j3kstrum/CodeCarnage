@@ -1,11 +1,17 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package gui.game;
 
 import common.BaseLogger;
 import engine.core.Engine;
+import engine.core.TickingService;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.ObservableMap;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -24,6 +30,8 @@ import org.mapeditor.core.TileLayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static java.lang.Thread.sleep;
+
 
 public class GameGUI extends Application {
 
@@ -36,16 +44,10 @@ public class GameGUI extends Application {
     public GameGUI() throws Exception {
         //Create Engine
         _engine = new Engine(this);
-        LOGGER.info("Beginning core game battle...");
+        LOGGER.info("Beginning game gui and engine...");
         this._engine.startGame();
 
         start(new Stage());
-    }
-
-    public GameGUI(String[] args) {
-        new Thread(
-                () -> launch(args)
-        ).start();
     }
 
     @Override
@@ -77,33 +79,45 @@ public class GameGUI extends Application {
     /**
      * Starts thread to update Game GUI
      */
-    private void startUIUpdateThread(){
-        //TODO Think about how often rendering should happen
-        Task task = new Task<Void>() {
-            @Override
-            public Void call() throws Exception {
+    private void startUIUpdateThread() {
 
-                while (true)
-                {
-                    //Currently renders 4 frames per second, which quicker than engine ticks ensuring each turn is accounted for
-                    Platform.runLater ( () -> updateGameGUI());
-                    Thread.sleep (250);
+        TickingService ts = new TickingService(_engine);
+
+        while (_engine.isRunning()) {
+            ts.forceResultNotReady();
+            new Thread(
+                () -> ts.restart()
+            ).start();
+            new Thread(
+                () -> updateGameGUI()
+            ).start();
+            while (!ts.resultReady()) {
+                // Sleep for half of the time difference between now and the final tick time.
+                long sleepMS = (ts.tickStart() + Engine.TICK_TIME - System.currentTimeMillis()) / 2;
+                try {
+                    // Always ensure we sleep for at least 5 ms to allow for some computation.
+                    Thread.sleep(sleepMS > 500 ? sleepMS : 500);
+                } catch (InterruptedException ie) {
+                    LOGGER.warning("Interrupted tick result waiting sleeping!");
                 }
             }
-        };
+            _map = ts.getValue();
+        }
 
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
+        if (!_engine.cleanup()) {
+            LOGGER.critical("Engine cleanup failed.");
+            System.exit(1);
+        }
+        System.exit(0);
     }
 
     /**
      * Updates the GUI based on data read from Map
      * Renderer code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
      */
-    public void updateGameGUI(){
+    public void updateGameGUI() {
 
-        if(_map==null){
+        if (_map == null) {
             return;
         }
         ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
