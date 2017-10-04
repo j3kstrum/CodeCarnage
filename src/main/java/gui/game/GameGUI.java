@@ -27,21 +27,18 @@ import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.locks.Lock;
-
-import static java.lang.Thread.sleep;
-
 
 public class GameGUI extends Application {
 
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
-    private ArrayList<ImageView> addChildBuffer = new ArrayList<>();
-
-    private static final Object bufferLock = new Object();
+    // (y*height+x)*layers + currLayer -> tile at x, y, currLayer
+    private HashMap<Integer, Integer> mapCache = new HashMap<>();
+    private HashMap<Integer, Image> tileCache = new HashMap<>();
 
     public Map _map;
     private Pane _imagePane;
@@ -113,73 +110,79 @@ public class GameGUI extends Application {
             System.exit(0);
         }
 
-        new Thread(this::updateGameGUI).start();
+        updateGameGUI();
         ts.restart();
-        synchronized (bufferLock) {
-            ArrayList<ImageView> purgable = new ArrayList<>();
-            for (ImageView child : addChildBuffer) {
-                // This can no longer be done in updateGameGUI,
-                // as it is called from a non-FX thread.
-                _imagePane.getChildren().add(child);
-                purgable.add(child);
-            }
-            addChildBuffer.removeAll(purgable);
-        }
     }
 
     /**
      * Updates the GUI based on data read from Map
      * Renderer code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
      */
-    public void updateGameGUI() {
-        synchronized (bufferLock) {
-            if (_map == null) {
-                return;
+    private void updateGameGUI() {
+        if (_map == null) {
+            return;
+        }
+        ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
+        final int layers = layerList.size();
+
+        int layerIndex = -1;
+
+        for (MapLayer layer : layerList) {
+
+            layerIndex++;
+
+            TileLayer tileLayer = (TileLayer) layer;
+
+            if (tileLayer == null) {
+                System.out.println("can't get map layer");
+                System.exit(-1);
             }
-            ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
 
-            for (MapLayer layer : layerList) {
+            int width = tileLayer.getBounds().width;
+            int height = tileLayer.getBounds().height;
 
-                TileLayer tileLayer = (TileLayer) layer;
+            Tile tile;
+            int tileID;
 
-                if (tileLayer == null) {
-                    System.out.println("can't get map layer");
-                    System.exit(-1);
-                }
+            Image tileImage = null;
 
-                int width = tileLayer.getBounds().width;
-                int height = tileLayer.getBounds().height;
-
-                Tile tile;
-                int tileID;
-
-                HashMap<Integer, Image> tileHash = new HashMap<>();
-                Image tileImage = null;
-
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        tile = tileLayer.getTileAt(x, y);
-                        if (tile == null) {
-                            continue;
-                        }
-                        tileID = tile.getId();
-                        if (tileHash.containsKey(tileID)) {
-                            tileImage = tileHash.get(tileID);
-                        } else {
-                            try {
-                                tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                            tileHash.put(tileID, tileImage);
-                        }
-
-                        ImageView i = new ImageView(tileImage);
-                        i.setTranslateX(x * 32);
-                        i.setTranslateY(y * 32);
-
-                        addChildBuffer.add(i);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    // TODO: Reconsider how this is being done.
+                    // Should check for validity of EVERY layer on the tile
+                    // And redraw
+//                    int cacheVal = layerIndex + (layers * (x + (width * y)));
+                    tile = tileLayer.getTileAt(x, y);
+                    if (tile == null) {
+                        // TODO: Don't continue! This invalidates the cache.
+//                        tileID = -1;
+                        continue;
                     }
+                    else {
+                        tileID = tile.getId();
+                    }
+//                    if (mapCache.get(cacheVal) != null && mapCache.get(cacheVal).equals(tileID)) {
+//                        // Don't bother redrawing or recomputing.
+//                        continue;
+//                    }
+                    if (tileCache.containsKey(tileID)) {
+                        tileImage = tileCache.get(tileID);
+                    } else {
+                        try {
+                            tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        tileCache.put(tileID, tileImage);
+                    }
+
+                    ImageView i = new ImageView(tileImage);
+                    i.setTranslateX(x * 32);
+                    i.setTranslateY(y * 32);
+
+//                    mapCache.put(cacheVal, tileID);
+
+                    _imagePane.getChildren().add(i);
                 }
             }
         }
