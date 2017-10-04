@@ -38,7 +38,6 @@ public class Engine {
 
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
-    public GameMap gameMap;
     public Map map;
     public Game game;
     public GameGUI gameGUI;
@@ -168,6 +167,7 @@ public class Engine {
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
+        game.move(0, 1,0);
         return game.nextTurn();
     }
 

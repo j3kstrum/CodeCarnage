@@ -228,5 +228,9 @@ public class EntityMap {
     public EntityTile[][] getEntityTiles() {
         return _entityTiles;
     }
+
+    public Map getMap(){
+        return this._gameMap;
+    }
 }
 
