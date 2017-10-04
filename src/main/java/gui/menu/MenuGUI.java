@@ -34,6 +34,7 @@ public class MenuGUI extends Application {
         ).start();
     }
 
+    private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -66,4 +67,5 @@ public class MenuGUI extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
     }
+
 }

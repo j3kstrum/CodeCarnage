@@ -7,7 +7,6 @@
 
 package common;
 
-import engine.core.Engine;
 import gui.menu.MenuGUI;
 
 /**
@@ -19,8 +18,6 @@ import gui.menu.MenuGUI;
  */
 public class Main {
 
-    private static Engine _ENGINE;
-    private static MenuGUI _GUI;
     private static final BaseLogger LOGGER = new BaseLogger("Main");
 
     /**
@@ -29,10 +26,8 @@ public class Main {
      * @param args The system's command line arguments. This should be empty.
      */
     public static void main(String[] args) {
-        _GUI = new MenuGUI(args);
-        //_ENGINE = new Engine();
-        LOGGER.debug("MenuGUI and Engine created. Setting observer...");
-        //_GUI.observe(_ENGINE);
+        new MenuGUI(args);
+        LOGGER.info("Main method complete.");
     }
 
 }
