@@ -10,6 +10,8 @@ public class Player extends Entity {
 
     private int id;
     private int health;
+    private boolean is_dead;
+    public static final int HEALTH_MAX = 100;
 
     /**
      *
@@ -18,8 +20,9 @@ public class Player extends Entity {
      */
     public Player(int id, Location location){
         this.id = id;
-        this.health = 100;
+        this.health = HEALTH_MAX; // TODO: If needed, scale by some handicap factor.
         this.location = location;
+        this.is_dead = false;
         entityType = EntityType.PLAYER;
     }
 
@@ -45,6 +48,25 @@ public class Player extends Entity {
      * @param health Health to change to
      */
     public void setHealth(int health){
-        this.health = health;
+        // Set to health if in range 0 to HEALTH_MAX, otherwise set to bound.
+        this.health = health < 0 ? 0 : health > HEALTH_MAX ? HEALTH_MAX : health;
+        this.is_dead = this.health == 0;
+    }
+
+    /**
+     * Determine if player is dead.
+     * @return True if the player is dead. False otherwise.
+     */
+    public boolean isDead() {
+        return this.is_dead;
+    }
+
+    /**
+     * Inflict x damage to player's health.
+     * @param x Amount of damage to do to player.
+     */
+    public void inflictDamage(int x) {
+        // Set to maximum of zero or health difference.
+        this.setHealth(this.getHealth() > x ? this.getHealth() - x : 0);
     }
 }

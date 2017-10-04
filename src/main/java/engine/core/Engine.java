@@ -2,8 +2,6 @@ package engine.core;
 
 import common.BaseLogger;
 import common.data.GameMap;
-import engine.access.extern.EngineToGUI;
-import engine.access.extern.EngineToScripting;
 import engine.data.EngineData;
 import gui.game.GameGUI;
 import org.mapeditor.core.Map;
@@ -84,16 +82,6 @@ public class Engine {
         }
 
         return mp;
-    }
-
-    /**
-     * BORROWED FROM Tiled MapEditor test code. Loads a filename from the project's resources.
-     * @param filename The relative path to be loaded for resources.
-     * @return The URL representing the full filepath to the desired resource.
-     */
-    private URL getUrlFromResources(String filename) {
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        return classLoader.getResource(filename);
     }
 
     private void start() {
@@ -236,19 +224,16 @@ public class Engine {
             for (int x = 0; x < width; x++) {
                 tile = playerLayer.getTileAt(x, y);
                 if (tile == null) {
-
                     continue;
                 }
-                else{
-                    //If we haven't found a player yet, then tile found is player
-                    if(playerTiles.size() == 0){
-                        playerLocation = new Location(x, y);
-                    }
-                    else{
-                        opponentLocation = new Location(x, y);
-                    }
-                    playerTiles.add(tile);
+                //If we haven't found a player yet, then tile found is player
+                if(playerTiles.size() == 0){
+                    playerLocation = new Location(x, y);
                 }
+                else{
+                    opponentLocation = new Location(x, y);
+                }
+                playerTiles.add(tile);
 
             }
         }
