@@ -7,6 +7,9 @@
 
 package interpreter;
 
+import utilties.entities.*;
+import utilties.models.*;
+
 public class Check {
 
     public Data data1;
@@ -18,4 +21,18 @@ public class Check {
         this.data2 = data2;
         this.operator = operator;
     }
+
+    /**
+     *
+     * @param game takes in the model
+     * @return if defined condition is true
+     */
+    public boolean conditionIsTrue(Game game){
+
+
+
+        return true;
+    }
+
+
 }
