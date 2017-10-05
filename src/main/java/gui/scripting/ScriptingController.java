@@ -37,10 +37,13 @@ public class ScriptingController {
     private VBox conditionals, data, operators, commands;
 
     private ArrayList<ChoiceButton> conditionalList, dataList, operatorList, commandList;
+
+    /**
+     * Handles click events for choice buttons.  Attempts to add the selected item to the selected behavior
+     * in the list.
+     */
     private EventHandler choiceButtonClick = new EventHandler() {
         /**
-         * Handles click events for choice buttons.  Attempts to add the selected item to the selected behavior
-         * in the list.
          * @param event Click event to be handled
          */
         @Override
@@ -48,6 +51,7 @@ public class ScriptingController {
             try {
                 // Get the last selected behavior from the list
                 Behavior behavior = (Behavior) behaviorList.getToggleGroup().getSelectedToggle();
+
                 if (behavior.isSelected()) {
                     ChoiceButton currentButton = (ChoiceButton) event.getTarget();
 
@@ -57,11 +61,6 @@ public class ScriptingController {
                     buttonToAdd.setStyle(currentButton.getStyle());
 
                     behavior.getChildren().add(buttonToAdd);
-                    // get last button, check type etc.
-
-                    // Last Child.
-                    //                ScriptButton previousInstruction = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size()-1);
-                    //                String instructionText = previousInstruction.getText();
 
                     List<ScriptButton> currentScript =
                             behavior.getChildren().stream()
@@ -69,40 +68,56 @@ public class ScriptingController {
                                     .map(b -> (ScriptButton) b)
                                     .collect(Collectors.toList());
 
-                    if (currentScript.isEmpty()) {
-                        // enforce 'if'
-                        enableButtons(Collections.singletonList("If"));
-                        return;
-                    }
+                    List<String> allowables = getAllowableText(currentScript);
 
-                    ScriptButton lastButton = currentScript.get(currentScript.size() - 1);
-                    String lastButtonText = lastButton.getText().trim();
-
-                    if (lastButtonText.equals("If") || lastButtonText.equals("And") ||
-                            operatorList.stream().map(o -> o.getText()).collect(Collectors.toList()).contains(lastButtonText)) {
-                        // enforce data
-                        enableButtons(dataList.stream().map(Labeled::getText).collect(Collectors.toList()));
-                    } else if (dataList.stream().map(d -> d.getText()).collect(Collectors.toList()).contains(lastButtonText) &&
-                            (currentScript.size() % 4) - 2 == 0) {
-                        // enforce operator
-                        enableButtons(operatorList.stream().map(Labeled::getText).collect(Collectors.toList()));
-                    } else if (dataList.stream().map(d -> d.getText()).collect(Collectors.toList()).contains(lastButtonText)) {
-                        // enforce and or then
-                        enableButtons(Arrays.asList("And", "Then"));
-                    } else if (lastButtonText.equals("Then")) {
-                        // enforce command
-                        enableButtons(commandList.stream().map(Labeled::getText).collect(Collectors.toList()));
-                    } else {
-                        enableButtons(Collections.emptyList());
-                    }
+                    enableButtons(allowables);
                 } else {
-                    showNoneSelected();
+                    alertNoneSelected();
                 }
             } catch (Exception ex) {
-                showNoneSelected();
+                alertNoneSelected();
             }
         }
     };
+
+    /**
+     * Get all button text that is valid at current state
+     *
+     * @param currentScript Script buttons that are active in the current Behavior
+     * @return Returns a list of all Strings that are valid adds to the current Behavior
+     */
+    private List<String> getAllowableText(List<ScriptButton> currentScript) {
+        if (currentScript.isEmpty()) {
+            // enforce 'if'
+            return (Collections.singletonList("If"));
+        }
+
+        ScriptButton lastButton = currentScript.get(currentScript.size() - 1);
+        String lastButtonText = lastButton.getText().trim();
+
+        // enforce data
+        if (lastButtonText.equals("If") || lastButtonText.equals("And") ||
+                operatorList.stream().map(Labeled::getText).collect(Collectors.toList()).contains(lastButtonText)) {
+            return dataList.stream().map(Labeled::getText).collect(Collectors.toList());
+        }
+        // enforce operator
+        else if (dataList.stream().map(Labeled::getText).collect(Collectors.toList()).contains(lastButtonText) &&
+                (currentScript.size() % 4) - 2 == 0) {
+            return operatorList.stream().map(Labeled::getText).collect(Collectors.toList());
+        }
+        // enforce and or then
+        else if (dataList.stream().map(Labeled::getText).collect(Collectors.toList()).contains(lastButtonText)) {
+            return Arrays.asList("And", "Then");
+        }
+        // enforce command
+        else if (lastButtonText.equals("Then")) {
+            return commandList.stream().map(Labeled::getText).collect(Collectors.toList());
+        }
+        // disable all
+        else {
+            return Collections.emptyList();
+        }
+    }
 
     public List<ChoiceButton> getConditionalList() {
         return conditionals.getChildren().stream()
@@ -180,32 +195,10 @@ public class ScriptingController {
                                 .map(b -> (ScriptButton) b)
                                 .collect(Collectors.toList());
 
-                if (currentScript.isEmpty()) {
-                    // enforce 'if'
-                    enableButtons(Collections.singletonList("If"));
-                    return;
-                }
+                List<String> allowables = getAllowableText(currentScript);
 
-                ScriptButton lastButton = currentScript.get(currentScript.size() - 1);
-                String lastButtonText = lastButton.getText().trim();
+                enableButtons(allowables);
 
-                if (lastButtonText.equals("If") || lastButtonText.equals("And") ||
-                        operatorList.stream().map(o -> o.getText()).collect(Collectors.toList()).contains(lastButtonText)) {
-                    // enforce data
-                    enableButtons(dataList.stream().map(Labeled::getText).collect(Collectors.toList()));
-                } else if (dataList.stream().map(d -> d.getText()).collect(Collectors.toList()).contains(lastButtonText) &&
-                        (currentScript.size() % 4) - 2 == 0) {
-                    // enforce operator
-                    enableButtons(operatorList.stream().map(Labeled::getText).collect(Collectors.toList()));
-                } else if (dataList.stream().map(d -> d.getText()).collect(Collectors.toList()).contains(lastButtonText)) {
-                    // enforce and or then
-                    enableButtons(Arrays.asList("And", "Then"));
-                } else if (lastButtonText.equals("Then")) {
-                    // enforce command
-                    enableButtons(commandList.stream().map(Labeled::getText).collect(Collectors.toList()));
-                } else {
-                    enableButtons(Collections.emptyList());
-                }
             });
 
             behaviorList.getChildren().add(behavior);
@@ -218,11 +211,11 @@ public class ScriptingController {
                 if (behavior.isSelected()) {
                     behaviorList.getChildren().remove(behavior);
                 } else {
-                    showNoneSelected();
+                    alertNoneSelected();
                 }
             } catch (Exception ex) {
                 //  Do Nothing
-                showNoneSelected();
+                alertNoneSelected();
             }
         });
 
@@ -244,7 +237,7 @@ public class ScriptingController {
      * Shows an informational alert stating that the selected action could not be completed since no behavior has been
      * selected
      */
-    private void showNoneSelected() {
+    private void alertNoneSelected() {
         // Nothing is selected, show prompt
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("No Behavior Selected");
@@ -262,22 +255,23 @@ public class ScriptingController {
     private boolean isCompleteBehavior(Behavior behavior) {
         ScriptButton lastButton = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size() - 1);
 
-        // we can do this since validity is enforced along the way
-        if (lastButton.getText().equals("command")) {
-            return true;
-        } else {
-            return false;
-        }
+        // We can do this since validity is enforced along the way
+        return commandList.stream().map(Labeled::getText).collect(Collectors.toList()).contains(lastButton.getText());
     }
 
-    private void enableButtons(List<String> validButtons) {
+    /**
+     * Enable all buttons in validButtons, disable the rest that appear in the choicesPane
+     *
+     * @param validText List of valid Strings at current point
+     */
+    private void enableButtons(List<String> validText) {
 
         List<ChoiceButton> allButtons = Stream.of(conditionalList, commandList, operatorList, dataList)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
         allButtons.forEach(b -> {
-            if (validButtons.contains(b.getText().trim())) {
+            if (validText.contains(b.getText().trim())) {
                 b.setDisable(false);
             } else {
                 b.setDisable(true);
