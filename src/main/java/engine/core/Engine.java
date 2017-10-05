@@ -100,7 +100,7 @@ public class Engine {
      * @return True if the engine is running, False otherwise.
      */
     public boolean isRunning() {
-        return !this._shutdown;
+        return this._inCoreGame;
     }
 
     /**
@@ -133,10 +133,12 @@ public class Engine {
         System.out.println("Shutting down...");
         if (now) {
             this._shutdown = true;
+            this._inCoreGame = false;
         } else {
             ENGINE_LOGGER.warning("Currently can not shutdown engine with delay. " +
                     "Terminating immediately following current tick.");
             this._shutdown = true;
+            this._inCoreGame = false;
         }
         return true;
     }
