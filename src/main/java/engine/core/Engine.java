@@ -66,11 +66,18 @@ public class Engine {
         GameMap mp = null;
         try {
             TMXMapReader mapReader = new TMXMapReader();
+            URL mapPath = getClass().getResource("/game-map.tmx");
             try {
-                URL mapPath = getClass().getResource("/game-map.tmx");
                 this.map = mapReader.readMap(mapPath.toString());
             } catch (Exception ex) {
-                ex.printStackTrace();
+                ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
+                mapPath = getClass().getResource("/nix/game-map.tmx");
+                try {
+                    this.map = mapReader.readMap(mapPath.toString());
+                } catch (Exception ex2) {
+                    ENGINE_LOGGER.fatal(ex2.getMessage());
+                    System.exit(2);
+                }
             }
 
             EntityMap entityMap = new EntityMap(map, 25, 15);
