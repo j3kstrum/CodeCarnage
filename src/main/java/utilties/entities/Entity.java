@@ -1,6 +1,13 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package utilties.entities;
 
-import utilties.models.Location;
+import java.awt.*;
 
 /* Entity Abstract Class
  *
@@ -10,24 +17,27 @@ public abstract class Entity {
 
     protected EntityType entityType = null;
 
-    protected Location location;
+    protected Point location;
 
     /*
     Entity Type enum
      */
-    public enum EntityType {EMPTY, PLAYER}
+    public enum EntityType {
+        EMPTY, PLAYER
+    }
 
 
-    public void setLocation(Location location){
+    public void setLocation(Point location) {
         this.location = location;
     }
 
-    public Location getLocation(){
+    public Point getLocation() {
         return this.location;
     }
 
     public EntityType getEntityType() {
         return this.entityType;
     }
+
 
 }

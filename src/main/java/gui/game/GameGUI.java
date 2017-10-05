@@ -1,11 +1,17 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package gui.game;
 
 import common.BaseLogger;
 import engine.core.Engine;
+import engine.core.TickingService;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.ObservableMap;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -21,33 +27,31 @@ import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-
 
 public class GameGUI extends Application {
 
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
 
+    // layerIndex + (layers * (x + (width * y))) -> tile at x, y, currLayer
+    private HashMap<Integer, Integer> mapCache = new HashMap<>();
+    private HashMap<Integer, Image> tileCache = new HashMap<>();
+    private ArrayList<Point> redrawCoords = new ArrayList<>();
+
     public Map _map;
     private Pane _imagePane;
 
     public GameGUI() throws Exception {
-        new Thread().start();
-
         //Create Engine
         _engine = new Engine(this);
-        LOGGER.info("Beginning core game battle...");
+        LOGGER.info("Beginning game gui and engine...");
         this._engine.startGame();
 
         start(new Stage());
-    }
-
-    public GameGUI(String[] args) {
-        new Thread(
-                () -> launch(args)
-        ).start();
     }
 
     @Override
@@ -79,43 +83,62 @@ public class GameGUI extends Application {
     /**
      * Starts thread to update Game GUI
      */
-    private void startUIUpdateThread(){
-        //TODO Think about how often rendering should happen
-        Task task = new Task<Void>() {
-            @Override
-            public Void call() throws Exception {
+    private void startUIUpdateThread() {
 
-                while (true)
-                {
-                    //Currently renders 4 frames per second, which quicker than engine ticks ensuring each turn is accounted for
-                    Platform.runLater ( () -> updateGameGUI());
-                    Thread.sleep (250);
+        TickingService ts = new TickingService(_engine);
+
+        ts.setOnSucceeded(
+                (event) -> {
+                    _map = ts.getValue();
+                    uiTick(ts);
                 }
-            }
-        };
+        );
 
-        Thread th = new Thread(task);
-        th.setDaemon(true);
-        th.start();
+        uiTick(ts);
     }
 
     /**
-     * Updates the GUI based on data read from Map
-     * Renderer code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
+     * Performs all of the required actions for the UI to tick.
+     * @param ts The ticking service to be used for engine tick calls.
      */
-    public void updateGameGUI(){
+    private void uiTick(TickingService ts) {
+        if (!_engine.isRunning()) {
+            LOGGER.info("Engine not running.");
 
-        if(_map==null){
-            return;
+            if (!_engine.cleanup()) {
+                LOGGER.critical("Engine cleanup failed.");
+                System.exit(1);
+            }
+            System.exit(0);
         }
-        ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
 
+        updateGameGUI();
+        ts.restart();
+    }
+
+    /**
+     * Identifies map "Deltas."
+     *
+     * A Delta is defined as a map tile whose state differs from the previous tick.
+     * These are identified to prevent useless computation associated with redrawing the entire map each tick.
+     *
+     * Some code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
+     * @param layerList The list of map layers to be used for cache comparisons.
+     */
+    private void identifyDeltas(ArrayList<MapLayer> layerList) {
+
+        final int layers = layerList.size();
+        // Initialize first layer
+        int layerIndex = -1;
+
+        // Search for points that must be redrawn
         for (MapLayer layer : layerList) {
+            layerIndex++;
 
             TileLayer tileLayer = (TileLayer) layer;
 
             if (tileLayer == null) {
-                System.out.println("can't get map layer");
+                LOGGER.fatal("Cannot retrieve map layer.");
                 System.exit(-1);
             }
 
@@ -125,34 +148,119 @@ public class GameGUI extends Application {
             Tile tile;
             int tileID;
 
-            HashMap<Integer, Image> tileHash = new HashMap<>();
-            Image tileImage = null;
-
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    tile = tileLayer.getTileAt(x, y);
-                    if (tile == null) {
+                    // If we're already redrawing, don't waste computation.
+                    if (redrawCoords.contains(new Point(x, y))) {
                         continue;
                     }
-                    tileID = tile.getId();
-                    if (tileHash.containsKey(tileID)) {
-                        tileImage = tileHash.get(tileID);
-                    } else {
-                        try {
-                            tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                        tileHash.put(tileID, tileImage);
+                    // Get the cache key for this specific point.
+                    int cacheVal = layerIndex + (layers * (x + (width * y)));
+                    tile = tileLayer.getTileAt(x, y);
+                    // Use -1 for no tile ID instead of null to create discrepancy between "never drawn"
+                    // and "drawn but a blank tile".
+                    tileID = tile == null ? -1 : tile.getId();
+                    // If it's null, this is our first time rendering - so we must draw.
+                    // If not and there is a discrepancy with the cache, we need to update the map and cache.
+                    if (mapCache.get(cacheVal) == null || !mapCache.get(cacheVal).equals(tileID)) {
+                        // Need to redraw this value.
+                        redrawCoords.add(new Point(x, y));
                     }
-
-                    ImageView i = new ImageView(tileImage);
-                    i.setTranslateX(x * 32);
-                    i.setTranslateY(y * 32);
-
-                    _imagePane.getChildren().add(i);
                 }
             }
         }
+
+    }
+
+    /**
+     * Updates, on the GUI, the deltas that were identified for the current tick.
+     * Some code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
+     *
+     * @param layerList The list containing each of the layers of the map.
+     *
+     */
+    private void updateDeltas(ArrayList<MapLayer> layerList) {
+        // Reset layer and reverse iteration again.
+        final int layers = layerList.size();
+        // LayerIndex will keep track of which layer we're on. This is used to accurately access the cache.
+        int layerIndex = -1;
+
+        // For each layer, redraw points that must be redrawn.
+        for (MapLayer layer : layerList) {
+
+            // Perform variable initializations.
+            layerIndex++;
+            TileLayer tileLayer = (TileLayer) layer;
+            if (tileLayer == null) {
+                LOGGER.fatal("Cannot retrieve map layer.");
+                System.exit(-1);
+            }
+            int width = tileLayer.getBounds().width;
+            Image tileImage = null;
+            Tile tile;
+            int tileID;
+
+            // For each point (which, hopefully, has been identified previously)
+            for (Point p : redrawCoords) {
+                // Get the cache value that we will deposit into.
+                int cacheVal = layerIndex + (layers * (p.x + (width * p.y)));
+                // Get the tile that needs to be redrawn on this layer.
+                tile = tileLayer.getTileAt(p.x, p.y);
+                // If it's null, don't bother redrawing.
+                // Instead, store 'empty tile' in the cache.
+                if (tile == null) {
+                    mapCache.put(cacheVal, -1);
+                    continue;
+                }
+                // Get the unique identifier for the tile image.
+                tileID = tile.getId();
+                if (tileCache.containsKey(tileID)) {
+                    // Grab the image from the image cache.
+                    tileImage = tileCache.get(tileID);
+                } else {
+                    // Convert the tile's image to a swing image, and then cache it.
+                    try {
+                        tileImage = SwingFXUtils.toFXImage(tile.getImage(), null);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    tileCache.put(tileID, tileImage);
+                }
+
+                // Create the actual image to be redrawn.
+                ImageView i = new ImageView(tileImage);
+                i.setTranslateX(p.x * 32);
+                i.setTranslateY(p.y * 32);
+
+                // Update the map cache and then redraw the tile.
+                mapCache.put(cacheVal, tileID);
+                _imagePane.getChildren().add(i);
+            }
+        }
+    }
+
+    /**
+     * Updates the GUI based on data read from Map
+     * Some child code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
+     */
+    private void updateGameGUI() {
+        // If null return
+        if (_map == null) {
+            LOGGER.fatal("Could not update GameGUI: Map == null.");
+            return;
+        }
+        // Get map data
+        ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
+        redrawCoords = new ArrayList<>();
+
+        // Reverse layers for top-down identification
+        Collections.reverse(layerList);
+
+        identifyDeltas(layerList);
+
+        // Reverse the layers again so we can draw back-to-front.
+        Collections.reverse(layerList);
+
+        updateDeltas(layerList);
     }
 }
