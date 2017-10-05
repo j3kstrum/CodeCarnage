@@ -41,7 +41,8 @@
             <content>
                 <AnchorPane fx:id="choicesPane" minHeight="0.0">
                     <children>
-                        <VBox alignment="TOP_CENTER" layoutX="-2.0" layoutY="8.0" prefHeight="166.0" prefWidth="250.0">
+                        <VBox fx:id="conditionals" alignment="TOP_CENTER" layoutX="-2.0" layoutY="8.0"
+                              prefHeight="166.0" prefWidth="250.0">
                             <children>
                                 <Label alignment="TOP_CENTER" prefHeight="27.0" text="Conditionals"
                                        textAlignment="CENTER">
@@ -68,7 +69,8 @@
                                 </ChoiceButton>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" layoutX="1.0" layoutY="174.0" prefHeight="252.0" prefWidth="250.0">
+                        <VBox fx:id="operators" alignment="TOP_CENTER" layoutX="1.0" layoutY="174.0" prefHeight="252.0"
+                              prefWidth="250.0">
                             <children>
                                 <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="111.0" text="Operators"
                                        textAlignment="CENTER">
@@ -103,7 +105,8 @@
                                 </ChoiceButton>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" layoutX="7.0" layoutY="426.0" prefHeight="216.0" prefWidth="250.0">
+                        <VBox fx:id="data" alignment="TOP_CENTER" layoutX="7.0" layoutY="426.0" prefHeight="216.0"
+                              prefWidth="250.0">
                             <children>
                                 <Label alignment="TOP_CENTER" prefHeight="32.0" prefWidth="117.0" text="Data"
                                        textAlignment="CENTER">
@@ -136,7 +139,8 @@
                                 </ChoiceButton>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" layoutX="2.0" layoutY="642.0" prefHeight="342.0" prefWidth="250.0">
+                        <VBox fx:id="commands" alignment="TOP_CENTER" layoutX="2.0" layoutY="642.0" prefHeight="342.0"
+                              prefWidth="250.0">
                             <children>
                                 <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="189.0" text="Commands"
                                        textAlignment="CENTER">
