@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package gui.menu;
 
 import com.jfoenix.controls.JFXButton;
@@ -15,6 +22,8 @@ import javafx.stage.Stage;
 
 public class MenuGUI extends Application {
 
+    private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
+
     public MenuGUI() {
         super();
     }
@@ -24,8 +33,6 @@ public class MenuGUI extends Application {
                 () -> launch(args)
         ).start();
     }
-
-    private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -39,10 +46,9 @@ public class MenuGUI extends Application {
 
         loader.setController(controller);
 
-        startButton.addEventHandler(
-            MouseEvent.MOUSE_CLICKED,
-            m -> {
-                LOGGER.info("You clicked Start!");
+        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
+            (MouseEvent m) -> {
+                LOGGER.debug("You clicked Start!");
 
                 try {
                     new ScriptingGUI();

@@ -1,8 +1,13 @@
+/*
+ * Copyright (c) 2017. Licensed under the Apache License 2.0.
+ * For full copyright, licensing, and sourcing information,
+ * please refer to the CodeCarnage GitHub repository's README.md file
+ * (found on https://github.com/j3kstrum/CodeCarnage).
+ */
+
 package engine.core;
 
-import gui.game.GameGUI;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class EngineTest {
 
@@ -11,10 +16,9 @@ public class EngineTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
-        //e = new Engine(null);
-	two = 0;
+        e = new Engine(null);
     }
-/*
+
     @org.junit.Test
     public void shutdown() throws Exception {
         e.startGame();
@@ -48,10 +52,10 @@ public class EngineTest {
         e.stopGame();
         assertTrue(true);
     }
-*/
+
     @org.junit.Test
     public void onePlusOne() throws Exception {
-	two = 1 + 1;
+        two = 1 + 1;
         assertTrue(two == 2);
     }
 }
