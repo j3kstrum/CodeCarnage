@@ -9,6 +9,7 @@ package engine.data;
 
 import common.BaseLogger;
 import common.data.GameMap;
+import org.mapeditor.core.Map;
 
 /**
  * The class containing the Engine's Data. It handles all lower-level data objects pertaining to the engine.
@@ -17,7 +18,7 @@ import common.data.GameMap;
  */
 public class EngineData {
 
-    private GameMap _map;
+    private Map _map;
     private static final BaseLogger LOGGER = new BaseLogger("EngineData");
 
     /**
@@ -32,7 +33,7 @@ public class EngineData {
      *
      * @param toMap The game map that should be used as the new game map.
      */
-    public void setMap(GameMap toMap) {
+    public void setMap(Map toMap) {
         // TODO: Some error checking, possibly?
         this._map = toMap;
     }
@@ -42,7 +43,7 @@ public class EngineData {
      *
      * @return The game map that is currently in play.
      */
-    public GameMap getMap() {
+    public Map getMap() {
         // TODO: Some error checking, possibly?
         return this._map;
     }
