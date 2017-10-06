@@ -180,31 +180,45 @@ public class ScriptingController {
 
         // Assign add button an action to create a new behavior in the list when clicked
         add.setOnAction((ActionEvent event) -> {
-            Behavior behavior = new Behavior();
-            behavior.getStyleClass().add("behavior");
-            behavior.setToggleGroup(behaviorList.getToggleGroup());
-            behavior.setOnMouseClicked((mouseEvent) -> {
-                if (behavior.isSelected()) {
-                    System.out.println("Unselected!");
-                    behavior.setSelected(false);
-                } else {
-                    System.out.println("Selected!");
-                    behavior.setSelected(true);
-                }
+            List<Node> allBehaviors = behaviorList.getChildren().filtered(n -> n instanceof Behavior);
 
-                List<ScriptButton> currentScript =
-                        behavior.getChildren().stream()
-                                .filter(b -> b instanceof ScriptButton)
-                                .map(b -> (ScriptButton) b)
-                                .collect(Collectors.toList());
+            // Check if all behaviors in the list are complete
+            if (canAddBehaviors(allBehaviors)) {
 
-                List<String> allowables = getAllowableText(currentScript);
+                Behavior behavior = new Behavior();
+                behavior.getStyleClass().add("behavior");
+                behavior.setToggleGroup(behaviorList.getToggleGroup());
+                behavior.setOnMouseClicked((mouseEvent) -> {
+                    if (behavior.isSelected()) {
+                        System.out.println("Unselected!");
+                        behavior.setSelected(false);
+                    } else {
+                        System.out.println("Selected!");
+                        behavior.setSelected(true);
+                    }
 
-                enableButtons(allowables);
+                    List<ScriptButton> currentScript =
+                            behavior.getChildren().stream()
+                                    .filter(b -> b instanceof ScriptButton)
+                                    .map(b -> (ScriptButton) b)
+                                    .collect(Collectors.toList());
 
-            });
+                    List<String> allowables = getAllowableText(currentScript);
 
-            behaviorList.getChildren().add(behavior);
+                    enableButtons(allowables);
+
+
+                });
+
+                behaviorList.getChildren().add(behavior);
+            } else {
+                // Incomplete behaviors exist, show prompt
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Unfinished Behavior!");
+                alert.setHeaderText("You have incomplete scripts.");
+                alert.setContentText("You must complete all scripts in your behavior list prior to adding another!");
+                alert.showAndWait();
+            }
         });
 
         // Assign subtract button an action to remove the selected behavior when clicked
@@ -239,6 +253,16 @@ public class ScriptingController {
         });
     }
 
+    private boolean canAddBehaviors(List<Node> allBehaviors) {
+        for (Node node : allBehaviors) {
+            Behavior asBehavior = (Behavior) node;
+            if (!isCompleteBehavior(asBehavior)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Shows an informational alert stating that the selected action could not be completed since no behavior has been
      * selected
@@ -259,6 +283,9 @@ public class ScriptingController {
      * @return Returns true if behavior is well formed
      */
     private boolean isCompleteBehavior(Behavior behavior) {
+        if (behavior.getChildren().size() == 0) {
+            return false;
+        }
         ScriptButton lastButton = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size() - 1);
 
         // We can do this since validity is enforced along the way
