@@ -178,11 +178,11 @@ public class Engine {
             ENGINE_LOGGER.critical("Game was null. Returning null.");
             return null;
         }
-        if (game.getNumberOfTurnsCompleted() > 30) {
+        if (game.getNumberOfTurnsCompleted() > 150) {
             this.shutdown();
         }
         game.approach(0,1);
-        game.approach(1, 0);
+        game.retreat(1, 0);
         return game.nextTurn();
     }
 

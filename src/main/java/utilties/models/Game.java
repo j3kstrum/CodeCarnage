@@ -13,6 +13,7 @@ import utilties.entities.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Model for Game.  Execute nextTurn to progress through game.
@@ -33,6 +34,16 @@ public class Game {
     public static final int DIRECTION_UP = 1;
     public static final int DIRECTION_DOWN = -1;
     public static final int DIRECTION_CONSTANT = 0;
+
+    //List of random directions we can move to.  Will stay constant 50%, and move randomly one direction 50% of time
+    public static final ArrayList<Integer> DIRECTIONS_RANDOM_MOVEMENT = new ArrayList() {{
+        add(DIRECTION_UP);
+        add(DIRECTION_CONSTANT);
+        add(DIRECTION_CONSTANT);
+        add(DIRECTION_CONSTANT);
+        add(DIRECTION_CONSTANT);
+        add(DIRECTION_DOWN);
+    }};
 
     //Players
     public static final int HEALTH_DEAD = 0;
@@ -227,14 +238,10 @@ public class Game {
      * @return
      */
     public int pathDistanceToPlayer(int playerId, int opponentId){
-        Point locationOfPlayer = getPlayer(playerId).getLocation();
-        Point locationOfOpponent = getPlayer(opponentId).getLocation();
-
-        int distanceX = locationOfOpponent.x - locationOfPlayer.x;
-        int distanceY = locationOfOpponent.y - locationOfPlayer.y;
-
+        //Calculate distances in X and Y directions
+        Point distances = getDeltaDistances(playerId, opponentId);
         //Subtract one because you can never get to players actual location, only the closest tile surrounding it
-        return (Math.abs(distanceX) + Math.abs(distanceY)) - 1;
+        return (Math.abs(distances.x) + Math.abs(distances.y)) - 1;
     }
 
     /**
@@ -246,18 +253,13 @@ public class Game {
     public boolean approach(int playerId, int opponentId){
         getPlayer(playerId).setShielding(false);
 
-        //Get locations of players
-        Point locationOfPlayer = getPlayer(playerId).getLocation();
-        Point locationOfOpponent = getPlayer(opponentId).getLocation();
-
         //Calculate distances in X and Y directions
-        int distanceX = locationOfOpponent.x - locationOfPlayer.x;
-        int distanceY = locationOfOpponent.y - locationOfPlayer.y;
+        Point distances = getDeltaDistances(playerId, opponentId);
 
         //If Y distance is 0, then we only need to move in X directions
-        if(distanceY == 0){
+        if(distances.y == 0){
             //If negative, move left
-            if(distanceX<0){
+            if(distances.x<0){
                 return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
             }
             //If positive, move right
@@ -266,8 +268,8 @@ public class Game {
             }
         }
         //Repeat steps when X distance = 0
-        else if(distanceX == 0) {
-            if(distanceY<0){
+        else if(distances.x == 0) {
+            if(distances.y<0){
                 return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
             }
             else{
@@ -276,12 +278,12 @@ public class Game {
         }
 
         //Calculate slope
-        double slope = (double) distanceX / distanceY;
+        double slope = (double) distances.x / distances.y;
 
         //If slope is < .5, then we need to move in Y direction
         //If slope is > .5 then we need to move in X direction
         if(Math.abs(slope) < .5){
-            if(distanceY<0){
+            if(distances.y<0){
                 return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
             }
             else{
@@ -289,13 +291,32 @@ public class Game {
             }
         }
         else {
-            if(distanceX<0){
+            if(distances.x<0){
                 return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
             }
             else{
                 return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
             }
         }
+    }
+
+    /**
+     * Returns a point(should be a vector) of distances in x and y coordinates between player and opponent
+     * @param playerId
+     * @param opponentId
+     * @return
+     */
+    private Point getDeltaDistances(int playerId, int opponentId){
+        //Get locations of players
+        Point locationOfPlayer = getPlayer(playerId).getLocation();
+        Point locationOfOpponent = getPlayer(opponentId).getLocation();
+
+        //Calculate distances in X and Y directions
+        int distanceX = locationOfOpponent.x - locationOfPlayer.x;
+        int distanceY = locationOfOpponent.y - locationOfPlayer.y;
+
+        return new Point(distanceX, distanceY);
+
     }
 
     /**
@@ -353,4 +374,31 @@ public class Game {
     public boolean isGameOver(){
         return this._isGameOver;
     }
+
+    public boolean retreat(int playerId, int opponentId){
+        getPlayer(playerId).setShielding(false);
+
+        //Calculate distances in X and Y directions
+        Point distances = getDeltaDistances(playerId, opponentId);
+
+        //If Y distance is 0, then we only need to move in X directions
+
+        //Should we have one direction stay the same?  Introduces randomness
+
+        int randomMovement = generateRandomMovement();
+
+        return move(playerId, generateRandomMovement(), generateRandomMovement());
+    }
+
+    /**
+     *
+     * @return Random Movement Value
+     */
+    public int generateRandomMovement(){
+        int seed =  ThreadLocalRandom.current().nextInt(0, 5 + 1);
+        System.out.println(seed);
+        int direction = DIRECTIONS_RANDOM_MOVEMENT.get(seed);
+        return direction;
+    }
+
 }
