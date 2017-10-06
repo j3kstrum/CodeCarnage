@@ -7,11 +7,13 @@
 
 package engine.core;
 
+import utilties.models.Game;
+
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class EngineTest {
 
-    private int two;
     private Engine e;
 
     @org.junit.Before
@@ -23,39 +25,92 @@ public class EngineTest {
     public void shutdown() throws Exception {
         e.startGame();
         e.shutdown();
-        assertTrue(true);
     }
 
     @org.junit.Test
     public void shutdown1() throws Exception {
         e.startGame();
         e.shutdown(true);
-        assertTrue(true);
     }
 
     @org.junit.Test
     public void shutdown2() throws Exception {
         e.startGame();
         e.shutdown(false);
-        assertTrue(true);
     }
 
     @org.junit.Test
     public void startGame() throws Exception {
         e.startGame();
-        assertTrue(true);
     }
 
     @org.junit.Test
     public void stopGame() throws Exception {
         e.startGame();
         e.stopGame();
-        assertTrue(true);
     }
 
     @org.junit.Test
-    public void onePlusOne() throws Exception {
-        two = 1 + 1;
-        assertTrue(two == 2);
+    public void cleanup() throws Exception {
+        e.startGame();
+        e.stopGame();
+        e.cleanup();
+    }
+
+    @org.junit.Test
+    public void gameRunning() throws Exception {
+        e.startGame();
+        assertTrue(e.isRunning());
+    }
+
+    @org.junit.Test
+    public void gameStoppedNotRunning() throws Exception {
+        e.startGame();
+        e.stopGame();
+        assertFalse(e.isRunning());
+    }
+
+    @org.junit.Test
+    public void testValidWait() throws Exception {
+        e.performWait(System.currentTimeMillis() - Engine.TICK_TIME / 10);
+    }
+
+    @org.junit.Test
+    public void testBarelyValidWait() throws Exception {
+        e.performWait(System.currentTimeMillis() - Engine.TICK_TIME * 2 / 3);
+    }
+
+    @org.junit.Test
+    public void testInvalidWait() throws Exception {
+        e.performWait(System.currentTimeMillis() - Engine.TICK_TIME * 2);
+    }
+
+    @org.junit.Test
+    public void interruptEngineWait() throws Exception {
+        Thread t = new Thread(() -> e.performWait(System.currentTimeMillis() + 10000));
+        t.start();
+        Thread.sleep(100);
+        t.interrupt();
+    }
+
+    @org.junit.Test
+    public void properSleepDuration() throws Exception {
+        long curtime = System.currentTimeMillis();
+        long endtime = e.performWait(curtime);
+        assertTrue(endtime - curtime > Engine.TICK_TIME - 10);
+        assertTrue(endtime - curtime < Engine.TICK_TIME + 10);
+    }
+
+    @org.junit.Test
+    public void tickNullGame() throws Exception {
+        e.game = null;
+        assertTrue(e.tick() == null);
+    }
+
+    // TODO: Eventually be able to load up a valid game...
+    @org.junit.Test(expected = NullPointerException.class)
+    public void tickGame() throws Exception {
+        e.game = new Game(null);
+        assertTrue(e.tick() != null);
     }
 }
