@@ -232,5 +232,11 @@ public class EntityMap {
     public Map getMap(){
         return this._gameMap;
     }
+
+    public void removeTile(Point location){
+        EntityTile entityTile = this._entityTiles[location.x][location.y];
+        getPlayerLayer().removeTile(entityTile.getTile());
+        this._entityTiles[location.x][location.y] = new EntityTile(location, new Empty(location), getPlayerLayer().getTileAt(location.x, location.y));
+    }
 }
 

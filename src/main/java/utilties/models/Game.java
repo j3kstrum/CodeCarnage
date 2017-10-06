@@ -60,6 +60,7 @@ public class Game {
      */
     public Game(EntityMap entityMap) {
         this._entityMap = entityMap;
+        //this.getPlayer(0).setLocation(new Point(1, 1));
         _previousLocations.add(getPlayer(PLAYER_ID).getLocation());
         _previousLocations.add(getPlayer(OPPONENT_ID).getLocation());
         _numberOfTimesAtCurrentLocation.add(1);
@@ -396,7 +397,7 @@ public class Game {
      */
     public int generateRandomMovement(){
         int seed =  ThreadLocalRandom.current().nextInt(0, 5 + 1);
-        System.out.println(seed);
+        //System.out.println(seed);
         int direction = DIRECTIONS_RANDOM_MOVEMENT.get(seed);
         return direction;
     }
