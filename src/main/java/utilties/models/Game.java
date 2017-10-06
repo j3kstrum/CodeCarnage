@@ -26,15 +26,33 @@ public class Game {
     private boolean _isStalemate = false;
     private boolean _isGameOver = false;
 
+    //Constants
+    //Directions
+    public static final int DIRECTION_RIGHT = 1;
+    public static final int DIRECTION_LEFT = -1;
+    public static final int DIRECTION_UP = 1;
+    public static final int DIRECTION_DOWN = -1;
+    public static final int DIRECTION_CONSTANT = 0;
+
+    //Players
+    public static final int HEALTH_DEAD = 0;
+    public static final int HEALTH_MAX = 100;
+    public static final int PLAYER_ID = 0;
+    public static final int OPPONENT_ID = 1;
+
+    //Constant for number of turns to calculate a stalemate
+    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 10;
+
+
     /**
      * @param entityMap
      */
     public Game(EntityMap entityMap) {
         this._entityMap = entityMap;
-        move(0, 10,5);
-        move(1,-10,-5);
-        _previousLocations.add(getPlayer(0).getLocation());
-        _previousLocations.add(getPlayer(1).getLocation());
+        move(PLAYER_ID, 10,5);
+        move(OPPONENT_ID,-10,-5);
+        _previousLocations.add(getPlayer(PLAYER_ID).getLocation());
+        _previousLocations.add(getPlayer(OPPONENT_ID).getLocation());
         _numberOfTimesAtCurrentLocation.add(1);
         _numberOfTimesAtCurrentLocation.add(1);
     }
@@ -55,7 +73,8 @@ public class Game {
      * @return Updated EntityMap
      */
     public Map nextTurn() {
-        if(isStalemateTurnForPlayer(0) && isStalemateTurnForPlayer(1)){
+        //TODO Will need to update this if we want more players
+        if(isStalemateTurnForPlayer(PLAYER_ID) && isStalemateTurnForPlayer(OPPONENT_ID)){
             _isStalemate = true;
         }
         this._numberOfTurnsCompleted++;
@@ -109,7 +128,7 @@ public class Game {
             }
 
             playerToAttack.setHealth(playerToAttack.getHealth() - damageToBeDone);
-            if (playerToAttack.getHealth() <= 0) {
+            if (playerToAttack.getHealth() <= HEALTH_DEAD) {
                 this._isGameOver = false;
             }
 
@@ -124,6 +143,16 @@ public class Game {
      */
     public void defend(int playerId) {
         this.getPlayer(playerId).setShielding(true);
+    }
+
+    /**
+     * Sets defending state.  When another command is called defending state is set to false
+     * @param playerId
+     * @param shieldStrength
+     */
+    public void defend(int playerId, int shieldStrength){
+        getPlayer(playerId).setShielding(true);
+        getPlayer(playerId).setShieldStrength(shieldStrength);
     }
 
     /**
@@ -144,8 +173,8 @@ public class Game {
     public void heal(int playerId, int health) {
         this.getPlayer(playerId).setShielding(false);
         Player player = this.getPlayer(playerId);
-        if (player.getHealth() + health > 100) {
-            player.setHealth(100);
+        if (player.getHealth() + health > HEALTH_MAX) {
+            player.setHealth(HEALTH_MAX);
         } else {
             player.setHealth(player.getHealth() + health);
         }
@@ -206,7 +235,8 @@ public class Game {
         int distanceX = locationOfOpponent.x - locationOfPlayer.x;
         int distanceY = locationOfOpponent.y - locationOfPlayer.y;
 
-        return Math.abs(distanceX) + Math.abs(distanceY);
+        //Subtract one because you can never get to players actual location, only the closest tile surrounding it
+        return (Math.abs(distanceX) + Math.abs(distanceY)) - 1;
     }
 
     /**
@@ -217,46 +247,55 @@ public class Game {
      */
     public boolean moveCloserTo(int playerId, int opponentId){
         getPlayer(playerId).setShielding(false);
+
+        //Get locations of players
         Point locationOfPlayer = getPlayer(playerId).getLocation();
         Point locationOfOpponent = getPlayer(opponentId).getLocation();
 
+        //Calculate distances in X and Y directions
         int distanceX = locationOfOpponent.x - locationOfPlayer.x;
         int distanceY = locationOfOpponent.y - locationOfPlayer.y;
 
+        //If Y distance is 0, then we only need to move in X directions
         if(distanceY == 0){
+            //If negative, move left
             if(distanceX<0){
-                return move(playerId, -1,0);
+                return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
             }
+            //If positive, move right
             else{
-                return move(playerId, 1,0);
+                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
             }
         }
+        //Repeat steps when X distance = 0
         else if(distanceX == 0) {
             if(distanceY<0){
-                return move(playerId, 0,-1);
+                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
             }
             else{
-                return move(playerId, 0,1);
+                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_UP);
             }
         }
 
+        //Calculate slope
         double slope = (double) distanceX / distanceY;
 
-
+        //If slope is < .5, then we need to move in Y direction
+        //If slope is > .5 then we need to move in X direction
         if(Math.abs(slope) < .5){
             if(distanceY<0){
-                return move(playerId, 0,-1);
+                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
             }
             else{
-                return move(playerId, 0,1);
+                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_UP);
             }
         }
         else {
             if(distanceX<0){
-                return move(playerId, -1,0);
+                return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
             }
             else{
-                return move(playerId, 1,0);
+                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
             }
         }
     }
@@ -267,20 +306,10 @@ public class Game {
      * @return
      */
     public boolean isDead(int playerId){
-        if(getPlayer(playerId).getHealth() <=0){
+        if(getPlayer(playerId).getHealth() <= HEALTH_DEAD){
             return true;
         }
         return false;
-    }
-
-    /**
-     * Sets defending state.  When another command is called defending state is set to false
-     * @param playerId
-     * @param shieldStrength
-     */
-    public void defend(int playerId, int shieldStrength){
-        getPlayer(playerId).setShielding(true);
-        getPlayer(playerId).setShieldStrength(shieldStrength);
     }
 
     /**
@@ -300,7 +329,7 @@ public class Game {
     }
 
     /**
-     * Checks to see whether or not the current player has been in their location for 10 turns
+     * Checks to see whether or not the current player has been in their location for NUMBER_OF_TURNS_TO_STALEMATE
      * @param playerId
      * @return
      */
@@ -308,7 +337,7 @@ public class Game {
             if(_previousLocations.get(playerId) == getPlayer(playerId).getLocation()){
                 _numberOfTimesAtCurrentLocation.set(playerId, _numberOfTimesAtCurrentLocation.get(playerId) + 1);
 
-                if(_numberOfTimesAtCurrentLocation.get(playerId) > 10){
+                if(_numberOfTimesAtCurrentLocation.get(playerId) > NUMBER_OF_TURNS_TO_STALEMATE){
                     return true;
                 }
             }
