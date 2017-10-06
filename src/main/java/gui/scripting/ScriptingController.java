@@ -9,6 +9,8 @@ package gui.scripting;
 
 import com.jfoenix.controls.JFXButton;
 import gui.game.GameGUI;
+import gui.scripting.enumerations.Conditional;
+import gui.scripting.enumerations.ScriptingTypes;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -18,8 +20,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-public class ScriptingController {
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+public class ScriptingController {
 
     @FXML
     private BehaviorList behaviorList;
@@ -27,12 +35,17 @@ public class ScriptingController {
     @FXML
     private AnchorPane choicesPane;
     @FXML
-    private JFXButton add, subtract, submit;
+    private JFXButton add, subtract, submit, deleteWord;
 
+    @FXML
+    private VBox conditionals, data, operators, commands;
+
+    /**
+     * Handles click events for choice buttons.  Attempts to add the selected item to the selected behavior
+     * in the list.
+     */
     private EventHandler choiceButtonClick = new EventHandler() {
         /**
-         * Handles click events for choice buttons.  Attempts to add the selected item to the selected behavior
-         * in the list.
          * @param event Click event to be handled
          */
         @Override
@@ -40,6 +53,7 @@ public class ScriptingController {
             try {
                 // Get the last selected behavior from the list
                 Behavior behavior = (Behavior) behaviorList.getToggleGroup().getSelectedToggle();
+
                 if (behavior.isSelected()) {
                     ChoiceButton currentButton = (ChoiceButton) event.getTarget();
 
@@ -49,20 +63,97 @@ public class ScriptingController {
                     buttonToAdd.setStyle(currentButton.getStyle());
 
                     behavior.getChildren().add(buttonToAdd);
-                    // get last button, check type etc.
 
-                    // Last Child.
-                    //                ScriptButton previousInstruction = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size()-1);
-                    //                String instructionText = previousInstruction.getText();
+                    List<ScriptButton> currentScript =
+                            behavior.getChildren().stream()
+                                    .filter(b -> b instanceof ScriptButton)
+                                    .map(b -> (ScriptButton) b)
+                                    .collect(Collectors.toList());
 
+                    List<String> allowables = getAllowableText(currentScript);
+
+                    enableButtons(allowables);
                 } else {
-                    showNoneSelected();
+                    alertNoneSelected();
                 }
             } catch (Exception ex) {
-                showNoneSelected();
+                alertNoneSelected();
             }
         }
     };
+
+    /**
+     * Handles click events for the deleteWord button.  Removes the last word in the selected behavior
+     */
+    private EventHandler removeLastWordClick = new EventHandler() {
+        /**
+         * @param event Click event to be handled
+         */
+        @Override
+        public void handle(Event event) {
+            // Remove the last word in the selected behavior
+            try {
+                Behavior behavior = (Behavior) behaviorList.getToggleGroup().getSelectedToggle();
+
+                if (behavior.isSelected()) {
+                    ScriptButton lastButton = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size() - 1);
+
+                    behavior.getChildren().remove(lastButton);
+
+                    List<ScriptButton> currentScript =
+                            behavior.getChildren().stream()
+                                    .filter(b -> b instanceof ScriptButton)
+                                    .map(b -> (ScriptButton) b)
+                                    .collect(Collectors.toList());
+
+                    List<String> allowables = getAllowableText(currentScript);
+
+                    enableButtons(allowables);
+                } else {
+                    alertNoneSelected();
+                }
+            } catch (Exception ex) {
+                alertNoneSelected();
+            }
+        }
+    };
+
+    /**
+     * Get all button text that is valid at current state
+     *
+     * @param currentScript Script buttons that are active in the current Behavior
+     * @return Returns a list of all Strings that are valid adds to the current Behavior
+     */
+    private List<String> getAllowableText(List<ScriptButton> currentScript) {
+        if (currentScript.isEmpty()) {
+            // enforce 'if'
+            return (Collections.singletonList("If"));
+        }
+
+        ScriptButton lastButton = currentScript.get(currentScript.size() - 1);
+        String lastButtonText = lastButton.getText().trim();
+
+        // enforce data
+        if (ScriptingTypes.OPERATOR.list().contains(lastButtonText) || lastButtonText.equals(Conditional.IF.text()) || lastButtonText.equals(Conditional.AND.text())) {
+            return ScriptingTypes.DATA.list();
+        }
+        // enforce operator
+        else if (ScriptingTypes.DATA.list().contains(lastButtonText) && (currentScript.size() % 4) - 2 == 0) {
+            return ScriptingTypes.OPERATOR.list();
+        }
+        // enforce and or then
+        else if (ScriptingTypes.DATA.list().contains(lastButtonText)) {
+            return Arrays.asList(Conditional.AND.text(), Conditional.THEN.text());
+        }
+        // enforce command
+        else if (lastButtonText.equals(Conditional.THEN.text())) {
+            return ScriptingTypes.COMMAND.list();
+        }
+        // disable all
+        else {
+            return Collections.emptyList();
+        }
+    }
 
     public BehaviorList getBehaviorList() {
         return behaviorList;
@@ -76,7 +167,6 @@ public class ScriptingController {
      */
     @FXML
     private void initialize() {
-
         // Assign each ChoiceButton in choicesPane the choiceButtonClick event handler
         for (Node component : choicesPane.getChildren()) {
             if (component instanceof VBox) {
@@ -101,6 +191,17 @@ public class ScriptingController {
                     System.out.println("Selected!");
                     behavior.setSelected(true);
                 }
+
+                List<ScriptButton> currentScript =
+                        behavior.getChildren().stream()
+                                .filter(b -> b instanceof ScriptButton)
+                                .map(b -> (ScriptButton) b)
+                                .collect(Collectors.toList());
+
+                List<String> allowables = getAllowableText(currentScript);
+
+                enableButtons(allowables);
+
             });
 
             behaviorList.getChildren().add(behavior);
@@ -113,13 +214,16 @@ public class ScriptingController {
                 if (behavior.isSelected()) {
                     behaviorList.getChildren().remove(behavior);
                 } else {
-                    showNoneSelected();
+                    alertNoneSelected();
                 }
             } catch (Exception ex) {
                 //  Do Nothing
-                showNoneSelected();
+                alertNoneSelected();
             }
         });
+
+        // Add Event listener to deleteWord button to delete last word in the selected behavior
+        deleteWord.setOnAction(removeLastWordClick);
 
         // Assign submit button an action to instantiate the GameGUI, as well as to pass all necessary scripting objects
         submit.setOnAction((ActionEvent event) -> {
@@ -139,7 +243,7 @@ public class ScriptingController {
      * Shows an informational alert stating that the selected action could not be completed since no behavior has been
      * selected
      */
-    private void showNoneSelected() {
+    private void alertNoneSelected() {
         // Nothing is selected, show prompt
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("No Behavior Selected");
@@ -148,6 +252,42 @@ public class ScriptingController {
                 " If you have not yet created a behavior, select the green 'plus' button " +
                 "to do so.");
         alert.showAndWait();
+    }
+
+    /**
+     * @param behavior Behavior to be checked for completeness
+     * @return Returns true if behavior is well formed
+     */
+    private boolean isCompleteBehavior(Behavior behavior) {
+        ScriptButton lastButton = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size() - 1);
+
+        // We can do this since validity is enforced along the way
+        return ScriptingTypes.COMMAND.list().contains(lastButton.getText());
+    }
+
+    /**
+     * Enable all buttons in validButtons, disable the rest that appear in the choicesPane
+     *
+     * @param validText List of valid Strings at current point
+     */
+    private void enableButtons(List<String> validText) {
+
+        List<Node> allButtons = Stream.of(conditionals.getChildren(),
+                commands.getChildren(),
+                operators.getChildren(),
+                data.getChildren())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        allButtons.forEach(b -> {
+            if (b instanceof ChoiceButton) {
+                if (validText.contains(((ChoiceButton) b).getText().trim())) {
+                    b.setDisable(false);
+                } else {
+                    b.setDisable(true);
+                }
+            }
+        });
     }
 
 }
