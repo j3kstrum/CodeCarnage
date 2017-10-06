@@ -7,6 +7,8 @@
 
 package engine.core;
 
+import utilties.models.Game;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -97,5 +99,18 @@ public class EngineTest {
         long endtime = e.performWait(curtime);
         assertTrue(endtime - curtime > Engine.TICK_TIME - 10);
         assertTrue(endtime - curtime < Engine.TICK_TIME + 10);
+    }
+
+    @org.junit.Test
+    public void tickNullGame() throws Exception {
+        e.game = null;
+        assertTrue(e.tick() == null);
+    }
+
+    // TODO: Eventually be able to load up a valid game...
+    @org.junit.Test(expected = NullPointerException.class)
+    public void tickGame() throws Exception {
+        e.game = new Game(null);
+        assertTrue(e.tick() != null);
     }
 }

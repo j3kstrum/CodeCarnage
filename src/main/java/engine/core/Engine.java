@@ -26,9 +26,6 @@ import java.net.URL;
  */
 public class Engine {
 
-    // Hard shutdown boolean. Causes main loop to terminate with no chance for recovery.
-    private boolean _shutdown = false;
-
     // The Engine's Database.
     private final EngineData DATA;
 
@@ -61,38 +58,27 @@ public class Engine {
      *
      * @return The initial GameMap, initialized to hold the static Tiled EntityMap.
      */
-    private GameMap loadGameMap() {
-        TMXMapReader tmr = new TMXMapReader();
-        GameMap mp = null;
+    private Map loadGameMap() {
+        TMXMapReader mapReader = new TMXMapReader();
+        URL mapPath = getClass().getResource("/game-map.tmx");
         try {
-            TMXMapReader mapReader = new TMXMapReader();
-            URL mapPath = getClass().getResource("/game-map.tmx");
+            this.map = mapReader.readMap(mapPath.toString());
+        } catch (Exception ex) {
+            ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
+            mapPath = getClass().getResource("/nix/game-map.tmx");
+            System.out.println(mapPath == null ? "null" : mapPath.toString());
             try {
                 this.map = mapReader.readMap(mapPath.toString());
-            } catch (Exception ex) {
-                ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
-                mapPath = getClass().getResource("/nix/game-map.tmx");
-                try {
-                    this.map = mapReader.readMap(mapPath.toString());
-                } catch (Exception ex2) {
-                    ENGINE_LOGGER.fatal(ex2.getMessage());
-                    System.exit(2);
-                }
+            } catch (Exception ex2) {
+                ENGINE_LOGGER.fatal(ex2.getMessage());
+                System.exit(1);
             }
-
-            EntityMap entityMap = new EntityMap(map, 25, 15);
-            game = new Game(entityMap);
-            this.gameGUI._map = map;
-
-        } catch (Exception e) {
-            ENGINE_LOGGER.fatal("Could not load game map.");
-            // TODO: Don't just kill the program here. Download the game map that we know works from
-            // GitHub if we can get a connection, and then use that map instead.
-            ENGINE_LOGGER.fatal(e.getMessage());
-            System.exit(1);
         }
 
-        return mp;
+        EntityMap entityMap = new EntityMap(map, map.getWidth(), map.getHeight());
+        game = new Game(entityMap);
+        this.gameGUI._map = map;
+        return map;
     }
 
     /**
@@ -101,17 +87,6 @@ public class Engine {
      */
     public boolean isRunning() {
         return this._inCoreGame;
-    }
-
-    /**
-     * BORROWED FROM Tiled MapEditor test code. Loads a filename from the project's resources.
-     *
-     * @param filename The relative path to be loaded for resources.
-     * @return The URL representing the full filepath to the desired resource.
-     */
-    private URL getUrlFromResources(String filename) {
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        return classLoader.getResource(filename);
     }
 
     /**
@@ -132,12 +107,10 @@ public class Engine {
     public boolean shutdown(boolean now) {
         System.out.println("Shutting down...");
         if (now) {
-            this._shutdown = true;
             this._inCoreGame = false;
         } else {
             ENGINE_LOGGER.warning("Currently can not shutdown engine with delay. " +
                     "Terminating immediately following current tick.");
-            this._shutdown = true;
             this._inCoreGame = false;
         }
         return true;
