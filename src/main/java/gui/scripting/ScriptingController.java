@@ -35,7 +35,7 @@ public class ScriptingController {
     @FXML
     private AnchorPane choicesPane;
     @FXML
-    private JFXButton add, subtract, submit;
+    private JFXButton add, subtract, submit, deleteWord;
 
     @FXML
     private VBox conditionals, data, operators, commands;
@@ -63,6 +63,42 @@ public class ScriptingController {
                     buttonToAdd.setStyle(currentButton.getStyle());
 
                     behavior.getChildren().add(buttonToAdd);
+
+                    List<ScriptButton> currentScript =
+                            behavior.getChildren().stream()
+                                    .filter(b -> b instanceof ScriptButton)
+                                    .map(b -> (ScriptButton) b)
+                                    .collect(Collectors.toList());
+
+                    List<String> allowables = getAllowableText(currentScript);
+
+                    enableButtons(allowables);
+                } else {
+                    alertNoneSelected();
+                }
+            } catch (Exception ex) {
+                alertNoneSelected();
+            }
+        }
+    };
+
+    /**
+     * Handles click events for the deleteWord button.  Removes the last word in the selected behavior
+     */
+    private EventHandler removeLastWordClick = new EventHandler() {
+        /**
+         * @param event Click event to be handled
+         */
+        @Override
+        public void handle(Event event) {
+            // Remove the last word in the selected behavior
+            try {
+                Behavior behavior = (Behavior) behaviorList.getToggleGroup().getSelectedToggle();
+
+                if (behavior.isSelected()) {
+                    ScriptButton lastButton = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size() - 1);
+
+                    behavior.getChildren().remove(lastButton);
 
                     List<ScriptButton> currentScript =
                             behavior.getChildren().stream()
@@ -185,6 +221,9 @@ public class ScriptingController {
                 alertNoneSelected();
             }
         });
+
+        // Add Event listener to deleteWord button to delete last word in the selected behavior
+        deleteWord.setOnAction(removeLastWordClick);
 
         // Assign submit button an action to instantiate the GameGUI, as well as to pass all necessary scripting objects
         submit.setOnAction((ActionEvent event) -> {
