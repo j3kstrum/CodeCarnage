@@ -154,13 +154,6 @@ public class Engine {
             ENGINE_LOGGER.critical("System too slow for tick. Elapsed delta: " + String.valueOf(delta) + ".");
         } else {
             try {
-                if (delta < Engine.TICK_TIME / 2) {
-                    ENGINE_LOGGER.info("Delta: " + delta + " (" + (100 * delta / Engine.TICK_TIME) + "% utilization)");
-                } else {
-                    ENGINE_LOGGER.warning(
-                            "Delta: " + delta + " (" + (100 * delta / Engine.TICK_TIME) + "% utilization)"
-                    );
-                }
                 Thread.sleep(Engine.TICK_TIME - delta);
             } catch (InterruptedException ie) {
                 ENGINE_LOGGER.critical("Tick sleep interrupted!");
@@ -181,7 +174,8 @@ public class Engine {
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
-        game.move(0, 1,0);
+        game.moveCloserTo(0,1);
+        game.moveCloserTo(1, 0);
         return game.nextTurn();
     }
 
