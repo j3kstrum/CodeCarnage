@@ -156,7 +156,8 @@ public class Engine {
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
-        game.move(0, 1,0);
+        game.approach(0,1);
+        game.approach(1, 0);
         return game.nextTurn();
     }
 
