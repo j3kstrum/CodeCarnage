@@ -209,22 +209,22 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <JFXButton fx:id="add" layoutX="404.0" layoutY="324.0" prefHeight="41.0" prefWidth="97.0"
-                   style="-fx-background-color: lightgreen;" text="+">
+        <JFXButton fx:id="add" buttonType="RAISED" layoutX="414.0" layoutY="324.0" prefHeight="40.0" prefWidth="150.0"
+                   style="-fx-background-color: lightgreen;" text="Add Behavior">
             <font>
-                <Font size="18.0"/>
+                <Font size="16.0"/>
             </font>
         </JFXButton>
-        <JFXButton fx:id="submit" layoutX="1295.0" layoutY="324.0" prefHeight="41.0" prefWidth="179.0"
+        <JFXButton fx:id="submit" layoutX="1359.0" layoutY="324.0" prefHeight="40.0" prefWidth="150.0"
                    style="-fx-background-color: #ffab00;" text="Submit Script">
             <font>
-                <Font size="18.0"/>
+                <Font size="16.0"/>
             </font>
         </JFXButton>
-        <JFXButton fx:id="subtract" layoutX="533.0" layoutY="324.0" prefHeight="41.0" prefWidth="97.0"
-                   style="-fx-background-color: #FF9494;" text="-">
+        <JFXButton fx:id="subtract" layoutX="585.0" layoutY="324.0" prefHeight="40.0" prefWidth="150.0"
+                   style="-fx-background-color: #FF9494;" text="Delete Behavior">
             <font>
-                <Font size="18.0"/>
+                <Font size="16.0"/>
             </font>
         </JFXButton>
         <Pane fx:id="logoPane" layoutX="1199.0" layoutY="87.0">
@@ -236,5 +236,11 @@
                 </ImageView>
             </children>
         </Pane>
+        <JFXButton fx:id="deleteWord" layoutX="756.0" layoutY="324.0" prefHeight="40.0" prefWidth="150.0"
+                   style="-fx-background-color: #FF9494;" text="Delete Last Entry">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </JFXButton>
     </children>
 </AnchorPane>
