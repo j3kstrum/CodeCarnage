@@ -49,8 +49,6 @@ public class Game {
      */
     public Game(EntityMap entityMap) {
         this._entityMap = entityMap;
-        move(PLAYER_ID, 10,5);
-        move(OPPONENT_ID,-10,-5);
         _previousLocations.add(getPlayer(PLAYER_ID).getLocation());
         _previousLocations.add(getPlayer(OPPONENT_ID).getLocation());
         _numberOfTimesAtCurrentLocation.add(1);
@@ -245,7 +243,7 @@ public class Game {
      * @param opponentId
      * @return
      */
-    public boolean moveCloserTo(int playerId, int opponentId){
+    public boolean approach(int playerId, int opponentId){
         getPlayer(playerId).setShielding(false);
 
         //Get locations of players
