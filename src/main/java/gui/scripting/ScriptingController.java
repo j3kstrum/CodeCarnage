@@ -183,13 +183,14 @@ public class ScriptingController {
                 behavior.getStyleClass().add("behavior");
                 behavior.setToggleGroup(behaviorList.getToggleGroup());
                 behavior.setOnMouseClicked((mouseEvent) -> {
-                    if (behavior.isSelected()) {
-                        System.out.println("Unselected!");
-                        behavior.setSelected(false);
-                    } else {
-                        System.out.println("Selected!");
-                        behavior.setSelected(true);
-                    }
+                    behavior.setSelected(behavior.isSelected());
+//                    if (behavior.isSelected()) {
+//                        System.out.println("Unselected!");
+//                        behavior.setSelected(false);
+//                    } else {
+//                        System.out.println("Selected!");
+//                        behavior.setSelected(true);
+//                    }
 
                     List<ScriptButton> currentScript =
                             behavior.getChildren().stream()
@@ -235,7 +236,7 @@ public class ScriptingController {
 
         // Assign submit button an action to instantiate the GameGUI, as well as to pass all necessary scripting objects
         submit.setOnAction((ActionEvent event) -> {
-            System.out.println("You clicked Submit!");
+//            System.out.println("You clicked Submit!");
 
             try {
                 List<ScriptCommand> commandObjects = getCommands();

@@ -8,6 +8,7 @@
 package engine.core;
 
 import common.BaseLogger;
+import common.constants.GameStatus;
 import common.data.GameMap;
 import engine.data.EngineData;
 import gui.game.GameGUI;
@@ -54,6 +55,14 @@ public class Engine {
     }
 
     /**
+     *
+     * @return The current state of the game (inactive, running, won, lost, stalemate)
+     */
+    public GameStatus getGameState() {
+        return game.getState();
+    }
+
+    /**
      * Loads the Tiled static EntityMap from disk.
      *
      * @return The initial GameMap, initialized to hold the static Tiled EntityMap.
@@ -66,7 +75,7 @@ public class Engine {
         } catch (Exception ex) {
             ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
             mapPath = getClass().getResource("/nix/game-map.tmx");
-            System.out.println(mapPath == null ? "null" : mapPath.toString());
+//            System.out.println(mapPath == null ? "null" : mapPath.toString());
             try {
                 this.map = mapReader.readMap(mapPath.toString());
             } catch (Exception ex2) {
@@ -105,7 +114,7 @@ public class Engine {
      * @return true if successful, false if shutdown failed.
      */
     public boolean shutdown(boolean now) {
-        System.out.println("Shutting down...");
+        ENGINE_LOGGER.info("Shutting down...");
         if (now) {
             this._inCoreGame = false;
         } else {
@@ -158,6 +167,12 @@ public class Engine {
         }
         game.approach(0,1);
         game.approach(1, 0);
+        game.attack(0,
+                game.getPlayer(1).getLocation().x
+                - game.getPlayer(0).getLocation().x,
+                game.getPlayer(1).getLocation().y
+                - game.getPlayer(0).getLocation().y
+        );
         return game.nextTurn();
     }
 
