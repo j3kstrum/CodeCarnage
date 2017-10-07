@@ -12,14 +12,10 @@ public class ScriptCommand {
 
     private List<Check> checks;
     private Command command;
-    private int id;
-    private int otherId;
 
     public ScriptCommand(List<Check> checks, Command command) {
         this.checks = checks;
         this.command = command;
-        this.id = -1;
-        this.otherId = -1;
     }
 
     public Command getCommand() {
@@ -30,20 +26,8 @@ public class ScriptCommand {
         return checks;
     }
 
-    public int getId(){return this.id;}
 
-    public int getOtherId(){return this.otherId;}
-
-    public void setId(int id){
-        this.id = id;
-        if (id == 0){
-            this.otherId = 1;
-        } else {
-            this.otherId = 0;
-        }
-    }
-
-    public boolean performCommand(Game game){
+    public boolean performCommand(Game game, int id){
 
         for (Check c: this.checks){
             if (!c.conditionIsTrue(game)){
@@ -51,25 +35,29 @@ public class ScriptCommand {
             }
         }
 
-        doCommand(game);
+        doCommand(game, id);
         return true;
     }
 
 
-    private void doCommand(Game game){
+    private void doCommand(Game game, int id){
+
+        int otherId;
+
+        if (id == 0){otherId = 1;}else{otherId = 0;}
 
         switch(this.command){
             case APPROACH:
-                game.approach(this.id, this.otherId);
+                game.approach(id, otherId);
                 break;
             case HEAL:
-                game.heal(this.id, 20);
+                game.heal(id, 20);
                 break;
             case DO_NOTHING:
-                game.doNothing(this.id);
+                game.doNothing(id);
                 break;
             case DEFEND:
-                game.defend(this.id);
+                game.defend(id);
                 break;
         }
     }
