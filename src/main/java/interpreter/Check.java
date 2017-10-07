@@ -27,8 +27,6 @@ public class Check {
     private Data data2;
     private Operator operator;
 
-    private int userInput;
-
     /**
      *
      * Default constructor when not dealing with user input.
@@ -41,36 +39,8 @@ public class Check {
         this.data1 = data1;
         this.data2 = data2;
         this.operator = operator;
-        this.userInput = -1;
     }
 
-    /**
-     * Constructor for comparing user input data
-     *
-     * @param userInput User-inputed integer value
-     * @param data2 Second data element
-     * @param operator  Operator for comparison
-     */
-    public Check(int userInput, Data data2, Operator operator) {
-        this.data1 = Data.UserInput;
-        this.data2 = data2;
-        this.operator = operator;
-        this.userInput = userInput;
-    }
-
-    /**
-     * Constructor for comparing user input data
-     *
-     * @param data1 First data element
-     * @param userInput User-inputed integer value
-     * @param operator  Operator for comparison
-     */
-    public Check(Data data1, int userInput, Operator operator) {
-        this.data1 = data1;
-        this.data2 = Data.UserInput;
-        this.operator = operator;
-        this.userInput = userInput;
-    }
 
     /**
      * Based on the current game state data, returns if condition is true.
@@ -115,8 +85,6 @@ public class Check {
                 return game.getPlayer(Game.OPPONENT_ID).getHealth();
             case DistanceFromOpponent:
                 return (int)Math.round(game.distanceToOpponent(Game.PLAYER_ID, Game.OPPONENT_ID));
-            case UserInput:
-                return this.userInput;
             default:
                 return -1;  //This "should" never happen, if it does, fix it!
         }
