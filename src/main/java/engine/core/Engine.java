@@ -33,6 +33,7 @@ public class Engine {
     public static final long TICK_TIME = 250;
     private boolean _inCoreGame = false;
 
+    private int victoryCount = 0;
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
     public Map map;
@@ -153,11 +154,30 @@ public class Engine {
             ENGINE_LOGGER.critical("Game was null. Returning null.");
             return null;
         }
-        if (game.getNumberOfTurnsCompleted() > 150) {
-            this.shutdown();
-        }
-        game.approach(0,1);
-        game.retreat(1, 0);
+
+            if(game.getPlayer(1).getHealth() <= 0){
+                game.getEntityMap().removeTile(game.getPlayer(1).getLocation());
+
+                victoryCount++;
+
+                if(this.victoryCount == 10){
+                    this.shutdown();
+                }
+
+            }
+            else {
+                if(game.pathDistanceToPlayer(0, 1) ==0){
+                    game.attack(0, 0, 1);
+                    game.attack(0, 0, -1);
+                    game.attack(0, 1, 0);
+                    game.attack(0, -1, 0);
+                }
+
+                game.approach(0,1);
+                game.retreat(1, 0);
+            }
+
+
         return game.nextTurn();
     }
 

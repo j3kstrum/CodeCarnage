@@ -13,6 +13,7 @@ import utilties.entities.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -41,7 +42,6 @@ public class Game {
         add(DIRECTION_CONSTANT);
         add(DIRECTION_CONSTANT);
         add(DIRECTION_CONSTANT);
-        add(DIRECTION_CONSTANT);
         add(DIRECTION_DOWN);
     }};
 
@@ -60,6 +60,7 @@ public class Game {
      */
     public Game(EntityMap entityMap) {
         this._entityMap = entityMap;
+        //this.getPlayer(0).setLocation(new Point(1, 1));
         _previousLocations.add(getPlayer(PLAYER_ID).getLocation());
         _previousLocations.add(getPlayer(OPPONENT_ID).getLocation());
         _numberOfTimesAtCurrentLocation.add(1);
@@ -387,7 +388,12 @@ public class Game {
 
         int randomMovement = generateRandomMovement();
 
-        return move(playerId, generateRandomMovement(), generateRandomMovement());
+        if(getRandomBoolean()){
+            return move(playerId, randomMovement, DIRECTION_CONSTANT);
+        }
+        else{
+            return move(playerId, DIRECTION_CONSTANT, randomMovement);
+        }
     }
 
     /**
@@ -395,10 +401,15 @@ public class Game {
      * @return Random Movement Value
      */
     public int generateRandomMovement(){
-        int seed =  ThreadLocalRandom.current().nextInt(0, 5 + 1);
-        System.out.println(seed);
+        int seed =  ThreadLocalRandom.current().nextInt(0, 4 + 1);
+        //System.out.println(seed);
         int direction = DIRECTIONS_RANDOM_MOVEMENT.get(seed);
         return direction;
+    }
+
+    public boolean getRandomBoolean() {
+        Random random = new Random();
+        return random.nextBoolean();
     }
 
 }
