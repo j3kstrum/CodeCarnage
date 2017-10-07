@@ -9,8 +9,7 @@ package interpreter;
 
 import interpreter.enumerations.Data;
 import interpreter.enumerations.Operator;
-
-import utilties.models.*;
+import utilties.models.Game;
 
 /**
  * Class used to compare data, in order to evaluate if a function should be allowed to proceed.
@@ -69,15 +68,15 @@ public class Check {
         int data2 = getData(this.data2, game);
 
         switch (this.operator){
-            case LessThan:
+            case LESS_THAN:
                 return data1 < data2;
-            case GreaterThan:
+            case GREATER_THAN:
                 return data1 > data2;
-            case LessThanOrEqualTo:
+            case LESS_THAN_OR_EQUAL_TO:
                 return data1 <= data2;
-            case GreaterThanOrEqualTo:
+            case GREATER_THAN_OR_EQUAL_TO:
                 return data1 >= data2;
-            case EqualTo:
+            case EQUALS:
                 return data1 == data2;
             default:
                 return false;  // should never happen, but Java is Java
@@ -94,11 +93,11 @@ public class Check {
      */
     public int getData(Data data, Game game){
         switch(data){
-            case UserHealth:
+            case USER_HEALTH:
                 return game.getPlayer(Game.PLAYER_ID).getHealth();
-            case OpponentHealth:
+            case OPPONENT_HEALTH:
                 return game.getPlayer(Game.OPPONENT_ID).getHealth();
-            case DistanceFromOpponent:
+            case DISTANCE_FROM_OPPONENT:
                 return (int)Math.round(game.distanceToOpponent(Game.PLAYER_ID, Game.OPPONENT_ID));
             default:
                 return -1;  //This "should" never happen, if it does, fix it!
