@@ -75,7 +75,7 @@ public class Engine {
         } catch (Exception ex) {
             ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
             mapPath = getClass().getResource("/nix/game-map.tmx");
-            System.out.println(mapPath == null ? "null" : mapPath.toString());
+//            System.out.println(mapPath == null ? "null" : mapPath.toString());
             try {
                 this.map = mapReader.readMap(mapPath.toString());
             } catch (Exception ex2) {
@@ -114,7 +114,7 @@ public class Engine {
      * @return true if successful, false if shutdown failed.
      */
     public boolean shutdown(boolean now) {
-        System.out.println("Shutting down...");
+        ENGINE_LOGGER.info("Shutting down...");
         if (now) {
             this._inCoreGame = false;
         } else {

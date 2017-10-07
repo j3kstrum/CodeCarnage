@@ -74,7 +74,7 @@ public class EntityMap {
                     //If the current coordinates are the opponent's location on map
                 } else if (_opponentTile.getLocation().equals(currentLocation)) {
                     _entityTiles[x][y] = _opponentTile;
-                    System.out.println(_entityTiles[x][y].getEntityType() == Entity.EntityType.PLAYER);
+//                    System.out.println(_entityTiles[x][y].getEntityType() == Entity.EntityType.PLAYER);
                 } else {
                     //Grab the empty tile reference at that location
                     TileLayer playerLayer = (TileLayer) this._gameMap.getLayer(2);
