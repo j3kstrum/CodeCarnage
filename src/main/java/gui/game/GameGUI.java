@@ -10,8 +10,8 @@ package gui.game;
 import common.BaseLogger;
 import engine.core.Engine;
 import engine.core.TickingService;
+import interpreter.ScriptCommand;
 import javafx.application.Application;
-import javafx.beans.NamedArg;
 import javafx.collections.ObservableMap;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
@@ -28,14 +28,12 @@ import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class GameGUI extends Application {
 
@@ -48,17 +46,23 @@ public class GameGUI extends Application {
     private ArrayList<Point> redrawCoords = new ArrayList<>();
 
     private boolean hasDisplayedResultScreen = false;
+    private ArrayList<ScriptCommand> commandObjects;
 
     public Map _map;
     private Pane _imagePane;
 
-    public GameGUI() throws Exception {
+    public GameGUI(ArrayList<ScriptCommand> commandObjects) throws Exception {
         //Create Engine
+        this.commandObjects = commandObjects;
         _engine = new Engine(this);
         LOGGER.info("Beginning game gui and engine...");
         this._engine.startGame();
 
         start(new Stage());
+    }
+
+    public List<ScriptCommand> getCommandObjects() {
+        return commandObjects;
     }
 
     @Override
