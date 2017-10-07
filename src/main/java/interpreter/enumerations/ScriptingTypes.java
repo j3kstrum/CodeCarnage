@@ -1,4 +1,4 @@
-package gui.scripting.enumerations;
+package interpreter.enumerations;
 
 import java.util.Arrays;
 import java.util.List;
