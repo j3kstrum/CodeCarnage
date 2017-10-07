@@ -11,6 +11,7 @@ import common.BaseLogger;
 import engine.core.Engine;
 import engine.core.TickingService;
 import javafx.application.Application;
+import javafx.beans.NamedArg;
 import javafx.collections.ObservableMap;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +28,11 @@ import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,6 +46,8 @@ public class GameGUI extends Application {
     private HashMap<Integer, Integer> mapCache = new HashMap<>();
     private HashMap<Integer, Image> tileCache = new HashMap<>();
     private ArrayList<Point> redrawCoords = new ArrayList<>();
+
+    private boolean hasDisplayedResultScreen = false;
 
     public Map _map;
     private Pane _imagePane;
@@ -74,6 +81,7 @@ public class GameGUI extends Application {
 
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root, 800, 480));
+        primaryStage.setResizable(false);
         primaryStage.show();
 
         startUIUpdateThread();
@@ -240,6 +248,21 @@ public class GameGUI extends Application {
     }
 
     /**
+     * Displays the result screen found at the specified path.
+     * @param imagePath The path containing the image file to be used.
+     */
+    private void displayResultScreen(URL imagePath) {
+        ImageView i = new ImageView(new Image(imagePath.toString()));
+
+        // Ensure that, even if we ever resize the game map, we scale the results screen to encompass everything.
+        i.setFitWidth(_imagePane.getWidth());
+        i.setFitHeight(_imagePane.getHeight());
+
+        _imagePane.getChildren().add(i);
+        hasDisplayedResultScreen = true;
+    }
+
+    /**
      * Updates the GUI based on data read from Map
      * Some child code derived from http://discourse.mapeditor.org/t/loading-tmx-map-and-displaying-with-javafx/1189
      */
@@ -249,6 +272,32 @@ public class GameGUI extends Application {
             LOGGER.fatal("Could not update GameGUI: Map == null.");
             return;
         }
+
+        // If the game is over, display the appropriate screen (if not yet done) and then return.
+        // We won't be updating tiles, since the game is DEFINITIVELY over.
+        switch (_engine.getGameState()) {
+            case INACTIVE:
+                return;
+            case WON:
+                if (!hasDisplayedResultScreen) {
+                    URL img = getClass().getResource("/winner_overlay.png");
+                    displayResultScreen(img);
+                }
+                return;
+            case LOST:
+                if (!hasDisplayedResultScreen) {
+                    URL img = getClass().getResource("/defeated_overlay.png");
+                    displayResultScreen(img);
+                }
+                return;
+            case STALEMATE:
+                if (!hasDisplayedResultScreen) {
+                    URL img = getClass().getResource("/stalemate_overlay.png");
+                    displayResultScreen(img);
+                }
+                return;
+        }
+
         // Get map data
         ArrayList<MapLayer> layerList = new ArrayList<>(this._map.getLayers());
         redrawCoords = new ArrayList<>();

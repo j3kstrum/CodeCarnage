@@ -7,6 +7,8 @@
 
 package utilties.models;
 
+import common.BaseLogger;
+import common.constants.GameStatus;
 import org.mapeditor.core.Map;
 import utilties.entities.Entity;
 import utilties.entities.Player;
@@ -43,6 +45,7 @@ public class Game {
     //Constant for number of turns to calculate a stalemate
     private static final int NUMBER_OF_TURNS_TO_STALEMATE = 10;
 
+    private static final BaseLogger LOGGER = new BaseLogger("Game");
 
     /**
      * @param entityMap
@@ -324,6 +327,28 @@ public class Game {
      */
     public boolean isStalemate(){
         return this._isStalemate;
+    }
+
+    /**
+     * Used by external classes to acquire game state.
+     * @return The GameStatus pertaining to the current state of the game.
+     */
+    public GameStatus getState() {
+        if (!isGameOver()) {
+            LOGGER.critical("No way to distinguish between RUNNING and INACTIVE game states yet (TODO SEAN).");
+            return GameStatus.RUNNING;
+        }
+        if (isStalemate()) {
+            return GameStatus.STALEMATE;
+        }
+        LOGGER.warning("Cannot determine which player has won easily from the getState() method. Needs helper methods.");
+        if (isDead(0)) {
+            return GameStatus.LOST;
+        }
+        else if (isDead(1)) {
+            return GameStatus.WON;
+        }
+        throw new RuntimeException("CANNOT DETERMINE GAME STATE.");
     }
 
     /**

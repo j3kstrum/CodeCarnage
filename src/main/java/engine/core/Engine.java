@@ -8,6 +8,7 @@
 package engine.core;
 
 import common.BaseLogger;
+import common.constants.GameStatus;
 import common.data.GameMap;
 import engine.data.EngineData;
 import gui.game.GameGUI;
@@ -51,6 +52,14 @@ public class Engine {
             ENGINE_LOGGER.fatal("COULD NOT LOAD GAME MAP.");
         }
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
+    }
+
+    /**
+     *
+     * @return The current state of the game (inactive, running, won, lost, stalemate)
+     */
+    public GameStatus getGameState() {
+        return game.getState();
     }
 
     /**
@@ -158,6 +167,12 @@ public class Engine {
         }
         game.approach(0,1);
         game.approach(1, 0);
+        game.attack(0,
+                game.getPlayer(1).getLocation().x
+                - game.getPlayer(0).getLocation().x,
+                game.getPlayer(1).getLocation().y
+                - game.getPlayer(0).getLocation().y
+        );
         return game.nextTurn();
     }
 
