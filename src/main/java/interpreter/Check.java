@@ -21,4 +21,16 @@ public class Check {
         this.data2 = data2;
         this.operator = operator;
     }
+
+    public Data getData1() {
+        return data1;
+    }
+
+    public Data getData2() {
+        return data2;
+    }
+
+    public Operator getOperator() {
+        return operator;
+    }
 }
