@@ -8,7 +8,6 @@
 package engine.core;
 
 import common.BaseLogger;
-import common.data.GameMap;
 import engine.data.EngineData;
 import gui.game.GameGUI;
 import org.mapeditor.core.Map;
@@ -167,14 +166,13 @@ public class Engine {
             }
             else {
                 if(game.pathDistanceToPlayer(0, 1) ==0){
-                    game.attack(0, 0, 1);
-                    game.attack(0, 0, -1);
-                    game.attack(0, 1, 0);
-                    game.attack(0, -1, 0);
+                    game.attack(0);
                 }
-
-                game.approach(0,1);
-                game.retreat(1, 0);
+                else{
+                    game.approach(0,1);
+                    boolean didEvade = game.evade(1, 0);
+                }
+                int x = 5;
             }
 
 

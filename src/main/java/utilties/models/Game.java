@@ -29,12 +29,20 @@ public class Game {
     private boolean _isGameOver = false;
 
     //Constants
+
     //Directions
     public static final int DIRECTION_RIGHT = 1;
     public static final int DIRECTION_LEFT = -1;
     public static final int DIRECTION_UP = 1;
     public static final int DIRECTION_DOWN = -1;
     public static final int DIRECTION_CONSTANT = 0;
+
+    //Vectors for Moving
+    private static final Point MOVE_LEFT = new Point(DIRECTION_LEFT, DIRECTION_CONSTANT);
+    private static final Point MOVE_RIGHT = new Point(DIRECTION_RIGHT, DIRECTION_CONSTANT);
+    private static final Point MOVE_DOWN = new Point(DIRECTION_CONSTANT, DIRECTION_DOWN);
+    private static final Point MOVE_UP = new Point(DIRECTION_CONSTANT, DIRECTION_UP);
+
 
     //List of random directions we can move to.  Will stay constant 50%, and move randomly one direction 50% of time
     public static final ArrayList<Integer> DIRECTIONS_RANDOM_MOVEMENT = new ArrayList() {{
@@ -60,7 +68,6 @@ public class Game {
      */
     public Game(EntityMap entityMap) {
         this._entityMap = entityMap;
-        //this.getPlayer(0).setLocation(new Point(1, 1));
         _previousLocations.add(getPlayer(PLAYER_ID).getLocation());
         _previousLocations.add(getPlayer(OPPONENT_ID).getLocation());
         _numberOfTimesAtCurrentLocation.add(1);
@@ -106,6 +113,31 @@ public class Game {
         return this._entityMap.setLocation(player, new Point(location.x + x, location.y + y));
     }
 
+
+    /**
+     * If opponent is within one tile horizontally or vertically, player will attack that tile.  If not, returns false
+     *
+     * @param playerId Player
+     * @return If player was able to attack
+     */
+    public boolean attack(int playerId) {
+        if(attackLocation(0, 0, 1)){
+            return true;
+        }
+        else if(attackLocation(0, 0, -1)){
+            return true;
+        }
+        else if(attackLocation(0, 1, 0)){
+            return true;
+        }
+        else if(attackLocation(0, -1, 0)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     /**
      * Attacks location x and y away from players current location
      *
@@ -114,7 +146,7 @@ public class Game {
      * @param y        Units away from players current location
      * @return If player was able to attack
      */
-    public boolean attack(int playerId, int x, int y) {
+    private boolean attackLocation(int playerId, int x, int y) {
         EntityTile playerTile = this._entityMap.getPlayers().get(playerId);
         Point location = playerTile.getLocation();
 
@@ -147,6 +179,166 @@ public class Game {
     }
 
     /**
+     * Moves one tile closer to opponent.
+     * @param playerId
+     * @param opponentId
+     * @return
+     */
+    public boolean approach(int playerId, int opponentId){
+        getPlayer(playerId).setShielding(false);
+
+        //Calculate distances in X and Y directions
+        Point distances = getDeltaDistances(playerId, opponentId);
+
+        //Check if Y is 0 to prevent divide by 0 error.
+        if(distances.y == 0){
+            //If negative, move left
+            if(distances.x<0){
+                return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
+            }
+            //If positive, move right
+            else{
+                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
+            }
+        }
+
+        //Calculate slope
+        double slope = (double) distances.x / distances.y;
+
+        //If slope is < .5, then we need to move in Y direction
+        //If slope is > .5 then we need to move in X direction
+        if(Math.abs(slope) < .5){
+            if(distances.y<0){
+                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
+            }
+            else{
+                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_UP);
+            }
+        }
+        else {
+            if(distances.x<0){
+                return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
+            }
+            else{
+                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
+            }
+        }
+    }
+
+    /** Evades from opposing player.  Will move in random direction away from player
+     *
+     * @param playerId
+     * @param opponentId
+     * @return
+     */
+
+    public boolean evade(int playerId, int opponentId){
+
+        stopDefending(playerId);
+
+        /*Player player = getPlayer(playerId);
+        Player opponent = getPlayer(opponentId);
+
+        //Calculate distances in X and Y directions
+        Point distances = getDeltaDistances(playerId, opponentId);
+
+        ArrayList<Point> potentialMoveLocations = getAllPossibleMoves(getPlayer(playerId).getLocation());
+
+        if(potentialMoveLocations.size() ==0){
+            return false;
+        }
+        else{
+            int farthestDistance = 500;
+            int moveLocationIndex = 0;
+            for(int i = 0; i < potentialMoveLocations.size(); i++){
+                Point possibleMoveLocation = getNewLocation(player.getLocation(), potentialMoveLocations.get(i));
+                int currentDistanceFromPlayer = pathDistanceToLocation(possibleMoveLocation, opponent.getLocation());
+                if(farthestDistance > currentDistanceFromPlayer){
+                    farthestDistance = currentDistanceFromPlayer;
+                    moveLocationIndex = i;
+                }
+                //If equal, choose random choice
+                else if(farthestDistance == currentDistanceFromPlayer){
+                    if(getRandomBoolean()){
+                        farthestDistance = currentDistanceFromPlayer;
+                        moveLocationIndex = i;
+                    }
+                }
+            }
+
+            ArrayList<Point> possibleMovesLottery = new ArrayList<>();
+
+            for(int i = 0; i < potentialMoveLocations.size(); i++){
+                if(i == moveLocationIndex){
+                    possibleMovesLottery.add(potentialMoveLocations.get(i));
+                    possibleMovesLottery.add(potentialMoveLocations.get(i));
+                    possibleMovesLottery.add(potentialMoveLocations.get(i));
+                }
+                possibleMovesLottery.add(potentialMoveLocations.get(i));
+            }
+
+            System.out.println("Max Element " + possibleMovesLottery.size());
+            int seed = pickRandomElement(possibleMovesLottery.size());
+            System.out.println("Seed Chosen " + seed);
+            Point moveChosen = possibleMovesLottery.get(seed);
+
+            if(getRandomBoolean()){
+               return move(playerId, moveChosen.x, moveChosen.y);
+            }
+            return false;
+        }
+        */
+        return false;
+    }
+
+
+
+    /** Evades from opposing player.  Will move in random direction away from player
+     *
+     * @param playerId
+     * @param opponentId
+     * @return
+     */
+
+    public boolean dodge(int playerId, int opponentId){
+
+        stopDefending(playerId);/*
+        stopDefending(playerId);
+        Player player = getPlayer(playerId);
+        Player opponent = getPlayer(opponentId);
+
+        //Calculate distances in X and Y directions
+        ArrayList<Point> potentialMoveLocations = getAllPossibleMoves(getPlayer(playerId).getLocation());
+
+        if(potentialMoveLocations.size() == 0) {
+            return false;
+        }
+        else{
+            Point location = potentialMoveLocations.get(pickRandomElement(potentialMoveLocations.size()));
+            return move(playerId, location.x, location.y);
+        }*/
+        return false;
+    }
+
+    private ArrayList<Point> getAllPossibleMoves(Point location){
+        ArrayList<Point> potentialMoveDirections = new ArrayList<>();
+
+        if(_entityMap.canMoveToLocation(getNewLocation(location, MOVE_UP))){
+            potentialMoveDirections.add(MOVE_UP);
+        }
+        if(_entityMap.canMoveToLocation(getNewLocation(location, MOVE_DOWN))){
+            potentialMoveDirections.add(MOVE_DOWN);
+        }
+        if(_entityMap.canMoveToLocation(getNewLocation(location, MOVE_RIGHT))){
+            potentialMoveDirections.add(MOVE_RIGHT);
+        }
+        if(_entityMap.canMoveToLocation(getNewLocation(location, MOVE_LEFT))){
+            potentialMoveDirections.add(MOVE_LEFT);
+        }
+        return potentialMoveDirections;
+    }
+
+    /**
      * Sets the players state to defending.  When another command is used this is set to false
      *
      * @param playerId
@@ -156,7 +348,7 @@ public class Game {
     }
 
     /**
-     * Sets defending state.  When another command is called defending state is set to false
+     * Sets the players state to defending and sets shield strength to specified value. When another command is used this is set to false
      * @param playerId
      * @param shieldStrength
      */
@@ -165,30 +357,20 @@ public class Game {
         getPlayer(playerId).setShieldStrength(shieldStrength);
     }
 
+
     /**
      * Sets the players state to stop defending
      *
      * @param playerId
      */
-    public void stopDefending(int playerId) {
+    private void stopDefending(int playerId) {
         this.getPlayer(playerId).setShielding(false);
     }
 
-
-    /**
-     * Heals the players to a maximum of 100.  Adds specified health to the player
-     * @param playerId
-     * @param health
-     */
-    public void heal(int playerId, int health) {
-        this.getPlayer(playerId).setShielding(false);
-        Player player = this.getPlayer(playerId);
-        if (player.getHealth() + health > HEALTH_MAX) {
-            player.setHealth(HEALTH_MAX);
-        } else {
-            player.setHealth(player.getHealth() + health);
-        }
+    private Point getNewLocation(Point currentLocation, Point vector){
+        return new Point(currentLocation.x + vector.x, currentLocation.y + vector.y);
     }
+
 
     /**
      * Gets entity at specified location
@@ -229,11 +411,15 @@ public class Game {
     public double distanceToOpponent(int playerId, int opponentId) {
         Point playerLocation = getPlayer(playerId).getLocation();
         Point opponentLocation = getPlayer(opponentId).getLocation();
-        return Math.hypot(playerLocation.x - opponentLocation.x, playerLocation.y - opponentLocation.y);
+        return distance(playerLocation, opponentLocation);
+    }
+
+    public double distance(Point location1, Point location2){
+       return Math.hypot(location1.x - location2.x, location1.y - location2.y);
     }
 
     /**
-     * Number of tiles to get to player using only horizontal and vertical movement
+     * Number of tiles to get to opponent using only horizontal and vertical movement
      * @param playerId
      * @param opponentId
      * @return
@@ -243,62 +429,6 @@ public class Game {
         Point distances = getDeltaDistances(playerId, opponentId);
         //Subtract one because you can never get to players actual location, only the closest tile surrounding it
         return (Math.abs(distances.x) + Math.abs(distances.y)) - 1;
-    }
-
-    /**
-     * Moves one tile closer to player.
-     * @param playerId
-     * @param opponentId
-     * @return
-     */
-    public boolean approach(int playerId, int opponentId){
-        getPlayer(playerId).setShielding(false);
-
-        //Calculate distances in X and Y directions
-        Point distances = getDeltaDistances(playerId, opponentId);
-
-        //If Y distance is 0, then we only need to move in X directions
-        if(distances.y == 0){
-            //If negative, move left
-            if(distances.x<0){
-                return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
-            }
-            //If positive, move right
-            else{
-                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
-            }
-        }
-        //Repeat steps when X distance = 0
-        else if(distances.x == 0) {
-            if(distances.y<0){
-                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
-            }
-            else{
-                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_UP);
-            }
-        }
-
-        //Calculate slope
-        double slope = (double) distances.x / distances.y;
-
-        //If slope is < .5, then we need to move in Y direction
-        //If slope is > .5 then we need to move in X direction
-        if(Math.abs(slope) < .5){
-            if(distances.y<0){
-                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
-            }
-            else{
-                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_UP);
-            }
-        }
-        else {
-            if(distances.x<0){
-                return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
-            }
-            else{
-                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
-            }
-        }
     }
 
     /**
@@ -320,6 +450,15 @@ public class Game {
 
     }
 
+    public int pathDistanceToLocation(Point location1, Point location2){
+
+        //Calculate distances in X and Y directions
+        int distanceX = location1.x - location2.x;
+        int distanceY = location1.y - location2.y;
+        return (Math.abs(distanceX) + Math.abs(distanceY)) - 1;
+
+    }
+
     /**
      * Is the player dead
      * @param playerId
@@ -330,14 +469,6 @@ public class Game {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Command to do nothing
-     */
-    public void doNothing(int playerId){
-        getPlayer(playerId).setShielding(false);
-        return;
     }
 
     /**
@@ -376,40 +507,21 @@ public class Game {
         return this._isGameOver;
     }
 
-    public boolean retreat(int playerId, int opponentId){
-        getPlayer(playerId).setShielding(false);
-
-        //Calculate distances in X and Y directions
-        Point distances = getDeltaDistances(playerId, opponentId);
-
-        //If Y distance is 0, then we only need to move in X directions
-
-        //Should we have one direction stay the same?  Introduces randomness
-
-        int randomMovement = generateRandomMovement();
-
-        if(getRandomBoolean()){
-            return move(playerId, randomMovement, DIRECTION_CONSTANT);
-        }
-        else{
-            return move(playerId, DIRECTION_CONSTANT, randomMovement);
-        }
-    }
-
+    //TODO Utilize Seed generated from engine
     /**
      *
      * @return Random Movement Value
      */
-    public int generateRandomMovement(){
-        int seed =  ThreadLocalRandom.current().nextInt(0, 4 + 1);
-        //System.out.println(seed);
-        int direction = DIRECTIONS_RANDOM_MOVEMENT.get(seed);
-        return direction;
+    public int pickRandomElement(int listSize){
+        int seed = ThreadLocalRandom.current().nextInt(0, listSize);
+        System.out.println(seed);
+        System.out.println(listSize);
+        return seed;
     }
 
+    //TODO Utilize Seed generated from engine
     public boolean getRandomBoolean() {
-        Random random = new Random();
-        return random.nextBoolean();
+        return ThreadLocalRandom.current().nextInt(0, 2) == 1;
     }
 
 }

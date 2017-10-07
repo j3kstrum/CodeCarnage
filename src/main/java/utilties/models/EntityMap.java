@@ -195,6 +195,15 @@ public class EntityMap {
         }
     }
 
+    /**
+     * Returns if the player can move to the specified location on the map
+     * @param location
+     * @return
+     */
+    public boolean canMoveToLocation(Point location){
+        return isInsideMap(location) && _entityTiles[location.x][location.y].getEntityType() == Entity.EntityType.EMPTY;
+    }
+
     public boolean isInsideMap(Point point) {
         if (point.x >= this._numberOfColumns || point.x < 0
                 || point.y >= this._numberOfRows || point.y < 0) {
