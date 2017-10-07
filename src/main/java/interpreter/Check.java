@@ -7,11 +7,14 @@
 
 package interpreter;
 
+import interpreter.enumerations.Data;
+import interpreter.enumerations.Operator;
+
 public class Check {
 
-    public Data data1;
-    public Data data2;
-    public Operator operator;
+    private Data data1;
+    private Data data2;
+    private Operator operator;
 
     public Check(Data data1, Data data2, Operator operator) {
         this.data1 = data1;

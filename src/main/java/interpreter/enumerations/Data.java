@@ -1,4 +1,4 @@
-package gui.scripting.enumerations;
+package interpreter.enumerations;
 
 public enum Data {
     USER_HEALTH("User Health"),

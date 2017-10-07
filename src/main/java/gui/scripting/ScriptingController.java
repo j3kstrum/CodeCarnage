@@ -9,8 +9,9 @@ package gui.scripting;
 
 import com.jfoenix.controls.JFXButton;
 import gui.game.GameGUI;
-import gui.scripting.enumerations.Conditional;
-import gui.scripting.enumerations.ScriptingTypes;
+import interpreter.Check;
+import interpreter.ScriptCommand;
+import interpreter.enumerations.*;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -20,10 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -155,10 +153,6 @@ public class ScriptingController {
         }
     }
 
-    public BehaviorList getBehaviorList() {
-        return behaviorList;
-    }
-
     public ScriptingController() {
     }
 
@@ -244,6 +238,9 @@ public class ScriptingController {
             System.out.println("You clicked Submit!");
 
             try {
+                List<ScriptCommand> commandObjects = getCommands();
+                // commandObjects should now be sent to the interpreter for processing...
+
                 new GameGUI();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -253,6 +250,109 @@ public class ScriptingController {
         });
     }
 
+    private List<ScriptCommand> getCommands() {
+        ArrayList<ScriptCommand> commands = new ArrayList<>();
+
+        // get all behaviors in the list as Behavior Nodes
+        List<Behavior> behaviors = behaviorList.getChildren().stream()
+                .map(b -> (Behavior) b)
+                .collect(Collectors.toList());
+
+        // Iterate behaviors on submitted script.
+        // Each valid behavior is converted to a ScriptCommand object
+        for (Behavior behavior : behaviors) {
+            if (isCompleteBehavior(behavior)) {
+
+                // Get the enumerated values of the current behavior
+                ArrayList<Enum> scriptingObjects = getScriptingEnums(behavior);
+
+                ArrayList<Check> checks = constructChecks(scriptingObjects);
+
+                // Get Command enum for the command button
+                Command command = (Command) scriptingObjects.get(scriptingObjects.size() - 1);
+
+                commands.add(new ScriptCommand(checks, command));
+            }
+        }
+
+        return commands;
+    }
+
+    /**
+     * Builds the set of Check objects from the present enumerators
+     *
+     * @param scriptingObjects List of Scripting Enumerators to be parsed
+     * @return Returns all check objects extracted from scriptingObjects
+     */
+    private ArrayList<Check> constructChecks(ArrayList<Enum> scriptingObjects) {
+        ArrayList<Check> checks = new ArrayList<>();
+        for (int i = 0; i < scriptingObjects.size(); i++) {
+            Enum object = scriptingObjects.get(i);
+
+            if (object instanceof Data) {
+                Check check = new Check((Data) scriptingObjects.get(i),
+                        (Data) scriptingObjects.get(i + 2),
+                        (Operator) scriptingObjects.get(i + 1));
+                checks.add(check);
+
+                // increment to end of the check that was located
+                i = i + 2;
+            }
+        }
+        return checks;
+    }
+
+    /**
+     * Gets the proper enum values that correspond with each button in the provided Behavior Node
+     *
+     * @param behavior Behavior node to be parsed for enumerators
+     * @return Returns a list of enums parsed from behavior
+     */
+    private ArrayList<Enum> getScriptingEnums(Behavior behavior) {
+        ArrayList<Enum> objects = new ArrayList<>();
+        for (Node button : behavior.getChildren()) {
+            String buttonText = ((ScriptButton) button).getText();
+
+            if (ScriptingTypes.COMMAND.list().contains(buttonText)) {
+                for (Command command : Command.values()) {
+                    if (command.text().equals(buttonText)) {
+                        objects.add(command);
+                        break;
+                    }
+                }
+            } else if (ScriptingTypes.OPERATOR.list().contains(buttonText)) {
+                for (Operator operator : Operator.values()) {
+                    if (operator.text().equals(buttonText)) {
+                        objects.add(operator);
+                        break;
+                    }
+                }
+            } else if (ScriptingTypes.DATA.list().contains(buttonText)) {
+                for (Data data : Data.values()) {
+                    if (data.text().equals(buttonText)) {
+                        objects.add(data);
+                        break;
+                    }
+                }
+            } else {
+                for (Conditional conditional : Conditional.values()) {
+                    if (conditional.text().equals(buttonText)) {
+                        objects.add(conditional);
+                        break;
+                    }
+                }
+            }
+
+        }
+        return objects;
+    }
+
+    /**
+     * Returns whether or not all behaviors in the list are complete
+     *
+     * @param allBehaviors List of all Behavior nodes to be checked
+     * @return Returns true if all behaviors are complete. False otherwise
+     */
     private boolean canAddBehaviors(List<Node> allBehaviors) {
         for (Node node : allBehaviors) {
             Behavior asBehavior = (Behavior) node;
