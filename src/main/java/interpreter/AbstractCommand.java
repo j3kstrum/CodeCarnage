@@ -8,7 +8,7 @@
 package interpreter;
 
 import javafx.scene.control.Toggle;
-
+import utilties.models.*;
 import java.util.List;
 
 // The actual command will be defined when implmenting the abstract class
@@ -22,6 +22,6 @@ public abstract class AbstractCommand implements Toggle {
         this.priority = priority;
     }
 
-    public abstract void operation();
+    public abstract boolean operation(Game game);
 
 }
