@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -132,10 +133,10 @@ public class ScriptingController {
 //            System.out.println("You clicked Submit!");
 
             try {
-                List<ScriptCommand> commandObjects = mouseEventHandler.getCommands();
+                ArrayList<ScriptCommand> commandObjects = new ArrayList<>(mouseEventHandler.getCommands());
                 // commandObjects should now be sent to the interpreter for processing...
 
-                new GameGUI();
+                new GameGUI(commandObjects);
             } catch (Exception e) {
                 e.printStackTrace();
             }
