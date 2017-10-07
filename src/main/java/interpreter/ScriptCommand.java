@@ -15,11 +15,11 @@ public class ScriptCommand {
     private int id;
     private int otherId;
 
-    public ScriptCommand(List<Check> checks, Command command, int id) {
+    public ScriptCommand(List<Check> checks, Command command) {
         this.checks = checks;
         this.command = command;
-        this.id = id;
-        if (id == 1){this.otherId = 0;} else {this.otherId = 1;};
+        this.id = -1;
+        this.otherId = -1;
     }
 
     public Command getCommand() {
@@ -28,6 +28,19 @@ public class ScriptCommand {
 
     public List<Check> getChecks() {
         return checks;
+    }
+
+    public int getId(){return this.id;}
+
+    public int getOtherId(){return this.otherId;}
+
+    public void setId(int id){
+        this.id = id;
+        if (id == 0){
+            this.otherId = 1;
+        } else {
+            this.otherId = 0;
+        }
     }
 
     public boolean performCommand(Game game){
