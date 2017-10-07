@@ -275,27 +275,26 @@ public class GameGUI extends Application {
 
         // If the game is over, display the appropriate screen (if not yet done) and then return.
         // We won't be updating tiles, since the game is DEFINITIVELY over.
+        String overlay = null;
         switch (_engine.getGameState()) {
             case INACTIVE:
                 return;
             case WON:
-                if (!hasDisplayedResultScreen) {
-                    URL img = getClass().getResource("/winner_overlay.png");
-                    displayResultScreen(img);
-                }
-                return;
+                overlay = "/winner_overlay.png";
+                break;
             case LOST:
-                if (!hasDisplayedResultScreen) {
-                    URL img = getClass().getResource("/defeated_overlay.png");
-                    displayResultScreen(img);
-                }
-                return;
+                overlay = "/defeated_overlay.png";
+                break;
             case STALEMATE:
-                if (!hasDisplayedResultScreen) {
-                    URL img = getClass().getResource("/stalemate_overlay.png");
-                    displayResultScreen(img);
-                }
-                return;
+                overlay = "/stalemate_overlay.png";
+                break;
+        }
+        if (overlay != null) {
+            if (!hasDisplayedResultScreen) {
+                URL img = getClass().getResource(overlay);
+                displayResultScreen(img);
+            }
+            return;
         }
 
         // Get map data
