@@ -20,6 +20,7 @@ public class BaseLogger {
     private String _name;
     private String _format;
     private PrintStream _stream;
+    private static final int level = 1;
 
     /**
      * Constructor for the logger. At its most basic, produces a logger with the given name

@@ -140,7 +140,7 @@ public class Game {
      */
     public boolean attack(int playerId) {
         stopDefending(playerId);
-        System.out.println("Attacking location for player ID: " + playerId);
+        LOGGER.debug("Attacking location for player ID: " + playerId);
         if (attackLocation(playerId, 0, 1)) {
             return true;
         } else if (attackLocation(playerId, 0, -1)) {
@@ -518,7 +518,7 @@ public class Game {
             return GameStatus.LOST;
         }
         else if (isDead(1)) {
-            System.out.println(getPlayer(1).getHealth());
+            LOGGER.debug("" + getPlayer(1).getHealth());
             return GameStatus.WON;
         }
         throw new RuntimeException("CANNOT DETERMINE GAME STATE.");
@@ -568,8 +568,8 @@ public class Game {
      */
     public int pickRandomElement(int listSize){
         int seed = ThreadLocalRandom.current().nextInt(0, listSize);
-        System.out.println(seed);
-        System.out.println(listSize);
+//        System.out.println(seed);
+//        System.out.println(listSize);
         return seed;
     }
 

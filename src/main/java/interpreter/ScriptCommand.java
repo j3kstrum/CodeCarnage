@@ -1,5 +1,6 @@
 package interpreter;
 
+import common.BaseLogger;
 import interpreter.enumerations.Command;
 import utilties.models.Game;
 
@@ -12,6 +13,7 @@ public class ScriptCommand {
 
     private List<Check> checks;
     private Command command;
+    private static final BaseLogger LOGGER = new BaseLogger("ScriptCommand");
 
     public ScriptCommand(List<Check> checks, Command command) {
         this.checks = checks;
@@ -42,7 +44,7 @@ public class ScriptCommand {
     public boolean doCommand(Game game, int id){
 
         for (Check c: this.checks){
-            if (!c.conditionIsTrue(game)) {
+            if (!c.conditionIsTrue(game, id)) {
                 return false;
             }
         }
@@ -63,7 +65,7 @@ public class ScriptCommand {
         if (id == 0){otherId = 1;}else{otherId = 0;}
 
         if(id == 1){
-            System.out.println("Executing attack for player " + id + " "+ this.command);
+            LOGGER.debug("Executing attack for player " + id + " "+ this.command);
         }
 
         switch(this.command){
