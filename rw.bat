@@ -1,2 +1,2 @@
-cd "jar-windows\game\"
+cd jar-windows\game
 java -jar CodeCarnage-all.jar

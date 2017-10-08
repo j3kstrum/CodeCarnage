@@ -12,10 +12,17 @@ import common.constants.GameStatus;
 import common.data.GameMap;
 import engine.data.EngineData;
 import gui.game.GameGUI;
+import interpreter.*;
+import interpreter.enumerations.Command;
+import interpreter.enumerations.Data;
+import interpreter.enumerations.Operator;
 import org.mapeditor.core.Map;
 import org.mapeditor.io.TMXMapReader;
 import utilties.models.EntityMap;
 import utilties.models.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.net.URL;
 
@@ -36,6 +43,11 @@ public class Engine {
 
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
+    // Currently holds hardcoded CPU script
+    private List<ScriptCommand> cpuCommands;
+
+    public static boolean TEST_FLAG = false;
+
     public Map map;
     public Game game;
     public GameGUI gameGUI;
@@ -44,12 +56,16 @@ public class Engine {
      * Initializes the Engine and performs the main ticking loop.
      */
     public Engine(GameGUI gameGUI) {
+        generateCPUScript();
         this.gameGUI = gameGUI;
         DATA = new EngineData();
         try {
             this.DATA.setMap(loadGameMap());
         } catch (NullPointerException ne) {
             ENGINE_LOGGER.fatal("COULD NOT LOAD GAME MAP.");
+            if (!TEST_FLAG) {
+                System.exit(1);
+            }
         }
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
     }
@@ -59,6 +75,7 @@ public class Engine {
      * @return The current state of the game (inactive, running, won, lost, stalemate)
      */
     public GameStatus getGameState() {
+        System.out.println(game.getState());
         return game.getState();
     }
 
@@ -74,13 +91,21 @@ public class Engine {
             this.map = mapReader.readMap(mapPath.toString());
         } catch (Exception ex) {
             ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
-            mapPath = getClass().getResource("/nix/game-map.tmx");
+            ENGINE_LOGGER.warning(ex.getMessage());
+            String path = "../resources/main/nix/game-map.tmx";
 //            System.out.println(mapPath == null ? "null" : mapPath.toString());
             try {
-                this.map = mapReader.readMap(mapPath.toString());
+                this.map = mapReader.readMap(path);
             } catch (Exception ex2) {
-                ENGINE_LOGGER.fatal(ex2.getMessage());
-                System.exit(1);
+                ENGINE_LOGGER.warning("Still failed to load game map. Attempting backup *nix filepaths.");
+                ENGINE_LOGGER.critical(ex2.getMessage());
+                try {
+                    mapPath = getClass().getResource("/nix/game-map.tmx");
+                    this.map = mapReader.readMap(mapPath.toString());
+                } catch (Exception ex3) {
+                    ENGINE_LOGGER.fatal(ex3.getMessage());
+                    System.exit(1);
+                }
             }
         }
 
@@ -165,14 +190,30 @@ public class Engine {
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
-        game.approach(0,1);
-        game.approach(1, 0);
-        game.attack(0,
-                game.getPlayer(1).getLocation().x
-                - game.getPlayer(0).getLocation().x,
-                game.getPlayer(1).getLocation().y
-                - game.getPlayer(0).getLocation().y
-        );
+
+        List<ScriptCommand> playerCommands = this.gameGUI.getCommandObjects();
+
+        boolean playerCommandExecuted = false;
+        for (ScriptCommand pc : playerCommands){
+            boolean executed = pc.doCommand(this.game, 0);
+            if (executed){
+                playerCommandExecuted = true;
+                break;
+            }
+        }
+        if (!playerCommandExecuted) this.game.doNothing(0);
+
+
+        boolean computerCommandExecuted = false;
+        for (ScriptCommand cc : this.cpuCommands){
+            boolean executed = cc.doCommand(this.game, 1);
+            if (executed){
+                computerCommandExecuted = true;
+                break;
+            }
+        }
+        if (!computerCommandExecuted) this.game.doNothing(1);
+
         return game.nextTurn();
     }
 
@@ -200,6 +241,15 @@ public class Engine {
      */
     public void stopGame() {
         this._inCoreGame = false;
+    }
+
+    public void generateCPUScript(){
+        this.cpuCommands = new ArrayList<>();
+
+        ArrayList<Check> checks = new ArrayList<>();
+        checks.add(new Check(Data.USER_HEALTH, Data.OPPONENT_HEALTH, Operator.GREATER_THAN));
+
+        ScriptCommand command1 = new ScriptCommand(checks, Command.APPROACH);
     }
 
 }
