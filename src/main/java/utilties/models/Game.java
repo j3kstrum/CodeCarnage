@@ -232,6 +232,12 @@ public class Game {
                 longestDistance = distanceCandidate;
                 longestMoveIndex = i;
             }
+            if(distanceCandidate == longestDistance){
+                if(getRandomBoolean()){
+                    longestDistance = distanceCandidate;
+                    longestMoveIndex = i;
+                }
+            }
         }
 
         //If the new location is farther than the old location, we move
@@ -432,7 +438,7 @@ public class Game {
         //Calculate distances in X and Y directions
         Point distances = getDeltaDistances(playerId, opponentId);
         //Subtract one because you can never get to players actual location, only the closest tile surrounding it
-        return (Math.abs(distances.x) + Math.abs(distances.y)) - 1;
+        return Math.abs(distances.x) + Math.abs(distances.y);
     }
 
     /**
