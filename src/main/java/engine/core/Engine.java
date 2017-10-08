@@ -12,10 +12,12 @@ import common.constants.GameStatus;
 import common.data.GameMap;
 import engine.data.EngineData;
 import gui.game.GameGUI;
+import interpreter.ScriptCommand;
 import org.mapeditor.core.Map;
 import org.mapeditor.io.TMXMapReader;
 import utilties.models.EntityMap;
 import utilties.models.Game;
+import java.util.List;
 
 import java.net.URL;
 
@@ -165,6 +167,17 @@ public class Engine {
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
+
+        List<ScriptCommand> playerCommands = this.gameGUI.getCommandObjects();
+
+        for (ScriptCommand pc : playerCommands){
+
+            boolean executed = pc.doCommand(this.game, 0);
+            if (executed) break;
+
+        }
+
+
         game.approach(0,1);
         game.approach(1, 0);
         game.attack(0,
