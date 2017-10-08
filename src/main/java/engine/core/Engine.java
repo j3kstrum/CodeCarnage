@@ -186,9 +186,6 @@ public class Engine {
             ENGINE_LOGGER.critical("Game was null. Returning null.");
             return null;
         }
-        if (game.getNumberOfTurnsCompleted() > 30) {
-            this.shutdown();
-        }
 
         List<ScriptCommand> playerCommands = this.gameGUI.getCommandObjects();
 

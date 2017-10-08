@@ -64,7 +64,7 @@ public class Game {
     public static final int MAX_TURN_LIMIT = 200;
 
     //Constant for number of turns to calculate a stalemate
-    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 35;
+    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 25;
 
     private static final BaseLogger LOGGER = new BaseLogger("Game");
 
@@ -493,7 +493,6 @@ public class Game {
 
         LOGGER.warning("Cannot determine which player has won easily from the getState() method. Needs helper methods.");
         if (isDead(0)) {
-            System.out.println("We got a winner");
             return GameStatus.LOST;
         }
         else if (isDead(1)) {
