@@ -61,7 +61,7 @@ public class Game {
     public static final int PLAYER_ID = 0;
     public static final int OPPONENT_ID = 1;
 
-    public static final int MAX_TURN_LIMIT = 100;
+    public static final int MAX_TURN_LIMIT = 250;
 
     //Constant for number of turns to calculate a stalemate
     private static final int NUMBER_OF_TURNS_TO_STALEMATE = 50;
@@ -232,7 +232,7 @@ public class Game {
                 longestDistance = distanceCandidate;
                 longestMoveIndex = i;
             }
-            //Introduce randomness.  If moves have equal distance, then choose randomly so we do evade to the same location every turn
+            //Introduce randomness.  If moves have equal distance, then choose randomly so we don't evade to the same location every turn
             if(distanceCandidate == longestDistance){
                 if(getRandomBoolean()){
                     longestDistance = distanceCandidate;
