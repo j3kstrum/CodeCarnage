@@ -232,6 +232,7 @@ public class Game {
                 longestDistance = distanceCandidate;
                 longestMoveIndex = i;
             }
+            //Introduce randomness.  If moves have equal distance, then choose randomly so we do evade to the same location every turn
             if(distanceCandidate == longestDistance){
                 if(getRandomBoolean()){
                     longestDistance = distanceCandidate;
