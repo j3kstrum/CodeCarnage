@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -27,6 +28,7 @@ import org.mapeditor.core.Map;
 import org.mapeditor.core.MapLayer;
 import org.mapeditor.core.Tile;
 import org.mapeditor.core.TileLayer;
+import utilties.models.Game;
 
 import java.awt.*;
 import java.net.URL;
@@ -39,6 +41,8 @@ public class GameGUI extends Application {
 
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
+
+    private ProgressBar userHealth, opponentHealth;
 
     // layerIndex + (layers * (x + (width * y))) -> tile at x, y, currLayer
     private HashMap<Integer, Integer> mapCache = new HashMap<>();
@@ -314,5 +318,33 @@ public class GameGUI extends Application {
         Collections.reverse(layerList);
 
         updateDeltas(layerList);
+
+        if (this.userHealth == null) {
+            this.userHealth = new ProgressBar();
+            this.opponentHealth = new ProgressBar();
+            this.opponentHealth.setTranslateX(700);
+        } else {
+            _imagePane.getChildren().remove(this.userHealth);
+            _imagePane.getChildren().remove(this.opponentHealth);
+        }
+
+        double userHealth = _engine.game.getPlayer(Game.PLAYER_ID).getHealth();
+        double opponentHealth = _engine.game.getPlayer(Game.OPPONENT_ID).getHealth();
+        double max = Game.HEALTH_MAX;
+
+        double userRatio = userHealth / max;
+
+        this.userHealth.setProgress(userRatio);
+
+        double opponentRatio = opponentHealth / max;
+
+        System.out.println("OPPONENT HEALTH: " + opponentHealth);
+        System.out.println("RATIO: " + Double.toString(opponentRatio));
+
+        this.opponentHealth.setProgress(opponentHealth / max);
+
+        _imagePane.getChildren().add(this.opponentHealth);
+        _imagePane.getChildren().add(this.userHealth);
+
     }
 }
