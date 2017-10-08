@@ -42,11 +42,10 @@ public class ScriptCommand {
     public boolean doCommand(Game game, int id){
 
         for (Check c: this.checks){
-            if (!c.conditionIsTrue(game)){
+            if (!c.conditionIsTrue(game, id)){
                 return false;
             }
         }
-
         executeFunction(game, id);
         return true;
     }
@@ -67,6 +66,10 @@ public class ScriptCommand {
             case APPROACH:
                 game.approach(id, otherId);
                 break;
+            case ATTACK:
+                if(!game.approach(id, otherId)){
+                    game.attack(id);
+                }
             case HEAL:
                 game.heal(id, 20);
                 break;
