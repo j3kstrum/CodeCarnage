@@ -60,12 +60,13 @@ public class Check {
      * Based on the current game state data, returns if condition is true.
      *
      * @param game takes in the model
+     * @param id id of the player whose data we are manipulating
      * @return if defined condition is true
      */
-    public boolean conditionIsTrue(Game game){
+    public boolean conditionIsTrue(Game game, int id){
 
-        int data1 = getData(this.data1, game);
-        int data2 = getData(this.data2, game);
+        int data1 = getData(this.data1, game, id);
+        int data2 = getData(this.data2, game, id);
 
         switch (this.operator){
             case LESS_THAN:
@@ -89,16 +90,22 @@ public class Check {
      *
      * @param data takes in the data to be returned
      * @param game is the pointer to the game model
+     * @param id id of the player whose data we are manipulating
      * @return the integer value of the game data that has been looked up
      */
-    public int getData(Data data, Game game){
+    private int getData(Data data, Game game, int id){
+
+        int otherId;
+
+        if (id == 0){otherId = 1;}else{otherId = 0;}
+
         switch(data){
             case USER_HEALTH:
-                return game.getPlayer(Game.PLAYER_ID).getHealth();
+                return game.getPlayer(id).getHealth();
             case OPPONENT_HEALTH:
-                return game.getPlayer(Game.OPPONENT_ID).getHealth();
+                return game.getPlayer(otherId).getHealth();
             case DISTANCE_FROM_OPPONENT:
-                return (int)Math.round(game.distanceToOpponent(Game.PLAYER_ID, Game.OPPONENT_ID));
+                return (int)Math.round(game.distanceToOpponent(id, otherId));
             default:
                 return -1;  //This "should" never happen, if it does, fix it!
         }

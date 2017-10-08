@@ -12,10 +12,17 @@ import common.constants.GameStatus;
 import common.data.GameMap;
 import engine.data.EngineData;
 import gui.game.GameGUI;
+import interpreter.*;
+import interpreter.enumerations.Command;
+import interpreter.enumerations.Data;
+import interpreter.enumerations.Operator;
 import org.mapeditor.core.Map;
 import org.mapeditor.io.TMXMapReader;
 import utilties.models.EntityMap;
 import utilties.models.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.net.URL;
 
@@ -36,6 +43,9 @@ public class Engine {
 
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
+    // Currently holds hardcoded CPU script
+    private List<ScriptCommand> cpuCommands;
+
     public static boolean TEST_FLAG = false;
 
     public Map map;
@@ -46,6 +56,7 @@ public class Engine {
      * Initializes the Engine and performs the main ticking loop.
      */
     public Engine(GameGUI gameGUI) {
+        generateCPUScript();
         this.gameGUI = gameGUI;
         DATA = new EngineData();
         try {
@@ -178,14 +189,30 @@ public class Engine {
         if (game.getNumberOfTurnsCompleted() > 30) {
             this.shutdown();
         }
-        game.approach(0,1);
-        game.approach(1, 0);
-        game.attack(0,
-                game.getPlayer(1).getLocation().x
-                - game.getPlayer(0).getLocation().x,
-                game.getPlayer(1).getLocation().y
-                - game.getPlayer(0).getLocation().y
-        );
+
+        List<ScriptCommand> playerCommands = this.gameGUI.getCommandObjects();
+
+        boolean playerCommandExecuted = false;
+        for (ScriptCommand pc : playerCommands){
+            boolean executed = pc.doCommand(this.game, 0);
+            if (executed){
+                playerCommandExecuted = true;
+                break;
+            }
+        }
+        if (!playerCommandExecuted) this.game.doNothing(0);
+
+
+        boolean computerCommandExecuted = false;
+        for (ScriptCommand cc : this.cpuCommands){
+            boolean executed = cc.doCommand(this.game, 1);
+            if (executed){
+                computerCommandExecuted = true;
+                break;
+            }
+        }
+        if (!computerCommandExecuted) this.game.doNothing(1);
+
         return game.nextTurn();
     }
 
@@ -213,6 +240,15 @@ public class Engine {
      */
     public void stopGame() {
         this._inCoreGame = false;
+    }
+
+    public void generateCPUScript(){
+        this.cpuCommands = new ArrayList<>();
+
+        ArrayList<Check> checks = new ArrayList<>();
+        checks.add(new Check(Data.USER_HEALTH, Data.OPPONENT_HEALTH, Operator.GREATER_THAN));
+
+        ScriptCommand command1 = new ScriptCommand(checks, Command.APPROACH);
     }
 
 }
