@@ -57,6 +57,7 @@ public class Game {
     //Players
     public static final int HEALTH_DEAD = 0;
     public static final int HEALTH_MAX = 100;
+
     public static final int PLAYER_ID = 0;
     public static final int OPPONENT_ID = 1;
 
@@ -130,6 +131,7 @@ public class Game {
      * @return If player was able to attack
      */
     public boolean attack(int playerId) {
+        stopDefending(playerId);
         if (attackLocation(0, 0, 1)) {
             return true;
         } else if (attackLocation(0, 0, -1)) {
@@ -151,7 +153,7 @@ public class Game {
      * @return
      */
     public boolean approach(int playerId, int opponentId) {
-        getPlayer(playerId).setShielding(false);
+        stopDefending(playerId);
 
         //Calculate distances in X and Y directions
         Point distances = getDeltaDistances(playerId, opponentId);
@@ -230,7 +232,7 @@ public class Game {
         return false;
     }
 
-    /** Evades from opposing player.  Will move in random direction away from player
+    /** Dodges from opposing player.  Currently not implemented
      *
      * @param playerId
      * @param opponentId
@@ -238,6 +240,7 @@ public class Game {
      */
 
     public boolean dodge(int playerId, int opponentId){
+        stopDefending(playerId);
         return false;
     }
 
@@ -348,6 +351,7 @@ public class Game {
 
             playerToAttack.setHealth(playerToAttack.getHealth() - damageToBeDone);
             if (playerToAttack.getHealth() <= HEALTH_DEAD) {
+                playerToAttack.setHealth(0);
                 this._isGameOver = false;
             }
 
@@ -472,7 +476,7 @@ public class Game {
      */
     public GameStatus getState() {
         if (!isGameOver()) {
-            LOGGER.critical("No way to distinguish between RUNNING and INACTIVE game states yet (TODO SEAN).");
+            //LOGGER.critical("No way to distinguish between RUNNING and INACTIVE game states yet (TODO SEAN).");
             return GameStatus.RUNNING;
         }
         if (_isStalemate) {
