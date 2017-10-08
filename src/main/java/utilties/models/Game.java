@@ -7,13 +7,14 @@
 
 package utilties.models;
 
+import common.BaseLogger;
+import common.constants.GameStatus;
 import org.mapeditor.core.Map;
 import utilties.entities.Entity;
 import utilties.entities.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -59,9 +60,12 @@ public class Game {
     public static final int PLAYER_ID = 0;
     public static final int OPPONENT_ID = 1;
 
+    public static final int MAX_TURN_LIMIT = 200;
+
     //Constant for number of turns to calculate a stalemate
     private static final int NUMBER_OF_TURNS_TO_STALEMATE = 10;
 
+    private static final BaseLogger LOGGER = new BaseLogger("Game");
 
     /**
      * @param entityMap
@@ -91,9 +95,15 @@ public class Game {
      */
     public Map nextTurn() {
         //TODO Will need to update this if we want more players
-        if(isStalemateTurnForPlayer(PLAYER_ID) && isStalemateTurnForPlayer(OPPONENT_ID)){
+        if (isStalemateTurnForPlayer(PLAYER_ID) && isStalemateTurnForPlayer(OPPONENT_ID)) {
             _isStalemate = true;
+            this._isGameOver = true;
         }
+        else if(this._numberOfTurnsCompleted > MAX_TURN_LIMIT){
+            _isStalemate = true;
+            this._isGameOver = true;
+        }
+
         this._numberOfTurnsCompleted++;
         return this._entityMap.getMap();
     }
@@ -113,7 +123,6 @@ public class Game {
         return this._entityMap.setLocation(player, new Point(location.x + x, location.y + y));
     }
 
-
     /**
      * If opponent is within one tile horizontally or vertically, player will attack that tile.  If not, returns false
      *
@@ -121,84 +130,41 @@ public class Game {
      * @return If player was able to attack
      */
     public boolean attack(int playerId) {
-        if(attackLocation(0, 0, 1)){
+        if (attackLocation(0, 0, 1)) {
             return true;
-        }
-        else if(attackLocation(0, 0, -1)){
+        } else if (attackLocation(0, 0, -1)) {
             return true;
-        }
-        else if(attackLocation(0, 1, 0)){
+        } else if (attackLocation(0, 1, 0)) {
             return true;
-        }
-        else if(attackLocation(0, -1, 0)){
+        } else if (attackLocation(0, -1, 0)) {
             return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    /**
-     * Attacks location x and y away from players current location
-     *
-     * @param playerId Player
-     * @param x        Units away from players current location
-     * @param y        Units away from players current location
-     * @return If player was able to attack
-     */
-    private boolean attackLocation(int playerId, int x, int y) {
-        EntityTile playerTile = this._entityMap.getPlayers().get(playerId);
-        Point location = playerTile.getLocation();
-
-        //If point to attack is outside map, return false
-        if (!_entityMap.isInsideMap(new Point(location.x + x, location.y + y))) {
-            return false;
-        }
-        Entity entity = getEntityAtLocation(new Point(location.x + x, location.y + y));
-
-        Player player = (Player) playerTile.getEntity();
-        player.setShielding(false);
-
-        if (entity.getEntityType() == Entity.EntityType.EMPTY) {
-            return false;
         } else {
-            Player playerToAttack = (Player) entity;
-            int damageToBeDone = player.getDamage();
-
-            if(playerToAttack.isShielding()){
-                damageToBeDone = player.getDamage() - playerToAttack.getShieldStrength();
-            }
-
-            playerToAttack.setHealth(playerToAttack.getHealth() - damageToBeDone);
-            if (playerToAttack.getHealth() <= HEALTH_DEAD) {
-                this._isGameOver = false;
-            }
-
-            return true;
+            return false;
         }
     }
 
     /**
      * Moves one tile closer to opponent.
+     *
      * @param playerId
      * @param opponentId
      * @return
      */
-    public boolean approach(int playerId, int opponentId){
+    public boolean approach(int playerId, int opponentId) {
         getPlayer(playerId).setShielding(false);
 
         //Calculate distances in X and Y directions
         Point distances = getDeltaDistances(playerId, opponentId);
 
         //Check if Y is 0 to prevent divide by 0 error.
-        if(distances.y == 0){
+        if (distances.y == 0) {
             //If negative, move left
-            if(distances.x<0){
+            if (distances.x < 0) {
                 return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
             }
             //If positive, move right
-            else{
-                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
+            else {
+                return move(playerId, DIRECTION_RIGHT, DIRECTION_CONSTANT);
             }
         }
 
@@ -207,91 +173,62 @@ public class Game {
 
         //If slope is < .5, then we need to move in Y direction
         //If slope is > .5 then we need to move in X direction
-        if(Math.abs(slope) < .5){
-            if(distances.y<0){
-                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_DOWN);
+        if (Math.abs(slope) < .5) {
+            if (distances.y < 0) {
+                return move(playerId, DIRECTION_CONSTANT, DIRECTION_DOWN);
+            } else {
+                return move(playerId, DIRECTION_CONSTANT, DIRECTION_UP);
             }
-            else{
-                return move(playerId, DIRECTION_CONSTANT ,DIRECTION_UP);
-            }
-        }
-        else {
-            if(distances.x<0){
+        } else {
+            if (distances.x < 0) {
                 return move(playerId, DIRECTION_LEFT, DIRECTION_CONSTANT);
-            }
-            else{
-                return move(playerId, DIRECTION_RIGHT,DIRECTION_CONSTANT);
+            } else {
+                return move(playerId, DIRECTION_RIGHT, DIRECTION_CONSTANT);
             }
         }
     }
 
-    /** Evades from opposing player.  Will move in random direction away from player
+    /**
+     * Evades from opposing player.  Will move in direction that is one space away from player.  Will only evade 50% of time
      *
      * @param playerId
      * @param opponentId
      * @return
      */
-
-    public boolean evade(int playerId, int opponentId){
-
+    public boolean evade(int playerId, int opponentId) {
         stopDefending(playerId);
 
-        /*Player player = getPlayer(playerId);
-        Player opponent = getPlayer(opponentId);
+        if (getRandomBoolean()) {
+            return false;
+        }
 
+        Player player = getPlayer(playerId);
+        Player opponent = getPlayer(opponentId);
         //Calculate distances in X and Y directions
-        Point distances = getDeltaDistances(playerId, opponentId);
+
+        int currentDistance = pathDistanceToLocation(player.getLocation(), opponent.getLocation());
 
         ArrayList<Point> potentialMoveLocations = getAllPossibleMoves(getPlayer(playerId).getLocation());
 
-        if(potentialMoveLocations.size() ==0){
-            return false;
+        Point playerCurrentLocation = getPlayer(playerId).getLocation();
+
+        double longestDistance = -1;
+        int longestMoveIndex = -1;
+        for (int i = 0; i < potentialMoveLocations.size(); i++) {
+            Point moveLocation = getNewLocation(playerCurrentLocation, potentialMoveLocations.get(i));
+            int distanceCandidate = pathDistanceToLocation(moveLocation, opponent.getLocation());
+            if (currentDistance > longestDistance) {
+                longestDistance = distanceCandidate;
+                longestMoveIndex = i;
+            }
         }
-        else{
-            int farthestDistance = 500;
-            int moveLocationIndex = 0;
-            for(int i = 0; i < potentialMoveLocations.size(); i++){
-                Point possibleMoveLocation = getNewLocation(player.getLocation(), potentialMoveLocations.get(i));
-                int currentDistanceFromPlayer = pathDistanceToLocation(possibleMoveLocation, opponent.getLocation());
-                if(farthestDistance > currentDistanceFromPlayer){
-                    farthestDistance = currentDistanceFromPlayer;
-                    moveLocationIndex = i;
-                }
-                //If equal, choose random choice
-                else if(farthestDistance == currentDistanceFromPlayer){
-                    if(getRandomBoolean()){
-                        farthestDistance = currentDistanceFromPlayer;
-                        moveLocationIndex = i;
-                    }
-                }
-            }
 
-            ArrayList<Point> possibleMovesLottery = new ArrayList<>();
-
-            for(int i = 0; i < potentialMoveLocations.size(); i++){
-                if(i == moveLocationIndex){
-                    possibleMovesLottery.add(potentialMoveLocations.get(i));
-                    possibleMovesLottery.add(potentialMoveLocations.get(i));
-                    possibleMovesLottery.add(potentialMoveLocations.get(i));
-                }
-                possibleMovesLottery.add(potentialMoveLocations.get(i));
-            }
-
-            System.out.println("Max Element " + possibleMovesLottery.size());
-            int seed = pickRandomElement(possibleMovesLottery.size());
-            System.out.println("Seed Chosen " + seed);
-            Point moveChosen = possibleMovesLottery.get(seed);
-
-            if(getRandomBoolean()){
-               return move(playerId, moveChosen.x, moveChosen.y);
-            }
-            return false;
+        if (longestDistance > currentDistance) {
+            return move(playerId, potentialMoveLocations.get(longestMoveIndex).x, potentialMoveLocations.get(longestMoveIndex).y);
         }
-        */
+
         return false;
     }
-
-
 
     /** Evades from opposing player.  Will move in random direction away from player
      *
@@ -301,25 +238,29 @@ public class Game {
      */
 
     public boolean dodge(int playerId, int opponentId){
-
-        stopDefending(playerId);/*
-        stopDefending(playerId);
-        Player player = getPlayer(playerId);
-        Player opponent = getPlayer(opponentId);
-
-        //Calculate distances in X and Y directions
-        ArrayList<Point> potentialMoveLocations = getAllPossibleMoves(getPlayer(playerId).getLocation());
-
-        if(potentialMoveLocations.size() == 0) {
-            return false;
-        }
-        else{
-            Point location = potentialMoveLocations.get(pickRandomElement(potentialMoveLocations.size()));
-            return move(playerId, location.x, location.y);
-        }*/
         return false;
     }
 
+    /**
+     * Heals the players to a maximum of 100.  Adds specified health to the player
+     * @param playerId
+     * @param health
+     */
+    public void heal(int playerId, int health) {
+        stopDefending(playerId);
+        Player player = this.getPlayer(playerId);
+        if (player.getHealth() + health > HEALTH_MAX) {
+            player.setHealth(HEALTH_MAX);
+        } else {
+            player.setHealth(player.getHealth() + health);
+        }
+    }
+
+    /**
+     * Gets all possible moves at a given location
+     * @param location
+     * @return
+     */
     private ArrayList<Point> getAllPossibleMoves(Point location){
         ArrayList<Point> potentialMoveDirections = new ArrayList<>();
 
@@ -357,6 +298,13 @@ public class Game {
         getPlayer(playerId).setShieldStrength(shieldStrength);
     }
 
+    /**
+     * Command to do nothing
+     */
+    public void doNothing(int playerId){
+        getPlayer(playerId).setShielding(false);
+        return;
+    }
 
     /**
      * Sets the players state to stop defending
@@ -366,6 +314,47 @@ public class Game {
     private void stopDefending(int playerId) {
         this.getPlayer(playerId).setShielding(false);
     }
+
+    /**
+     * Attacks location x and y away from players current location
+     *
+     * @param playerId Player
+     * @param x        Units away from players current location
+     * @param y        Units away from players current location
+     * @return If player was able to attack
+     */
+    private boolean attackLocation(int playerId, int x, int y) {
+        EntityTile playerTile = this._entityMap.getPlayers().get(playerId);
+        Point location = playerTile.getLocation();
+
+        //If point to attack is outside map, return false
+        if (!_entityMap.isInsideMap(new Point(location.x + x, location.y + y))) {
+            return false;
+        }
+        Entity entity = getEntityAtLocation(new Point(location.x + x, location.y + y));
+
+        Player player = (Player) playerTile.getEntity();
+        player.setShielding(false);
+
+        if (entity.getEntityType() == Entity.EntityType.EMPTY) {
+            return false;
+        } else {
+            Player playerToAttack = (Player) entity;
+            int damageToBeDone = player.getDamage();
+
+            if (playerToAttack.isShielding()) {
+                damageToBeDone = player.getDamage() - playerToAttack.getShieldStrength();
+            }
+
+            playerToAttack.setHealth(playerToAttack.getHealth() - damageToBeDone);
+            if (playerToAttack.getHealth() <= HEALTH_DEAD) {
+                this._isGameOver = false;
+            }
+
+            return true;
+        }
+    }
+
 
     private Point getNewLocation(Point currentLocation, Point vector){
         return new Point(currentLocation.x + vector.x, currentLocation.y + vector.y);
@@ -414,6 +403,7 @@ public class Game {
         return distance(playerLocation, opponentLocation);
     }
 
+
     public double distance(Point location1, Point location2){
        return Math.hypot(location1.x - location2.x, location1.y - location2.y);
     }
@@ -447,16 +437,13 @@ public class Game {
         int distanceY = locationOfOpponent.y - locationOfPlayer.y;
 
         return new Point(distanceX, distanceY);
-
     }
 
     public int pathDistanceToLocation(Point location1, Point location2){
-
         //Calculate distances in X and Y directions
         int distanceX = location1.x - location2.x;
         int distanceY = location1.y - location2.y;
         return (Math.abs(distanceX) + Math.abs(distanceY)) - 1;
-
     }
 
     /**
@@ -480,6 +467,28 @@ public class Game {
     }
 
     /**
+     * Used by external classes to acquire game state.
+     * @return The GameStatus pertaining to the current state of the game.
+     */
+    public GameStatus getState() {
+        if (!isGameOver()) {
+            LOGGER.critical("No way to distinguish between RUNNING and INACTIVE game states yet (TODO SEAN).");
+            return GameStatus.RUNNING;
+        }
+        if (_isStalemate) {
+            return GameStatus.STALEMATE;
+        }
+        LOGGER.warning("Cannot determine which player has won easily from the getState() method. Needs helper methods.");
+        if (isDead(0)) {
+            return GameStatus.LOST;
+        }
+        else if (isDead(1)) {
+            return GameStatus.WON;
+        }
+        throw new RuntimeException("CANNOT DETERMINE GAME STATE.");
+    }
+
+    /**
      * Checks to see whether or not the current player has been in their location for NUMBER_OF_TURNS_TO_STALEMATE
      * @param playerId
      * @return
@@ -499,6 +508,7 @@ public class Game {
             return false;
     }
 
+    //TODO Utilize Seed generated from engine
     /**
      * Is the game over
      * @return

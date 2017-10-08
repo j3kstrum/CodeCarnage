@@ -5,8 +5,15 @@
  * (found on https://github.com/j3kstrum/CodeCarnage).
  */
 
-package interpreter;
+package common.constants;
 
-public enum Operator {
-    LessThan, GreaterThan, EqualTo, LessThanOrEqualTo, GreaterThanOrEqualTo
+/**
+ * The class holding the possible states of the game.
+ */
+public enum GameStatus {
+    INACTIVE,
+    RUNNING,
+    WON,
+    LOST,
+    STALEMATE
 }

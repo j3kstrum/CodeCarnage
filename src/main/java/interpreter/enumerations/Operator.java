@@ -1,4 +1,4 @@
-package gui.scripting.enumerations;
+package interpreter.enumerations;
 
 public enum Operator {
     LESS_THAN("Less Than"),
