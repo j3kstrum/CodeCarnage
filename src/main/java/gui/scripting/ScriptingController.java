@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -105,6 +106,7 @@ public class ScriptingController {
             } else {
                 // Incomplete behaviors exist, show prompt
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setTitle("Unfinished Script!");
                 alert.setHeaderText(null);
                 alert.setContentText("You must complete all scripts in your behavior list prior to adding another!");
@@ -140,6 +142,7 @@ public class ScriptingController {
                 if (!mouseEventHandler.canAddBehaviors(allBehaviors)) {
                     // Incomplete scripts exist!
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initModality(Modality.APPLICATION_MODAL);
                     alert.setTitle("Unfinished Script!");
                     alert.setHeaderText(null);
                     alert.setContentText("You must complete all scripts in your behavior list prior to submission!");
@@ -151,6 +154,7 @@ public class ScriptingController {
 
                 if (commandObjects.size() == 0) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initModality(Modality.APPLICATION_MODAL);
                     alert.setContentText("Please submit at least 1 valid script before continuing!");
                     alert.setTitle("No Scripts Found!");
                     alert.setHeaderText(null);

@@ -26,6 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.mapeditor.core.Map;
 import org.mapeditor.core.MapLayer;
@@ -311,6 +312,8 @@ public class GameGUI extends Application {
             // HERE
             Alert endGame = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to play again?",
                     ButtonType.YES, ButtonType.NO);
+            endGame.initModality(Modality.APPLICATION_MODAL);
+
             endGame.setHeaderText(null);
             endGame.setTitle("Game Over.");
 
