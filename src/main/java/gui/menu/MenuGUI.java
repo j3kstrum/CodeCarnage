@@ -22,8 +22,13 @@ public class MenuGUI extends Application {
 
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
 
+    private static boolean firstTime = true;
+
     public MenuGUI() throws Exception {
-        start(new Stage());
+        if (!firstTime) {
+            start(new Stage());
+        }
+        firstTime = false;
     }
 
     public MenuGUI(String[] args) {
