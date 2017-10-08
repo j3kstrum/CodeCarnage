@@ -55,6 +55,9 @@ public class GameGUI extends Application {
     public Map _map;
     private Pane _imagePane;
 
+    private int _victoryConditionTickCounter = 0;
+
+
     public GameGUI(ArrayList<ScriptCommand> commandObjects) throws Exception {
         //Create Engine
         this.commandObjects = commandObjects;
@@ -288,13 +291,28 @@ public class GameGUI extends Application {
             case INACTIVE:
                 return;
             case WON:
-                overlay = "/winner_overlay.png";
+                if(this._victoryConditionTickCounter < 3){
+                    this._victoryConditionTickCounter++;
+                }
+                else{
+                    overlay = "/winner_overlay.png";
+                }
                 break;
             case LOST:
-                overlay = "/defeated_overlay.png";
+                if(this._victoryConditionTickCounter < 3){
+                    this._victoryConditionTickCounter++;
+                }
+                else{
+                    overlay = "/defeated_overlay.png";
+                }
                 break;
             case STALEMATE:
-                overlay = "/stalemate_overlay.png";
+                if(this._victoryConditionTickCounter < 3){
+                    this._victoryConditionTickCounter++;
+                }
+                else{
+                    overlay = "/stalemate_overlay.png";
+                }
                 break;
         }
         if (overlay != null) {

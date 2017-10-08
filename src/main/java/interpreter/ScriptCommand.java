@@ -54,7 +54,7 @@ public class ScriptCommand {
      * Called by doCommand to actually modify the game data with built-in functions
      *
      * @param game the instance of the game class passed in
-     * @param id the id of the player excecuting this script
+     * @param id the id of the player executing this script
      */
     private void executeFunction(Game game, int id){
 
@@ -62,12 +62,17 @@ public class ScriptCommand {
 
         if (id == 0){otherId = 1;}else{otherId = 0;}
 
+        if(id == 1){
+            System.out.println("Executing attack for player " + id + " "+ this.command);
+        }
+
         switch(this.command){
             case APPROACH:
                 game.approach(id, otherId);
                 break;
             case ATTACK:
                 game.attack(id);
+                break;
             case HEAL:
                 game.heal(id, 20);
                 break;
