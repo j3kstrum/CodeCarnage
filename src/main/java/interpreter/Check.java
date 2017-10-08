@@ -25,8 +25,8 @@ import utilties.models.Game;
  */
 public class Check {
 
-    private Data data1;
-    private Data data2;
+    private String data1;
+    private String data2;
     private Operator operator;
 
     /**
@@ -37,17 +37,17 @@ public class Check {
      * @param data2 Second data element
      * @param operator  Operator for comparison
      */
-    public Check(Data data1, Data data2, Operator operator) {
+    public Check(String data1, String data2, Operator operator) {
         this.data1 = data1;
         this.data2 = data2;
         this.operator = operator;
     }
 
-    public Data getData1() {
+    public String getData1() {
         return data1;
     }
 
-    public Data getData2() {
+    public String getData2() {
         return data2;
     }
 
@@ -62,7 +62,7 @@ public class Check {
      * @param game takes in the model
      * @return if defined condition is true
      */
-    public boolean conditionIsTrue(Game game){
+    boolean conditionIsTrue(Game game) {
 
         int data1 = getData(this.data1, game);
         int data2 = getData(this.data2, game);
@@ -91,16 +91,20 @@ public class Check {
      * @param game is the pointer to the game model
      * @return the integer value of the game data that has been looked up
      */
-    public int getData(Data data, Game game){
-        switch(data){
-            case USER_HEALTH:
-                return game.getPlayer(Game.PLAYER_ID).getHealth();
-            case OPPONENT_HEALTH:
-                return game.getPlayer(Game.OPPONENT_ID).getHealth();
-            case DISTANCE_FROM_OPPONENT:
-                return (int)Math.round(game.distanceToOpponent(Game.PLAYER_ID, Game.OPPONENT_ID));
-            default:
-                return -1;  //This "should" never happen, if it does, fix it!
+    public int getData(String data, Game game) {
+        if (data.equals(Data.USER_HEALTH.text())) {
+            return game.getPlayer(Game.PLAYER_ID).getHealth();
+        } else if (data.equals(Data.OPPONENT_HEALTH.text())) {
+            return game.getPlayer(Game.OPPONENT_ID).getHealth();
+        } else if (data.equals(Data.DISTANCE_FROM_OPPONENT.text())) {
+            return (int) Math.round(game.distanceToOpponent(Game.PLAYER_ID, Game.OPPONENT_ID));
+        } else {
+            try {
+                return Integer.parseInt(data);
+            } catch (Exception ex) {
+                System.out.println("Unable to parse '" + data + "' as Data.");
+                return -1;
+            }
         }
     }
 }
