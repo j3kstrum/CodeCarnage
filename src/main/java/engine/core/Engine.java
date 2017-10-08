@@ -92,21 +92,27 @@ public class Engine {
         try {
             this.map = mapReader.readMap(mapPath.toString());
         } catch (Exception ex) {
-            ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
-            ENGINE_LOGGER.warning(ex.getMessage());
-            String path = "../resources/main/nix/game-map.tmx";
-//            System.out.println(mapPath == null ? "null" : mapPath.toString());
+            ENGINE_LOGGER.warning("Could not load game map. Attempting backup windows filepaths.");
             try {
-                this.map = mapReader.readMap(path);
+                String pth = "../resources/main/game-map.tmx";
+                this.map = mapReader.readMap(pth);
             } catch (Exception ex2) {
-                ENGINE_LOGGER.warning("Still failed to load game map. Attempting backup *nix filepaths.");
-                ENGINE_LOGGER.critical(ex2.getMessage());
+                ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
+                ENGINE_LOGGER.warning(ex2.getMessage());
+                String path = "../resources/main/nix/game-map.tmx";
+                //            System.out.println(mapPath == null ? "null" : mapPath.toString());
                 try {
-                    mapPath = getClass().getResource("/nix/game-map.tmx");
-                    this.map = mapReader.readMap(mapPath.toString());
+                    this.map = mapReader.readMap(path);
                 } catch (Exception ex3) {
-                    ENGINE_LOGGER.fatal(ex3.getMessage());
-                    System.exit(1);
+                    ENGINE_LOGGER.warning("Still failed to load game map. Attempting backup *nix filepaths.");
+                    ENGINE_LOGGER.critical(ex3.getMessage());
+                    try {
+                        mapPath = getClass().getResource("/nix/game-map.tmx");
+                        this.map = mapReader.readMap(mapPath.toString());
+                    } catch (Exception ex4) {
+                        ENGINE_LOGGER.fatal(ex4.getMessage());
+                        System.exit(1);
+                    }
                 }
             }
         }

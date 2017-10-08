@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity"
            minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="507.0"
-           stylesheets="/styles/sample.css" xmlns="http://javafx.com/javafx/8.0.102">
+           stylesheets="/styles/sample.css" xmlns="http://javafx.com/javafx/8.0.141">
     <children>
         <ImageView id="imageView" fitHeight="304.0" fitWidth="510.0" pickOnBounds="true" preserveRatio="true">
             <effect>
@@ -37,7 +37,6 @@
                 </Label>
                 <JFXButton fx:id="buttonStart" buttonType="RAISED" layoutX="113.0" layoutY="206.0" prefHeight="25.0"
                            prefWidth="281.0" text="Start Game" textFill="WHITE"/>
-                <JFXButton layoutX="113.0" layoutY="249.0" prefHeight="25.0" prefWidth="281.0" text="Settings"/>
             </children>
         </AnchorPane>
     </children>
