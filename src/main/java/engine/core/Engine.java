@@ -36,6 +36,8 @@ public class Engine {
 
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
+    public static boolean TEST_FLAG = false;
+
     public Map map;
     public Game game;
     public GameGUI gameGUI;
@@ -50,7 +52,9 @@ public class Engine {
             this.DATA.setMap(loadGameMap());
         } catch (NullPointerException ne) {
             ENGINE_LOGGER.fatal("COULD NOT LOAD GAME MAP.");
-            System.exit(1);
+            if (!TEST_FLAG) {
+                System.exit(1);
+            }
         }
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
     }
@@ -75,6 +79,7 @@ public class Engine {
             this.map = mapReader.readMap(mapPath.toString());
         } catch (Exception ex) {
             ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
+            ENGINE_LOGGER.warning(ex.getMessage());
             String path = "../resources/main/nix/game-map.tmx";
 //            System.out.println(mapPath == null ? "null" : mapPath.toString());
             try {
