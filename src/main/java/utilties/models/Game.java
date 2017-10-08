@@ -25,7 +25,8 @@ public class Game {
     private EntityMap _entityMap;
     private int _numberOfTurnsCompleted = 0;
     private ArrayList<Point> _previousLocations = new ArrayList<>();
-    private ArrayList<Integer> _numberOfTimesAtCurrentLocation = new ArrayList<>();
+    private ArrayList<Integer> _numberOfStalemateTurns = new ArrayList<>();
+    private ArrayList<Integer> _previousHealth = new ArrayList<>();
     private boolean _isStalemate = false;
     private boolean _isGameOver = false;
 
@@ -61,10 +62,10 @@ public class Game {
     public static final int PLAYER_ID = 0;
     public static final int OPPONENT_ID = 1;
 
-    public static final int MAX_TURN_LIMIT = 100;
+    public static final int MAX_TURN_LIMIT = 240;
 
     //Constant for number of turns to calculate a stalemate
-    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 50;
+    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 120;
 
     private static final BaseLogger LOGGER = new BaseLogger("Game");
 
@@ -75,8 +76,10 @@ public class Game {
         this._entityMap = entityMap;
         _previousLocations.add(getPlayer(PLAYER_ID).getLocation());
         _previousLocations.add(getPlayer(OPPONENT_ID).getLocation());
-        _numberOfTimesAtCurrentLocation.add(1);
-        _numberOfTimesAtCurrentLocation.add(1);
+        _numberOfStalemateTurns.add(1);
+        _numberOfStalemateTurns.add(1);
+        _previousHealth.add(getPlayer(PLAYER_ID).getHealth());
+        _previousHealth.add(getPlayer(OPPONENT_ID).getHealth());
     }
 
     /**
@@ -101,7 +104,7 @@ public class Game {
             boolean isStalemateForPlayer = isStalemateTurnForPlayer(PLAYER_ID);
             boolean isStalemateForOpponent = isStalemateTurnForPlayer(OPPONENT_ID);
 
-            if (isStalemateForPlayer && isStalemateForOpponent) {
+            if (isStalemateForPlayer || isStalemateForOpponent) {
                 _isStalemate = true;
                 this._isGameOver = true;
             } else if (this._numberOfTurnsCompleted > MAX_TURN_LIMIT) {
@@ -197,7 +200,7 @@ public class Game {
     }
 
     /**
-     * Evades from opposing player.  Will move in direction that is one space away from player.  Will only evade 50% of time
+     * Evades from opposing player.  Will move in direction that is one space away from player.  Will only evade 87.5% of time
      *
      * @param playerId
      * @param opponentId
@@ -207,7 +210,11 @@ public class Game {
         stopDefending(playerId);
 
         if (getRandomBoolean()) {
-            return false;
+            if (getRandomBoolean()) {
+                if (getRandomBoolean()) {
+                    return false;
+                }
+            }
         }
 
         Player player = getPlayer(playerId);
@@ -231,6 +238,13 @@ public class Game {
             if (distanceCandidate > longestDistance) {
                 longestDistance = distanceCandidate;
                 longestMoveIndex = i;
+            }
+            //Introduce randomness.  If moves have equal distance, then choose randomly so we don't evade to the same location every turn
+            if(distanceCandidate == longestDistance){
+                if(getRandomBoolean()){
+                    longestDistance = distanceCandidate;
+                    longestMoveIndex = i;
+                }
             }
         }
 
@@ -339,6 +353,7 @@ public class Game {
     private boolean attackLocation(int playerId, int x, int y) {
         EntityTile playerTile = this._entityMap.getPlayers().get(playerId);
         Point location = playerTile.getLocation();
+        stopDefending(playerId);
 
         //If point to attack is outside map, return false
         if (!_entityMap.isInsideMap(new Point(location.x + x, location.y + y))) {
@@ -347,11 +362,10 @@ public class Game {
         Entity entity = getEntityAtLocation(new Point(location.x + x, location.y + y));
 
         Player player = (Player) playerTile.getEntity();
-        player.setShielding(false);
-
         if (entity.getEntityType() == Entity.EntityType.EMPTY) {
             return false;
         } else {
+            //Attack player.  If they are shielding, reduce the damage taken on that turn
             Player playerToAttack = (Player) entity;
             int damageToBeDone = player.getDamage();
 
@@ -359,6 +373,7 @@ public class Game {
                 damageToBeDone = player.getDamage() - playerToAttack.getShieldStrength();
             }
 
+            //Set player health to damage to be done
             playerToAttack.setHealth(playerToAttack.getHealth() - damageToBeDone);
             if (playerToAttack.getHealth() <= HEALTH_DEAD) {
                 playerToAttack.setHealth(0);
@@ -417,7 +432,12 @@ public class Game {
         return distance(playerLocation, opponentLocation);
     }
 
-
+    /**
+     * Returns a double of the distance between two points on graph.  This includes diagonal distance
+     * @param location1
+     * @param location2
+     * @return
+     */
     public double distance(Point location1, Point location2){
        return Math.hypot(location1.x - location2.x, location1.y - location2.y);
     }
@@ -431,8 +451,7 @@ public class Game {
     public int pathDistanceToPlayer(int playerId, int opponentId){
         //Calculate distances in X and Y directions
         Point distances = getDeltaDistances(playerId, opponentId);
-        //Subtract one because you can never get to players actual location, only the closest tile surrounding it
-        return (Math.abs(distances.x) + Math.abs(distances.y)) - 1;
+        return Math.abs(distances.x) + Math.abs(distances.y);
     }
 
     /**
@@ -506,25 +525,29 @@ public class Game {
     }
 
     /**
-     * Checks to see whether or not the current player has been in their location for NUMBER_OF_TURNS_TO_STALEMATE
+     * Checks to see whether or not the current player has been in their location and not taken damage for NUMBER_OF_TURNS_TO_STALEMATE
      * @param playerId
      * @return If the users has not moved in NUMBER_OF_TURNS_TO_STALEMATE
      */
     private boolean isStalemateTurnForPlayer(int playerId){
 
-        if(_previousLocations.get(playerId).x == getPlayer(playerId).getLocation().x && _previousLocations.get(playerId).y == getPlayer(playerId).getLocation().y){
-                _numberOfTimesAtCurrentLocation.set(playerId, _numberOfTimesAtCurrentLocation.get(playerId) + 1);
+        //If the player has not moved, and health did not change, then we consider this a stalemate condition.  Increase counter
+        if(_previousLocations.get(playerId).x == getPlayer(playerId).getLocation().x && _previousLocations.get(playerId).y == getPlayer(playerId).getLocation().y &&
+                _previousHealth.get(playerId) == getPlayer(playerId).getHealth()){
+                _numberOfStalemateTurns.set(playerId, _numberOfStalemateTurns.get(playerId) + 1);
 
-                if(_numberOfTimesAtCurrentLocation.get(playerId) > NUMBER_OF_TURNS_TO_STALEMATE){
+                if(_numberOfStalemateTurns.get(playerId) > NUMBER_OF_TURNS_TO_STALEMATE){
                     return true;
                 }
                 else{
                     _previousLocations.set(playerId, new Point(getPlayer(playerId).getLocation()));
+                    _previousHealth.set(playerId, getPlayer(playerId).getHealth());
                 }
             }
             else {
                 _previousLocations.set(playerId, new Point(getPlayer(playerId).getLocation()));
-                _numberOfTimesAtCurrentLocation.set(playerId, 1);
+            _previousHealth.set(playerId, getPlayer(playerId).getHealth());
+            _numberOfStalemateTurns.set(playerId, 1);
             }
             return false;
     }

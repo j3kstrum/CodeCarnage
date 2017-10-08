@@ -74,7 +74,7 @@ public class ScriptCommand {
                 game.attack(id);
                 break;
             case HEAL:
-                game.heal(id, 20);
+                game.heal(id, 9);
                 break;
             case EVADE:
                 game.evade(id, otherId);
