@@ -67,9 +67,7 @@ public class ScriptCommand {
                 game.approach(id, otherId);
                 break;
             case ATTACK:
-                if(!game.approach(id, otherId)){
-                    game.attack(id);
-                }
+                game.attack(id);
             case HEAL:
                 game.heal(id, 20);
                 break;
