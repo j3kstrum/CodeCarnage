@@ -95,6 +95,7 @@ public class Engine {
             ENGINE_LOGGER.warning("Could not load game map. Attempting backup windows filepaths.");
             try {
                 String pth = "../resources/main/game-map.tmx";
+                this.map = mapReader.readMap(pth);
             } catch (Exception ex2) {
                 ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
                 ENGINE_LOGGER.warning(ex2.getMessage());
