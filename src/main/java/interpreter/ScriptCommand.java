@@ -42,7 +42,7 @@ public class ScriptCommand {
     public boolean doCommand(Game game, int id){
 
         for (Check c: this.checks){
-            if (!c.conditionIsTrue(game)) {
+            if (!c.conditionIsTrue(game, id)) {
                 return false;
             }
         }

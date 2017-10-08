@@ -62,10 +62,10 @@ public class Check {
      * @param game takes in the model
      * @return if defined condition is true
      */
-    boolean conditionIsTrue(Game game) {
+    boolean conditionIsTrue(Game game, int id) {
 
-        int data1 = getData(this.data1, game);
-        int data2 = getData(this.data2, game);
+        int data1 = getData(this.data1, game, id);
+        int data2 = getData(this.data2, game, id);
 
         switch (this.operator){
             case LESS_THAN:
@@ -91,13 +91,17 @@ public class Check {
      * @param game is the pointer to the game model
      * @return the integer value of the game data that has been looked up
      */
-    private int getData(String data, Game game) {
+    private int getData(String data, Game game, int id) {
+
+        int otherId;
+        if (id == 0){otherId = 1;}else{otherId = 0;}
+
         if (data.equals(Data.USER_HEALTH.text())) {
-            return game.getPlayer(Game.PLAYER_ID).getHealth();
+            return game.getPlayer(id).getHealth();
         } else if (data.equals(Data.OPPONENT_HEALTH.text())) {
-            return game.getPlayer(Game.OPPONENT_ID).getHealth();
+            return game.getPlayer(otherId).getHealth();
         } else if (data.equals(Data.DISTANCE_FROM_OPPONENT.text())) {
-            return (int) Math.round(game.distanceToOpponent(Game.PLAYER_ID, Game.OPPONENT_ID));
+            return (int) Math.round(game.distanceToOpponent(id, otherId));
         } else {
             try {
                 return Integer.parseInt(data);
