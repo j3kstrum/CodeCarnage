@@ -391,8 +391,8 @@ public class GameGUI extends Application {
 
         double opponentRatio = opponentHealth / max;
 
-        System.out.println("OPPONENT HEALTH: " + opponentHealth);
-        System.out.println("RATIO: " + Double.toString(opponentRatio));
+//        System.out.println("OPPONENT HEALTH: " + opponentHealth);
+//        System.out.println("RATIO: " + Double.toString(opponentRatio));
 
         this.opponentHealth.setProgress(opponentHealth / max);
 

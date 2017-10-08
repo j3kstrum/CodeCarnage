@@ -7,6 +7,7 @@
 
 package interpreter;
 
+import common.BaseLogger;
 import interpreter.enumerations.Data;
 import interpreter.enumerations.Operator;
 import utilties.models.Game;
@@ -28,6 +29,8 @@ public class Check {
     private String data1;
     private String data2;
     private Operator operator;
+
+    private static final BaseLogger LOGGER = new BaseLogger("Check");
 
     /**
      *
@@ -106,7 +109,7 @@ public class Check {
             try {
                 return Integer.parseInt(data);
             } catch (Exception ex) {
-                System.out.println("Unable to parse '" + data + "' as Data.");
+                LOGGER.critical("Unable to parse '" + data + "' as Data.");
                 return -1;
             }
         }

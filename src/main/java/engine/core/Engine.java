@@ -77,7 +77,7 @@ public class Engine {
      * @return The current state of the game (inactive, running, won, lost, stalemate)
      */
     public GameStatus getGameState() {
-        System.out.println(game.getState());
+//        System.out.println(game.getState());
         return game.getState();
     }
 
