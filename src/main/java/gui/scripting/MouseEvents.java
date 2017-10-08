@@ -7,11 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import javax.management.InstanceNotFoundException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 final class MouseEvents {
@@ -34,7 +33,36 @@ final class MouseEvents {
                 if (behavior.isSelected()) {
                     ChoiceButton currentButton = (ChoiceButton) event.getTarget();
 
-                    ScriptButton buttonToAdd = new ScriptButton(currentButton.getText());
+                    ScriptButton buttonToAdd = new ScriptButton();
+
+                    if (currentButton.getText().equals(Data.USER_INPUT.text())) {
+                        // create alert to enter an integer
+                        TextInputDialog dialog = new TextInputDialog("0");
+                        dialog.setHeaderText("Please enter a number between 0 and 2,000,000,000");
+                        dialog.setContentText("User Input: ");
+
+                        boolean isInt = false;
+
+                        while (!isInt) {
+                            Optional<String> result = dialog.showAndWait();
+                            if (result.isPresent()) {
+                                try {
+                                    int input = Integer.parseInt(result.get().trim());
+                                    if (input < 0 || input > 2000000000) {
+                                        continue;
+                                    }
+                                    isInt = true;
+                                    buttonToAdd = new ScriptButton(result.get().trim());
+                                } catch (Exception ex) {
+                                    // continue
+                                }
+                            } else {
+                                return;
+                            }
+                        }
+                    } else {
+                        buttonToAdd = new ScriptButton(currentButton.getText());
+                    }
 
                     // Copy the style of the clicked button to the newly generated ScriptButton
                     buttonToAdd.setStyle(currentButton.getStyle());
@@ -116,16 +144,25 @@ final class MouseEvents {
         ScriptButton lastButton = currentScript.get(currentScript.size() - 1);
         String lastButtonText = lastButton.getText().trim();
 
+        boolean isInteger;
+
+        try {
+            int value = Integer.parseInt(lastButtonText.trim());
+            isInteger = true;
+        } catch (Exception ex) {
+            isInteger = false;
+        }
+
         // enforce data
         if (ScriptingTypes.OPERATOR.list().contains(lastButtonText) || lastButtonText.equals(Conditional.IF.text()) || lastButtonText.equals(Conditional.AND.text())) {
             return ScriptingTypes.DATA.list();
         }
         // enforce operator
-        else if (ScriptingTypes.DATA.list().contains(lastButtonText) && (currentScript.size() % 4) - 2 == 0) {
+        else if ((ScriptingTypes.DATA.list().contains(lastButtonText) || (isInteger)) && (currentScript.size() % 4) - 2 == 0) {
             return ScriptingTypes.OPERATOR.list();
         }
         // enforce and or then
-        else if (ScriptingTypes.DATA.list().contains(lastButtonText)) {
+        else if (ScriptingTypes.DATA.list().contains(lastButtonText) || (isInteger)) {
             return Arrays.asList(Conditional.AND.text(), Conditional.THEN.text());
         }
         // enforce command
@@ -144,15 +181,25 @@ final class MouseEvents {
      * @param scriptingObjects List of Scripting Enumerators to be parsed
      * @return Returns all check objects extracted from scriptingObjects
      */
-    private static ArrayList<Check> constructChecks(ArrayList<Enum> scriptingObjects) {
+    private static ArrayList<Check> constructChecks(ArrayList<String> scriptingObjects) {
         ArrayList<Check> checks = new ArrayList<>();
         for (int i = 0; i < scriptingObjects.size(); i++) {
-            Enum object = scriptingObjects.get(i);
+            String object = scriptingObjects.get(i);
 
-            if (object instanceof Data) {
-                Check check = new Check((Data) scriptingObjects.get(i),
-                        (Data) scriptingObjects.get(i + 2),
-                        (Operator) scriptingObjects.get(i + 1));
+            if (ScriptingTypes.DATA.list().contains(object)) {
+                Operator op;
+
+                try {
+                    op = getOperator(scriptingObjects.get(i + 1));
+                } catch (InstanceNotFoundException e) {
+                    e.printStackTrace();
+                    // Should never happen
+                    return null;
+                }
+
+                Check check = new Check(scriptingObjects.get(i),
+                        scriptingObjects.get(i + 2),
+                        op);
                 checks.add(check);
 
                 // increment to end of the check that was located
@@ -160,6 +207,15 @@ final class MouseEvents {
             }
         }
         return checks;
+    }
+
+    private static Operator getOperator(String text) throws InstanceNotFoundException {
+        for (Operator operator : Operator.values()) {
+            if (text.trim().equals(operator.text())) {
+                return operator;
+            }
+        }
+        throw new InstanceNotFoundException();
     }
 
     List<ScriptCommand> getCommands() {
@@ -176,18 +232,27 @@ final class MouseEvents {
             if (isCompleteBehavior(behavior)) {
 
                 // Get the enumerated values of the current behavior
-                ArrayList<Enum> scriptingObjects = getScriptingEnums(behavior);
+                ArrayList<String> scriptingObjects = getScriptingEnums(behavior);
 
                 ArrayList<Check> checks = constructChecks(scriptingObjects);
 
                 // Get Command enum for the command button
-                Command command = (Command) scriptingObjects.get(scriptingObjects.size() - 1);
+                Command command = getCommand(scriptingObjects.get(scriptingObjects.size() - 1));
 
                 commands.add(new ScriptCommand(checks, command));
             }
         }
 
         return commands;
+    }
+
+    private Command getCommand(String text) {
+        for (Command command : Command.values()) {
+            if (text.trim().equals(command.text())) {
+                return command;
+            }
+        }
+        return null;
     }
 
     /**
@@ -258,39 +323,42 @@ final class MouseEvents {
      * @param behavior Behavior node to be parsed for enumerators
      * @return Returns a list of enums parsed from behavior
      */
-    private ArrayList<Enum> getScriptingEnums(Behavior behavior) {
-        ArrayList<Enum> objects = new ArrayList<>();
+    private ArrayList<String> getScriptingEnums(Behavior behavior) {
+        ArrayList<String> objects = new ArrayList<>();
         for (Node button : behavior.getChildren()) {
             String buttonText = ((ScriptButton) button).getText();
 
             if (ScriptingTypes.COMMAND.list().contains(buttonText)) {
                 for (Command command : Command.values()) {
                     if (command.text().equals(buttonText)) {
-                        objects.add(command);
+                        objects.add(command.text());
                         break;
                     }
                 }
             } else if (ScriptingTypes.OPERATOR.list().contains(buttonText)) {
                 for (Operator operator : Operator.values()) {
                     if (operator.text().equals(buttonText)) {
-                        objects.add(operator);
+                        objects.add(operator.text());
                         break;
                     }
                 }
             } else if (ScriptingTypes.DATA.list().contains(buttonText)) {
                 for (Data data : Data.values()) {
                     if (data.text().equals(buttonText)) {
-                        objects.add(data);
+                        objects.add(data.text());
+                        break;
+                    }
+                }
+            } else if (ScriptingTypes.CONDITIONAL.list().contains(buttonText)) {
+                for (Conditional conditional : Conditional.values()) {
+                    if (conditional.text().equals(buttonText)) {
+                        objects.add(conditional.text());
                         break;
                     }
                 }
             } else {
-                for (Conditional conditional : Conditional.values()) {
-                    if (conditional.text().equals(buttonText)) {
-                        objects.add(conditional);
-                        break;
-                    }
-                }
+                // itz a number dood
+                objects.add(buttonText.trim());
             }
 
         }
