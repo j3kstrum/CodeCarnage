@@ -438,7 +438,6 @@ public class Game {
     public int pathDistanceToPlayer(int playerId, int opponentId){
         //Calculate distances in X and Y directions
         Point distances = getDeltaDistances(playerId, opponentId);
-        //Subtract one because you can never get to players actual location, only the closest tile surrounding it
         return Math.abs(distances.x) + Math.abs(distances.y);
     }
 
