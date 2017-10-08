@@ -50,6 +50,7 @@ public class Engine {
             this.DATA.setMap(loadGameMap());
         } catch (NullPointerException ne) {
             ENGINE_LOGGER.fatal("COULD NOT LOAD GAME MAP.");
+            System.exit(1);
         }
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
     }
@@ -74,13 +75,20 @@ public class Engine {
             this.map = mapReader.readMap(mapPath.toString());
         } catch (Exception ex) {
             ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
-            mapPath = getClass().getResource("/nix/game-map.tmx");
+            String path = "../resources/main/nix/game-map.tmx";
 //            System.out.println(mapPath == null ? "null" : mapPath.toString());
             try {
-                this.map = mapReader.readMap(mapPath.toString());
+                this.map = mapReader.readMap(path);
             } catch (Exception ex2) {
-                ENGINE_LOGGER.fatal(ex2.getMessage());
-                System.exit(1);
+                ENGINE_LOGGER.warning("Still failed to load game map. Attempting backup *nix filepaths.");
+                ENGINE_LOGGER.critical(ex2.getMessage());
+                try {
+                    mapPath = getClass().getResource("/nix/game-map.tmx");
+                    this.map = mapReader.readMap(mapPath.toString());
+                } catch (Exception ex3) {
+                    ENGINE_LOGGER.fatal(ex3.getMessage());
+                    System.exit(1);
+                }
             }
         }
 
