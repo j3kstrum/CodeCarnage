@@ -75,6 +75,14 @@ public class ScriptCommand {
             case DEFEND:
                 game.defend(id);
                 break;
+            case ATTACK:
+                // Keep trying to attack - but if we succeed, we don't attack elsewhere.
+                boolean success;
+                success = game.attack(id, -1, 0);
+                success = success ? success : game.attack(id, 1, 0);
+                success = success ? success : game.attack(id, 0, 1);
+                success = success ? success : game.attack(id, 0, -1);
+                break;
             default:
                 game.doNothing(id);
                 break;
