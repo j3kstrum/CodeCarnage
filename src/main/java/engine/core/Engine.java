@@ -255,7 +255,7 @@ public class Engine {
     public void generateCPUScript(){
 
         this.cpuCommands = new ArrayList<>();
-        
+
         if(getRandomBoolean()){
             ArrayList<Check> checks = new ArrayList<>();
             ArrayList<Check> checksForAttack = new ArrayList<>();
