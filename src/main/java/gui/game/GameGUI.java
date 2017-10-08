@@ -10,6 +10,7 @@ package gui.game;
 import common.BaseLogger;
 import engine.core.Engine;
 import engine.core.TickingService;
+import gui.menu.MenuGUI;
 import interpreter.ScriptCommand;
 import javafx.application.Application;
 import javafx.collections.ObservableMap;
@@ -18,6 +19,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,9 +35,7 @@ import utilties.models.Game;
 
 import java.awt.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 public class GameGUI extends Application {
@@ -51,6 +52,8 @@ public class GameGUI extends Application {
 
     private boolean hasDisplayedResultScreen = false;
     private ArrayList<ScriptCommand> commandObjects;
+
+    private Stage _stage = null;
 
     public Map _map;
     private Pane _imagePane;
@@ -86,6 +89,8 @@ public class GameGUI extends Application {
         pane.getChildren().add(group);
 
         group.getChildren().add(_imagePane);
+
+        this._stage = primaryStage;
 
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root, 800, 480));
@@ -125,7 +130,7 @@ public class GameGUI extends Application {
                 LOGGER.critical("Engine cleanup failed.");
                 System.exit(1);
             }
-            System.exit(0);
+            return;
         }
 
         updateGameGUI();
@@ -301,6 +306,33 @@ public class GameGUI extends Application {
             if (!hasDisplayedResultScreen) {
                 URL img = getClass().getResource(overlay);
                 displayResultScreen(img);
+            }
+
+            // HERE
+            Alert endGame = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to play again?",
+                    ButtonType.YES, ButtonType.NO);
+            endGame.setHeaderText(null);
+            endGame.setTitle("Game Over.");
+
+            Optional<ButtonType> result = endGame.showAndWait();
+
+            if (result.isPresent()) {
+                _engine.shutdown(true);
+
+                if (result.get().equals(ButtonType.YES)) {
+                    // start new game
+                    try {
+                        MenuGUI m = new MenuGUI();
+                        _stage.getScene().getWindow().hide();
+                        return;
+
+                    } catch (Exception ex) {
+                        System.exit(1);
+                    }
+
+                } else {
+                    System.exit(0);
+                }
             }
             return;
         }

@@ -9,11 +9,9 @@ package gui.menu;
 
 import com.jfoenix.controls.JFXButton;
 import common.BaseLogger;
-import engine.core.Engine;
 import gui.scripting.ScriptingGUI;
 import javafx.application.Application;
 import javafx.collections.ObservableMap;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,8 +22,8 @@ public class MenuGUI extends Application {
 
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
 
-    public MenuGUI() {
-        super();
+    public MenuGUI() throws Exception {
+        start(new Stage());
     }
 
     public MenuGUI(String[] args) {

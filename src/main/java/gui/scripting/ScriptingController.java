@@ -14,11 +14,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,7 +30,7 @@ public class ScriptingController {
     private BehaviorList behaviorList;
 
     @FXML
-    private AnchorPane choicesPane;
+    private VBox choicesPane;
     @FXML
     private JFXButton add, subtract, submit, deleteWord;
 
@@ -82,29 +82,31 @@ public class ScriptingController {
 
                 Behavior behavior = new Behavior();
                 behavior.getStyleClass().add("behavior");
+
+                behaviorList.getChildren().add(behavior);
                 behavior.setToggleGroup(behaviorList.getToggleGroup());
+
+                mouseEventHandler.enableButtons(Collections.emptyList());
+
                 behavior.setOnMouseClicked((mouseEvent) -> {
                     behavior.setSelected(behavior.isSelected());
 
-                    List<ScriptButton> currentScript =
+                    List<ScriptButton> script =
                             behavior.getChildren().stream()
                                     .filter(b -> b instanceof ScriptButton)
                                     .map(b -> (ScriptButton) b)
                                     .collect(Collectors.toList());
 
-                    List<String> allowables = MouseEvents.getAllowableText(currentScript);
+                    List<String> allowables = MouseEvents.getAllowableText(script);
 
                     mouseEventHandler.enableButtons(allowables);
-
-
                 });
 
-                behaviorList.getChildren().add(behavior);
             } else {
                 // Incomplete behaviors exist, show prompt
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Unfinished Behavior!");
-                alert.setHeaderText("You have incomplete scripts.");
+                alert.setTitle("Unfinished Script!");
+                alert.setHeaderText(null);
                 alert.setContentText("You must complete all scripts in your behavior list prior to adding another!");
                 alert.showAndWait();
             }
@@ -116,6 +118,7 @@ public class ScriptingController {
                 Behavior behavior = (Behavior) behaviorList.getToggleGroup().getSelectedToggle();
                 if (behavior.isSelected()) {
                     behaviorList.getChildren().remove(behavior);
+                    mouseEventHandler.enableButtons(Collections.emptyList());
                 } else {
                     this.mouseEventHandler.alertNoneSelected();
                 }
@@ -130,11 +133,30 @@ public class ScriptingController {
 
         // Assign submit button an action to instantiate the GameGUI, as well as to pass all necessary scripting objects
         submit.setOnAction((ActionEvent event) -> {
-//            System.out.println("You clicked Submit!");
 
             try {
+                List<Node> allBehaviors = behaviorList.getChildren().filtered(n -> n instanceof Behavior);
+
+                if (!mouseEventHandler.canAddBehaviors(allBehaviors)) {
+                    // Incomplete scripts exist!
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Unfinished Script!");
+                    alert.setHeaderText(null);
+                    alert.setContentText("You must complete all scripts in your behavior list prior to submission!");
+                    alert.showAndWait();
+                    return;
+                }
+
                 ArrayList<ScriptCommand> commandObjects = new ArrayList<>(mouseEventHandler.getCommands());
-                // commandObjects should now be sent to the interpreter for processing...
+
+                if (commandObjects.size() == 0) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("Please submit at least 1 valid script before continuing!");
+                    alert.setTitle("No Scripts Found!");
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                    return;
+                }
 
                 new GameGUI(commandObjects);
             } catch (Exception e) {
