@@ -24,6 +24,7 @@ import utilties.models.Game;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The main class for the main.java.engine.
@@ -254,32 +255,39 @@ public class Engine {
     public void generateCPUScript(){
 
         this.cpuCommands = new ArrayList<>();
-        ArrayList<Check> checks = new ArrayList<>();
-        ArrayList<Check> checksForAttack = new ArrayList<>();
+        
+        if(getRandomBoolean()){
+            ArrayList<Check> checks = new ArrayList<>();
+            ArrayList<Check> checksForAttack = new ArrayList<>();
 
-        checks.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1",  Operator.GREATER_THAN));
-        ScriptCommand approach = new ScriptCommand(checks, Command.APPROACH);
-        this.cpuCommands.add(approach);
+            checks.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1",  Operator.GREATER_THAN));
+            ScriptCommand approach = new ScriptCommand(checks, Command.APPROACH);
+            this.cpuCommands.add(approach);
 
-        checksForAttack.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), Data.DISTANCE_FROM_OPPONENT.text(), Operator.EQUALS));
-        ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-        this.cpuCommands.add(attack);
+            checksForAttack.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), Data.DISTANCE_FROM_OPPONENT.text(), Operator.EQUALS));
+            ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
+            this.cpuCommands.add(attack);
+        }
+        else{
+            ArrayList<Check> checksForApproach = new ArrayList<>();
+            ArrayList<Check> checksForEvade = new ArrayList<>();
+            ArrayList<Check> checksForAttack = new ArrayList<>();
 
-        /* Dummy script 2
-        ArrayList<Check> checksForApproach = new ArrayList<>();
-        ArrayList<Check> checksForEvade = new ArrayList<>();
-        ArrayList<Check> checksForAttack = new ArrayList<>();
+            checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "10",  Operator.GREATER_THAN));
+            ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
+            this.cpuCommands.add(approach);
+            checksForEvade.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(),"5", Operator.GREATER_THAN));
+            ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
+            this.cpuCommands.add(evade);
+            checksForAttack.add(new Check("1", "1", Operator.EQUALS));
+            ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
+            this.cpuCommands.add(attack);
+        }
+    }
 
-        checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "10",  Operator.GREATER_THAN));
-        ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
-        this.cpuCommands.add(approach);
-        checksForEvade.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(),"5", Operator.GREATER_THAN));
-        ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
-        this.cpuCommands.add(evade);
-        checksForAttack.add(new Check("1", "1", Operator.EQUALS));
-        ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-        this.cpuCommands.add(attack);
-        */
+    //TODO Utilize Seed generated from engine
+    public boolean getRandomBoolean() {
+        return ThreadLocalRandom.current().nextInt(0, 2) == 1;
     }
 
 }
