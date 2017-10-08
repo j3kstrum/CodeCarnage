@@ -213,21 +213,25 @@ public class Game {
 
         int currentDistance = pathDistanceToLocation(player.getLocation(), opponent.getLocation());
 
+        //Get a list of potential move locations
         ArrayList<Point> potentialMoveLocations = getAllPossibleMoves(getPlayer(playerId).getLocation());
 
         Point playerCurrentLocation = getPlayer(playerId).getLocation();
 
         double longestDistance = -1;
         int longestMoveIndex = -1;
+        //Pick the distance that moves farthest from opponent
         for (int i = 0; i < potentialMoveLocations.size(); i++) {
+
             Point moveLocation = getNewLocation(playerCurrentLocation, potentialMoveLocations.get(i));
             int distanceCandidate = pathDistanceToLocation(moveLocation, opponent.getLocation());
-            if (currentDistance > longestDistance) {
+            if (distanceCandidate > longestDistance) {
                 longestDistance = distanceCandidate;
                 longestMoveIndex = i;
             }
         }
 
+        //If the new location is farther than the old location, we move
         if (longestDistance > currentDistance) {
             return move(playerId, potentialMoveLocations.get(longestMoveIndex).x, potentialMoveLocations.get(longestMoveIndex).y);
         }
