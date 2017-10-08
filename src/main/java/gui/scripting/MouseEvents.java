@@ -99,7 +99,7 @@ final class MouseEvents {
             try {
                 Behavior behavior = (Behavior) behaviorList.getToggleGroup().getSelectedToggle();
 
-                if (behavior.isSelected()) {
+                if (behavior.isSelected() && behaviorList.getChildren().contains(behavior)) {
                     ScriptButton lastButton = (ScriptButton) behavior.getChildren().get(behavior.getChildren().size() - 1);
 
                     behavior.getChildren().remove(lastButton);
