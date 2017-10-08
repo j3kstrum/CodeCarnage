@@ -61,10 +61,10 @@ public class Game {
     public static final int PLAYER_ID = 0;
     public static final int OPPONENT_ID = 1;
 
-    public static final int MAX_TURN_LIMIT = 200;
+    public static final int MAX_TURN_LIMIT = 100;
 
     //Constant for number of turns to calculate a stalemate
-    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 35;
+    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 50;
 
     private static final BaseLogger LOGGER = new BaseLogger("Game");
 
@@ -95,20 +95,22 @@ public class Game {
      * @return Updated EntityMap
      */
     public Map nextTurn() {
-        //TODO Will need to update this if we want more players
-        boolean isStalemateForPlayer = isStalemateTurnForPlayer(PLAYER_ID);
-        boolean isStalemateForOpponent = isStalemateTurnForPlayer(OPPONENT_ID);
+        //If the game is not over, check to see if there is a stalemate condition
+        if(!isGameOver()) {
+            //TODO Will need to update this if we want more players
+            boolean isStalemateForPlayer = isStalemateTurnForPlayer(PLAYER_ID);
+            boolean isStalemateForOpponent = isStalemateTurnForPlayer(OPPONENT_ID);
 
-        if (isStalemateForPlayer && isStalemateForOpponent) {
-            _isStalemate = true;
-            this._isGameOver = true;
-        }
-        else if(this._numberOfTurnsCompleted > MAX_TURN_LIMIT){
-            _isStalemate = true;
-            this._isGameOver = true;
-        }
+            if (isStalemateForPlayer && isStalemateForOpponent) {
+                _isStalemate = true;
+                this._isGameOver = true;
+            } else if (this._numberOfTurnsCompleted > MAX_TURN_LIMIT) {
+                _isStalemate = true;
+                this._isGameOver = true;
+            }
 
-        this._numberOfTurnsCompleted++;
+            this._numberOfTurnsCompleted++;
+        }
         return this._entityMap.getMap();
     }
 
@@ -135,13 +137,14 @@ public class Game {
      */
     public boolean attack(int playerId) {
         stopDefending(playerId);
-        if (attackLocation(0, 0, 1)) {
+        System.out.println("Attacking location for player ID: " + playerId);
+        if (attackLocation(playerId, 0, 1)) {
             return true;
-        } else if (attackLocation(0, 0, -1)) {
+        } else if (attackLocation(playerId, 0, -1)) {
             return true;
-        } else if (attackLocation(0, 1, 0)) {
+        } else if (attackLocation(playerId, 1, 0)) {
             return true;
-        } else if (attackLocation(0, -1, 0)) {
+        } else if (attackLocation(playerId, -1, 0)) {
             return true;
         } else {
             return false;
@@ -493,11 +496,10 @@ public class Game {
 
         LOGGER.warning("Cannot determine which player has won easily from the getState() method. Needs helper methods.");
         if (isDead(0)) {
-            System.out.println("We got a winner");
             return GameStatus.LOST;
         }
         else if (isDead(1)) {
-            System.out.println("We got a loser");
+            System.out.println(getPlayer(1).getHealth());
             return GameStatus.WON;
         }
         throw new RuntimeException("CANNOT DETERMINE GAME STATE.");
@@ -506,13 +508,10 @@ public class Game {
     /**
      * Checks to see whether or not the current player has been in their location for NUMBER_OF_TURNS_TO_STALEMATE
      * @param playerId
-     * @return
+     * @return If the users has not moved in NUMBER_OF_TURNS_TO_STALEMATE
      */
     private boolean isStalemateTurnForPlayer(int playerId){
 
-        if(playerId == 0){
-            System.out.println(1);
-        }
         if(_previousLocations.get(playerId).x == getPlayer(playerId).getLocation().x && _previousLocations.get(playerId).y == getPlayer(playerId).getLocation().y){
                 _numberOfTimesAtCurrentLocation.set(playerId, _numberOfTimesAtCurrentLocation.get(playerId) + 1);
 
