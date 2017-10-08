@@ -97,7 +97,7 @@ public class Check {
         } else if (data.equals(Data.OPPONENT_HEALTH.text())) {
             return game.getPlayer(Game.OPPONENT_ID).getHealth();
         } else if (data.equals(Data.DISTANCE_FROM_OPPONENT.text())) {
-            return (int) Math.round(game.distanceToOpponent(Game.PLAYER_ID, Game.OPPONENT_ID));
+            return game.pathDistanceToPlayer(Game.PLAYER_ID, Game.OPPONENT_ID);
         } else {
             try {
                 return Integer.parseInt(data);

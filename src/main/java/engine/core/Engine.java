@@ -255,7 +255,7 @@ public class Engine {
     public void generateCPUScript(){
 
         this.cpuCommands = new ArrayList<>();
-        
+
         if(getRandomBoolean()){
             ArrayList<Check> checks = new ArrayList<>();
             ArrayList<Check> checksForAttack = new ArrayList<>();
@@ -269,6 +269,7 @@ public class Engine {
             this.cpuCommands.add(attack);
         }
         else{
+
             ArrayList<Check> checksForApproach = new ArrayList<>();
             ArrayList<Check> checksForEvade = new ArrayList<>();
             ArrayList<Check> checksForAttack = new ArrayList<>();
