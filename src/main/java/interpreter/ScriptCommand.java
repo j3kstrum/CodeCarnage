@@ -1,8 +1,8 @@
 package interpreter;
 
 import interpreter.enumerations.Command;
-
 import utilties.models.Game;
+
 import java.util.List;
 
 /**
@@ -42,7 +42,7 @@ public class ScriptCommand {
     public boolean doCommand(Game game, int id){
 
         for (Check c: this.checks){
-            if (!c.conditionIsTrue(game, id)){
+            if (!c.conditionIsTrue(game)) {
                 return false;
             }
         }

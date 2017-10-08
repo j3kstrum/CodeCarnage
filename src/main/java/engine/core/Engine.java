@@ -9,10 +9,10 @@ package engine.core;
 
 import common.BaseLogger;
 import common.constants.GameStatus;
-import common.data.GameMap;
 import engine.data.EngineData;
 import gui.game.GameGUI;
-import interpreter.*;
+import interpreter.Check;
+import interpreter.ScriptCommand;
 import interpreter.enumerations.Command;
 import interpreter.enumerations.Data;
 import interpreter.enumerations.Operator;
@@ -21,10 +21,9 @@ import org.mapeditor.io.TMXMapReader;
 import utilties.models.EntityMap;
 import utilties.models.Game;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.net.URL;
 
 /**
  * The main class for the main.java.engine.
@@ -247,7 +246,7 @@ public class Engine {
         this.cpuCommands = new ArrayList<>();
 
         ArrayList<Check> checks = new ArrayList<>();
-        checks.add(new Check(Data.USER_HEALTH, Data.OPPONENT_HEALTH, Operator.GREATER_THAN));
+        checks.add(new Check(Data.USER_HEALTH.text(), Data.OPPONENT_HEALTH.text(), Operator.GREATER_THAN));
 
         ScriptCommand command1 = new ScriptCommand(checks, Command.APPROACH);
     }

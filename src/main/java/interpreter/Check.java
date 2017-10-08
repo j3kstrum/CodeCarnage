@@ -91,7 +91,7 @@ public class Check {
      * @param game is the pointer to the game model
      * @return the integer value of the game data that has been looked up
      */
-    public int getData(String data, Game game) {
+    private int getData(String data, Game game) {
         if (data.equals(Data.USER_HEALTH.text())) {
             return game.getPlayer(Game.PLAYER_ID).getHealth();
         } else if (data.equals(Data.OPPONENT_HEALTH.text())) {
