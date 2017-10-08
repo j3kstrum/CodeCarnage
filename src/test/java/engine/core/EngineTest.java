@@ -7,6 +7,7 @@
 
 package engine.core;
 
+import gui.game.GameGUI;
 import utilties.models.Game;
 
 import static org.junit.Assert.assertFalse;
@@ -15,6 +16,11 @@ import static org.junit.Assert.assertTrue;
 public class EngineTest {
 
     private Engine e;
+
+    @org.junit.BeforeClass
+    public static void setTest() throws Exception {
+        Engine.TEST_FLAG = true;
+    }
 
     @org.junit.Before
     public void setUp() throws Exception {
