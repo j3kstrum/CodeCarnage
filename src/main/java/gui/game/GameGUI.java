@@ -8,6 +8,7 @@
 package gui.game;
 
 import common.BaseLogger;
+import common.exceptions.LoadMapFailedException;
 import engine.core.Engine;
 import engine.core.TickingService;
 import gui.menu.MenuGUI;
@@ -21,10 +22,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -35,6 +38,9 @@ import org.mapeditor.core.TileLayer;
 import utilties.models.Game;
 
 import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -65,7 +71,51 @@ public class GameGUI extends Application {
     public GameGUI(ArrayList<ScriptCommand> commandObjects) throws Exception {
         //Create Engine
         this.commandObjects = commandObjects;
-        _engine = new Engine(this);
+        try {
+            _engine = new Engine(this);
+        } catch (LoadMapFailedException lmfe) {
+            LOGGER.fatal(lmfe.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setTitle("CodeCarnage Error");
+            alert.setHeaderText("Resource files not found");
+
+            /*// http://bekwam.blogspot.com/2015/07/dont-just-tell-me-show-me-with-custom.html
+            FlowPane fp = new FlowPane();
+            javafx.scene.control.Label lbl = new javafx.scene.control.Label(
+                    "The CodeCarnage resource files are corrupted, or they cannot be found.\n" +
+                            "Please try redownloading CodeCarnage.\n" +
+                            "Up-to-date information regarding this issue can be found at ");
+            Hyperlink link = new Hyperlink("the CodeCarnage website.");
+            fp.getChildren().addAll(lbl, link);
+            link.setOnAction((evt) -> {
+                alert.close();
+                try {
+                    java.awt.Desktop.getDesktop().browse(new URI("http://codecarnage.ga/me/help/"));
+                } catch (URISyntaxException | IOException e) {
+                    LOGGER.warning("Could not load CodeCarnage website.");
+                }
+            });
+            alert.getDialogPane().contentProperty().set(fp);*/
+            FlowPane fp = new FlowPane();
+            javafx.scene.control.Label lbl = new javafx.scene.control.Label(
+                    "The CodeCarnage resource files are corrupted, or they cannot be found.\n" +
+                    "Please try redownloading CodeCarnage.\n" +
+                    "Up-to-date information regarding this issue can be found at the CodeCarnage website " +
+                    "(http://codecarnage.ga/me/help/)");
+            fp.getChildren().add(lbl);
+            alert.getDialogPane().contentProperty().set(fp);
+            alert.showAndWait();
+            // Graceful exit
+            if (_engine != null) {
+                try {
+                    _engine.cleanup();
+                } catch (Exception e) {
+                    LOGGER.fatal("Failed to clean up engine after LoadMapFailedException.");
+                }
+            }
+            System.exit(1);
+        }
         LOGGER.info("Beginning game gui and engine...");
         this._engine.startGame();
 

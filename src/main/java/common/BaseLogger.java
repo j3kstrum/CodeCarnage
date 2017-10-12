@@ -108,6 +108,9 @@ public class BaseLogger {
      * @param level   The level to log at.
      */
     private void print(String message, String level) {
+        if (message == null) {
+            message = "<null message>";
+        }
         String msg = this.format(this._format, level);
         if (msg.contains("%(message)")) {
             msg = msg.replace("%(message)", message);
