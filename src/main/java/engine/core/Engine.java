@@ -9,6 +9,7 @@ package engine.core;
 
 import common.BaseLogger;
 import common.constants.GameStatus;
+import common.exceptions.LoadMapFailedException;
 import engine.data.EngineData;
 import gui.game.GameGUI;
 import interpreter.Check;
@@ -57,16 +58,16 @@ public class Engine {
     /**
      * Initializes the Engine and performs the main ticking loop.
      */
-    public Engine(GameGUI gameGUI) {
+    public Engine(GameGUI gameGUI) throws LoadMapFailedException {
         generateCPUScript();
         this.gameGUI = gameGUI;
         DATA = new EngineData();
         try {
             this.DATA.setMap(loadGameMap());
-        } catch (NullPointerException ne) {
+        } catch (LoadMapFailedException lmfe) {
             ENGINE_LOGGER.fatal("COULD NOT LOAD GAME MAP.");
             if (!TEST_FLAG) {
-                System.exit(1);
+                throw lmfe;
             }
         }
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
@@ -86,7 +87,7 @@ public class Engine {
      *
      * @return The initial GameMap, initialized to hold the static Tiled EntityMap.
      */
-    private Map loadGameMap() {
+    private Map loadGameMap() throws LoadMapFailedException {
         TMXMapReader mapReader = new TMXMapReader();
         URL mapPath = getClass().getResource("/game-map.tmx");
         try {
@@ -111,15 +112,30 @@ public class Engine {
                         this.map = mapReader.readMap(mapPath.toString());
                     } catch (Exception ex4) {
                         ENGINE_LOGGER.fatal(ex4.getMessage());
-                        System.exit(1);
+                        throw new LoadMapFailedException(
+                                ex.getMessage()
+                                        + ex2.getMessage()
+                                        + ex3.getMessage()
+                                        + ex4.getMessage()
+                        );
                     }
                 }
             }
         }
 
-        EntityMap entityMap = new EntityMap(map, map.getWidth(), map.getHeight());
-        game = new Game(entityMap);
-        this.gameGUI._map = map;
+        try {
+            EntityMap entityMap = new EntityMap(map, map.getWidth(), map.getHeight());
+            game = new Game(entityMap);
+            this.gameGUI._map = map;
+        } catch (NullPointerException npe) {
+            throw new LoadMapFailedException(npe.getMessage());
+        }
+        if (map == null) {
+            throw new LoadMapFailedException("Engine map was null.");
+        }
+        if (this.gameGUI._map == null) {
+            throw new LoadMapFailedException("GameGUI map was null.");
+        }
         return map;
     }
 
