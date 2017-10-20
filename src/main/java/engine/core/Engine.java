@@ -36,9 +36,6 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Engine {
 
-    // The Engine's Database.
-    private final EngineData DATA;
-
     // The amount of time for each game tick.
     public static final long TICK_TIME = 250;
     private boolean _inCoreGame = false;
@@ -48,11 +45,8 @@ public class Engine {
     // Currently holds hardcoded CPU script
     private List<ScriptCommand> cpuCommands;
 
-    public static boolean TEST_FLAG = false;
-
-    public Map map;
-    public Game game;
-    public GameGUI gameGUI;
+    private Game game;
+    private GameGUI gameGUI;
 
     private boolean _isPlayerTurn = true;
 
@@ -61,17 +55,23 @@ public class Engine {
      */
     public Engine(GameGUI gameGUI) throws LoadMapFailedException {
         generateCPUScript();
+
         this.gameGUI = gameGUI;
-        DATA = new EngineData();
-        try {
-            this.DATA.setMap(loadGameMap());
-        } catch (LoadMapFailedException lmfe) {
-            ENGINE_LOGGER.fatal("COULD NOT LOAD GAME MAP.");
-            if (!TEST_FLAG) {
-                throw lmfe;
-            }
+        Map mp = loadGameMap();
+        this.gameGUI._map = mp;
+
+        if (mp == null) {
+            throw new LoadMapFailedException("Loaded map was null.");
         }
+
+        EntityMap em = parseEntityMap(mp);
+        this.game = new Game(em);
+
         ENGINE_LOGGER.info("Engine initialized. Beginning tick loop...");
+    }
+
+    public Game getGame() {
+        return this.game;
     }
 
     /**
@@ -83,35 +83,27 @@ public class Engine {
         return game.getState();
     }
 
+    private EntityMap parseEntityMap(Map mp) throws LoadMapFailedException {
+        try {
+            return new EntityMap(mp, mp.getWidth(), mp.getHeight());
+        } catch (NullPointerException npe) {
+            throw new LoadMapFailedException(npe.getMessage());
+        }
+    }
+
     /**
      * Loads the Tiled static EntityMap from disk.
      *
      * @return The initial GameMap, initialized to hold the static Tiled EntityMap.
      */
     private Map loadGameMap() throws LoadMapFailedException {
-        TMXMapReader mapReader = new TMXMapReader();
         try {
             URL mapPath = new URL("https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map.tmx");
             MapReader mr = new MapReader();
-            this.map = mr.readMap(mapPath);
+            return mr.readMap(mapPath);
         } catch (Exception ex) {
             throw new LoadMapFailedException(ex.getMessage());
         }
-
-        try {
-            EntityMap entityMap = new EntityMap(map, map.getWidth(), map.getHeight());
-            game = new Game(entityMap);
-            this.gameGUI._map = map;
-        } catch (NullPointerException npe) {
-            throw new LoadMapFailedException(npe.getMessage());
-        }
-        if (map == null) {
-            throw new LoadMapFailedException("Engine map was null.");
-        }
-        if (this.gameGUI._map == null) {
-            throw new LoadMapFailedException("GameGUI map was null.");
-        }
-        return map;
     }
 
     /**
