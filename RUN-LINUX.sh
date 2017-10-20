@@ -1,2 +1,2 @@
-cd jar-linux/game/
+#!/usr/bin/env bash
 java -jar CodeCarnage-all.jar &> /dev/null

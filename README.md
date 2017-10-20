@@ -29,9 +29,7 @@ However, should you have difficulties running *CodeCarnage*, please see https://
 
 1. Clone our git repository (if you are unsure how to clone a git repository, please see https://help.github.com/articles/cloning-a-repository/ .)
 2. Navigate to the folder where you cloned the git repository (this path will end with *CodeCarnage*).
-3. Double-click the ***RUN-WINDOWS.vbs*** file. If, after waiting a minute, nothing appears, try double-clicking
-the ***rw.bat*** file. If this still does not load CodeCarnage, try re-installing the Java Runtime Environment
-(see *How to Install The Java Runtime Environment* above).
+3. Double-click the ***CodeCarnage-all.jar*** file.
 4. Play!
 
 ### Linux
