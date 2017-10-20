@@ -18,6 +18,7 @@ import interpreter.enumerations.Command;
 import interpreter.enumerations.Data;
 import interpreter.enumerations.Operator;
 import org.mapeditor.core.Map;
+import org.mapeditor.io.MapReader;
 import org.mapeditor.io.TMXMapReader;
 import utilties.models.EntityMap;
 import utilties.models.Game;
@@ -89,38 +90,12 @@ public class Engine {
      */
     private Map loadGameMap() throws LoadMapFailedException {
         TMXMapReader mapReader = new TMXMapReader();
-        URL mapPath = getClass().getResource("/game-map.tmx");
         try {
-            this.map = mapReader.readMap(mapPath.toString());
+            URL mapPath = new URL("https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map.tmx");
+            MapReader mr = new MapReader();
+            this.map = mr.readMap(mapPath);
         } catch (Exception ex) {
-            ENGINE_LOGGER.warning("Could not load game map. Attempting backup windows filepaths.");
-            try {
-                String pth = "../resources/main/game-map.tmx";
-                this.map = mapReader.readMap(pth);
-            } catch (Exception ex2) {
-                ENGINE_LOGGER.warning("Could not load game map. Attempting to use *nix filepaths.");
-                ENGINE_LOGGER.warning(ex2.getMessage());
-                String path = "../resources/main/nix/game-map.tmx";
-                //            System.out.println(mapPath == null ? "null" : mapPath.toString());
-                try {
-                    this.map = mapReader.readMap(path);
-                } catch (Exception ex3) {
-                    ENGINE_LOGGER.warning("Still failed to load game map. Attempting backup *nix filepaths.");
-                    ENGINE_LOGGER.critical(ex3.getMessage());
-                    try {
-                        mapPath = getClass().getResource("/nix/game-map.tmx");
-                        this.map = mapReader.readMap(mapPath.toString());
-                    } catch (Exception ex4) {
-                        ENGINE_LOGGER.fatal(ex4.getMessage());
-                        throw new LoadMapFailedException(
-                                ex.getMessage()
-                                        + ex2.getMessage()
-                                        + ex3.getMessage()
-                                        + ex4.getMessage()
-                        );
-                    }
-                }
-            }
+            throw new LoadMapFailedException(ex.getMessage());
         }
 
         try {
