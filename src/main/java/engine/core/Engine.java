@@ -18,6 +18,7 @@ import interpreter.enumerations.Command;
 import interpreter.enumerations.Data;
 import interpreter.enumerations.Operator;
 import org.mapeditor.core.Map;
+import org.mapeditor.io.MapReader;
 import org.mapeditor.io.TMXMapReader;
 import utilties.models.EntityMap;
 import utilties.models.Game;
@@ -112,24 +113,31 @@ public class Engine {
                         this.map = mapReader.readMap(mapPath.toString());
                     } catch (Exception ex4) {
                         ENGINE_LOGGER.fatal(ex4.getMessage());
-                        throw new LoadMapFailedException(
-                                ex.getMessage()
-                                        + ex2.getMessage()
-                                        + ex3.getMessage()
-                                        + ex4.getMessage()
-                        );
+                        try {
+                            mapPath = new URL("https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map.tmx");
+                            MapReader mr = new MapReader();
+                            this.map = mr.readMap(mapPath);
+                        } catch (Exception ex5) {
+                            throw new LoadMapFailedException(
+                                    ex.getMessage()
+                                            + ex2.getMessage()
+                                            + ex3.getMessage()
+                                            + ex4.getMessage()
+                                            + ex5.getMessage()
+                            );
+                        }
                     }
                 }
             }
         }
 
-        try {
-            EntityMap entityMap = new EntityMap(map, map.getWidth(), map.getHeight());
-            game = new Game(entityMap);
-            this.gameGUI._map = map;
-        } catch (NullPointerException npe) {
-            throw new LoadMapFailedException(npe.getMessage());
-        }
+//        try {
+        EntityMap entityMap = new EntityMap(map, map.getWidth(), map.getHeight());
+        game = new Game(entityMap);
+        this.gameGUI._map = map;
+//        } catch (NullPointerException npe) {
+//            throw new LoadMapFailedException(npe.getMessage());
+//        }
         if (map == null) {
             throw new LoadMapFailedException("Engine map was null.");
         }

@@ -96,8 +96,17 @@ public class EntityMap {
     private ArrayList<EntityTile> getPlayerTiles(Map map) {
         ArrayList<Tile> playerTiles = new ArrayList<>();
         TileLayer playerLayer = (TileLayer) map.getLayer(2);
-        int height = playerLayer.getBounds().height;
-        int width = playerLayer.getBounds().width;
+        int height;
+        int width;
+        try {
+            height = playerLayer.getBounds().height;
+            width = playerLayer.getBounds().width;
+        } catch (NullPointerException npe) {
+            playerLayer.setOffset(0, 0);
+            height = playerLayer.getBounds().height;
+            width = playerLayer.getBounds().width;
+        }
+
 
         Point playerLocation = null;
         Point opponentLocation = null;

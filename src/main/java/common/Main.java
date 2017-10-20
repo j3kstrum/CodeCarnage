@@ -7,6 +7,7 @@
 
 package common;
 
+import engine.core.Engine;
 import gui.menu.MenuGUI;
 
 /**
