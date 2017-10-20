@@ -17,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -49,7 +48,7 @@ public class ScriptingGUI extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("scripting.fxml"));
         ObservableMap nodesMap = loader.getNamespace();
 
-        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        //Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
 
 
         Parent root = loader.load();
@@ -57,9 +56,9 @@ public class ScriptingGUI extends Application {
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
-        primaryStage.setWidth(visualBounds.getWidth());
-        primaryStage.setHeight(visualBounds.getHeight());
-        setDimensions(nodesMap, visualBounds);
+        //primaryStage.setWidth(visualBounds.getWidth());
+        //primaryStage.setHeight(visualBounds.getHeight());
+        //setDimensions(nodesMap, visualBounds);
         primaryStage.show();
 
         // Assign the stylesheet to the Scene
@@ -90,7 +89,6 @@ public class ScriptingGUI extends Application {
         behaviorList.setPrefWidth(.73 * visualBounds.getWidth());
 
         choicesScroll.setPrefHeight(.9 * visualBounds.getHeight());
-        logoPane.setPrefSize(visualBounds.getHeight() * .4, visualBounds.getWidth() * .4);
 
 
     }

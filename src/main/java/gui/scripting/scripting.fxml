@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import com.jfoenix.controls.JFXButton?>
 <?import gui.scripting.*?>
 <?import javafx.geometry.*?>
@@ -10,11 +9,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: #373737;"
+            minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" style="-fx-background-color: #373737;"
             xmlns="http://javafx.com/javafx/8.0.102" fx:controller="gui.scripting.ScriptingController">
     <children>
-        <AnchorPane fx:id="instructions" layoutX="404.0" layoutY="28.0" prefHeight="285.0" prefWidth="708.0"
-                    style="-fx-background-color: #373737;" AnchorPane.leftAnchor="404.0">
+        <AnchorPane fx:id="instructions" layoutX="280.0" layoutY="28.0" prefHeight="285.0" prefWidth="708.0"
+                    style="-fx-background-color: #373737;" AnchorPane.leftAnchor="280.0">
             <children>
                 <Label layoutX="166.0" text="Create Your Script" textFill="WHITE">
                     <font>
@@ -39,7 +38,7 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
         </AnchorPane>
-        <ScrollPane fx:id="choicesScroll" layoutX="71.0" layoutY="28.0" prefHeight="824.0">
+        <ScrollPane fx:id="choicesScroll" layoutX="27.0" layoutY="12.0" prefHeight="574.0" prefWidth="237.0">
             <content>
                 <AnchorPane minWidth="-Infinity">
                     <children>
@@ -194,12 +193,12 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <ScrollPane fx:id="behaviorsScroll" layoutX="399.0" layoutY="376.0" prefHeight="480.0" prefWidth="1150.0">
+        <ScrollPane fx:id="behaviorsScroll" layoutX="311.0" layoutY="376.0" prefHeight="206.0" prefWidth="866.0">
             <content>
-                <AnchorPane fx:id="behaviorPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1131.0">
+                <AnchorPane fx:id="behaviorPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="865.0">
                     <children>
                         <BehaviorList id="behaviorList" fx:id="behaviorList" layoutX="6.0" layoutY="5.0"
-                                      prefHeight="468.0" prefWidth="1122.0" spacing="10.0">
+                                      prefHeight="359.0" prefWidth="934.0" spacing="10.0">
                             <padding>
                                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
                             </padding>
@@ -208,9 +207,9 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <Pane fx:id="logoPane" layoutX="1233.0" layoutY="87.0">
+        <Pane fx:id="logoPane" layoutX="1014.0" layoutY="101.0" prefHeight="161.0" prefWidth="127.0">
             <children>
-                <ImageView fitHeight="175.0" fitWidth="289.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="161.0" fitWidth="129.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@/logo.png"/>
                     </image>
