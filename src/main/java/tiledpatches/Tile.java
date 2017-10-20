@@ -83,16 +83,16 @@ public class Tile extends TileData {
      * @param t tile to copy
      */
     public Tile(org.mapeditor.core.Tile t) {
-        tileset = t.tileset;
-
-        Properties tileProperties = t.properties;
-        if (tileProperties != null) {
-            try {
-                properties = tileProperties.clone();
-            } catch (CloneNotSupportedException ex) {
-                Logger.getLogger(org.mapeditor.core.Tile.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//        tileset = t.tileset;
+        System.err.println("PROTECTED CODE MUST BE UNCOMMENTED AND STITCHED BACK INTO JAR");
+//        Properties tileProperties = t.properties;
+//        if (tileProperties != null) {
+//            try {
+//                properties = tileProperties.clone();
+//            } catch (CloneNotSupportedException ex) {
+//                Logger.getLogger(org.mapeditor.core.Tile.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
     }
 
     /**
