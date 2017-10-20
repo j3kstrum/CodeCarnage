@@ -8,7 +8,6 @@ BehaviorList, Behavior{
 }
 
 Behavior{
-    -fx-pref-width: 1065;
     -fx-hgap: 10;
     -fx-vgap: 10;
 }
@@ -38,7 +37,7 @@ AnchorPane{
 }
 
 .behavior:selected {
-    -fx-border-width: 3;
+    -fx-border-width: 2;
     -fx-border-style: solid;
     -fx-border-color: #80deea;
     -fx-border-radius: 3;
@@ -48,5 +47,13 @@ AnchorPane{
     -fx-margin-top: 10;
     -fx-margin-bottom: 10;
     -fx-padding: 3 10 3 10;
+}
+
+.jfx-button:hover {
+    -fx-font-size: 14;
+}
+
+.jfx-button {
+    -fx-font-size: 14;
 }
 
