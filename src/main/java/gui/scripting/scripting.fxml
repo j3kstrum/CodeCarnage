@@ -42,110 +42,147 @@
             <content>
                 <AnchorPane minWidth="-Infinity">
                     <children>
-                        <VBox fx:id="choicesPane" layoutY="-2.0" prefHeight="920.0" prefWidth="235.0">
+                        <VBox fx:id="choicesPane" layoutX="6.0" layoutY="5.0" prefWidth="209.0"
+                              style="-fx-background-color: #616161;">
                             <children>
-                                <VBox fx:id="conditionals" alignment="TOP_CENTER">
+                                <VBox fx:id="conditionals" alignment="TOP_CENTER" prefWidth="228.0" spacing="5.0">
                                     <children>
                                         <Label alignment="TOP_CENTER" prefHeight="27.0" text="Conditionals"
-                                               textAlignment="CENTER">
+                                               textAlignment="CENTER" textFill="WHITE">
                                             <font>
                                                 <Font name="System Bold Italic" size="18.0"/>
                                             </font>
                                         </Label>
                                         <ChoiceButton style="-fx-background-color: #88ffff;" text="If">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="89.0" layoutY="65.0"
                                                       style="-fx-background-color: #88ffff;" text="Then">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="89.0" layoutY="362.0"
                                                       style="-fx-background-color: #88ffff;" text="And">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
-                                        </ChoiceButton>
-                                    </children>
-                                </VBox>
-                                <VBox fx:id="operators" alignment="TOP_CENTER">
-                                    <children>
-                                        <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="111.0"
-                                               text="Operators" textAlignment="CENTER">
                                             <font>
-                                                <Font name="System Bold Italic" size="18.0"/>
+                                                <Font size="10.0"/>
                                             </font>
-                                        </Label>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Less Than">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
-                                            </VBox.margin>
-                                        </ChoiceButton>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Greater Than">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
-                                            </VBox.margin>
-                                        </ChoiceButton>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Equals">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
-                                            </VBox.margin>
-                                        </ChoiceButton>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;"
-                                                      text="Greater Than Or Equal To">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
-                                            </VBox.margin>
-                                        </ChoiceButton>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;"
-                                                      text="Less Than Or Equal To">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
-                                            </VBox.margin>
                                         </ChoiceButton>
                                     </children>
                                 </VBox>
-                                <VBox fx:id="data" alignment="TOP_CENTER">
+                                <VBox fx:id="data" alignment="TOP_CENTER" spacing="5.0">
                                     <children>
                                         <Label alignment="TOP_CENTER" prefHeight="32.0" prefWidth="117.0" text="Data"
-                                               textAlignment="CENTER">
+                                               textAlignment="CENTER" textFill="WHITE">
                                             <font>
                                                 <Font name="System Bold Italic" size="18.0"/>
                                             </font>
                                         </Label>
                                         <ChoiceButton style="-fx-background-color: #b39ddb;" text="User Health">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="89.0" layoutY="30.0"
                                                       style="-fx-background-color: #b39ddb;" text="Opponent Health">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="89.0" layoutY="65.0"
                                                       style="-fx-background-color: #b39ddb;"
                                                       text="Distance From Opponent">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="47.0" layoutY="142.0"
                                                       style="-fx-background-color: #b39ddb;" text="User Input">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                     </children>
                                 </VBox>
-                                <VBox fx:id="commands" alignment="TOP_CENTER">
+                                <VBox fx:id="operators" alignment="TOP_CENTER" spacing="5.0">
+                                    <children>
+                                        <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="111.0"
+                                               text="Operators" textAlignment="CENTER" textFill="WHITE">
+                                            <font>
+                                                <Font name="System Bold Italic" size="18.0"/>
+                                            </font>
+                                        </Label>
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Less Than">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
+                                        </ChoiceButton>
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Greater Than">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
+                                        </ChoiceButton>
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Equals">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
+                                        </ChoiceButton>
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;"
+                                                      text="Greater Than Or Equal To">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
+                                        </ChoiceButton>
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;"
+                                                      text="Less Than Or Equal To">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
+                                        </ChoiceButton>
+                                    </children>
+                                </VBox>
+                                <VBox fx:id="commands" alignment="TOP_CENTER" spacing="5.0">
                                     <children>
                                         <Label alignment="TOP_CENTER" prefHeight="27.0" prefWidth="189.0"
-                                               text="Commands" textAlignment="CENTER">
+                                               text="Commands" textAlignment="CENTER" textFill="WHITE">
                                             <font>
                                                 <Font name="System Bold Italic" size="18.0"/>
                                             </font>
@@ -153,37 +190,55 @@
                                         <ChoiceButton layoutX="88.0" layoutY="137.0"
                                                       style="-fx-background-color: #76ff03;" text="Approach">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton style="-fx-background-color: #76ff03;" text="Attack">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="89.0" layoutY="30.0"
                                                       style="-fx-background-color: #76ff03;" text="Defend">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="88.0" layoutY="217.0"
                                                       style="-fx-background-color: #76ff03;" text="Evade">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="88.0" layoutY="182.0"
                                                       style="-fx-background-color: #76ff03;" text="Heal">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                         <ChoiceButton layoutX="88.0" layoutY="47.0"
                                                       style="-fx-background-color: #76ff03;" text="Do Nothing">
                                             <VBox.margin>
-                                                <Insets bottom="10.0" top="10.0"/>
+                                                <Insets bottom="10.0"/>
                                             </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
                                         </ChoiceButton>
                                     </children>
                                 </VBox>
@@ -207,9 +262,9 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <Pane fx:id="logoPane" layoutX="1014.0" layoutY="101.0" prefHeight="161.0" prefWidth="127.0">
+        <Pane fx:id="logoPane" layoutX="1014.0" layoutY="68.0" prefHeight="194.0" prefWidth="148.0">
             <children>
-                <ImageView fitHeight="161.0" fitWidth="129.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="174.0" fitWidth="147.0" layoutX="3.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@/logo.png"/>
                     </image>
