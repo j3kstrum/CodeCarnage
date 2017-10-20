@@ -49,6 +49,7 @@ public class GameGUI extends Application {
 
     private static final BaseLogger LOGGER = new BaseLogger("MenuGUI");
     private Engine _engine = null;
+    public static boolean ENGINE_TESTING = false;
 
     private ProgressBar userHealth, opponentHealth;
 
@@ -102,7 +103,9 @@ public class GameGUI extends Application {
         LOGGER.info("Beginning game gui and engine...");
         this._engine.startGame();
 
-        start(new Stage());
+        if (!ENGINE_TESTING) {
+            start(new Stage());
+        }
     }
 
     public List<ScriptCommand> getCommandObjects() {

@@ -10,6 +10,8 @@ package engine.core;
 import gui.game.GameGUI;
 import utilties.models.Game;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -19,7 +21,8 @@ public class EngineTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
-        e = new Engine(null);
+        GameGUI.ENGINE_TESTING = true;
+        e = new Engine(new GameGUI(new ArrayList<>()));
     }
 
     @org.junit.Test
