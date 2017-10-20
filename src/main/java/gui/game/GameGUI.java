@@ -80,29 +80,12 @@ public class GameGUI extends Application {
             alert.setTitle("CodeCarnage Error");
             alert.setHeaderText("Resource files not found");
 
-            /*// http://bekwam.blogspot.com/2015/07/dont-just-tell-me-show-me-with-custom.html
             FlowPane fp = new FlowPane();
             javafx.scene.control.Label lbl = new javafx.scene.control.Label(
-                    "The CodeCarnage resource files are corrupted, or they cannot be found.\n" +
-                            "Please try redownloading CodeCarnage.\n" +
-                            "Up-to-date information regarding this issue can be found at ");
-            Hyperlink link = new Hyperlink("the CodeCarnage website.");
-            fp.getChildren().addAll(lbl, link);
-            link.setOnAction((evt) -> {
-                alert.close();
-                try {
-                    java.awt.Desktop.getDesktop().browse(new URI("http://codecarnage.ga/me/help/"));
-                } catch (URISyntaxException | IOException e) {
-                    LOGGER.warning("Could not load CodeCarnage website.");
-                }
-            });
-            alert.getDialogPane().contentProperty().set(fp);*/
-            FlowPane fp = new FlowPane();
-            javafx.scene.control.Label lbl = new javafx.scene.control.Label(
-                    "The CodeCarnage resource files are corrupted, or they cannot be found.\n" +
-                    "Please try redownloading CodeCarnage.\n" +
-                    "Up-to-date information regarding this issue can be found at the CodeCarnage website " +
-                    "(http://codecarnage.ga/me/help/)");
+                    "The CodeCarnage resource files cannot be found.\n" +
+                    "Please check your internet connection.\n" +
+                    "If the problem persists, please visit http://codecarnage.ga/me\n" +
+                    "to see if the CodeCarnage servers are currently down.");
             fp.getChildren().add(lbl);
             alert.getDialogPane().contentProperty().set(fp);
             alert.showAndWait();
@@ -431,8 +414,8 @@ public class GameGUI extends Application {
             _imagePane.getChildren().remove(this.opponentHealth);
         }
 
-        double userHealth = _engine.game.getPlayer(Game.PLAYER_ID).getHealth();
-        double opponentHealth = _engine.game.getPlayer(Game.OPPONENT_ID).getHealth();
+        double userHealth = _engine.getGame().getPlayer(Game.PLAYER_ID).getHealth();
+        double opponentHealth = _engine.getGame().getPlayer(Game.OPPONENT_ID).getHealth();
         double max = Game.HEALTH_MAX;
 
         double userRatio = userHealth / max;
