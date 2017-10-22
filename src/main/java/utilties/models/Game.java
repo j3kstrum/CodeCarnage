@@ -62,7 +62,7 @@ public class Game {
     public static final int MAX_TURN_LIMIT = 240;
 
     //Constant for number of turns to calculate a stalemate
-    private static final int NUMBER_OF_TURNS_TO_STALEMATE = 120;
+    public static final int NUMBER_OF_TURNS_TO_STALEMATE = 120;
 
     private static final BaseLogger LOGGER = new BaseLogger("Game");
 
@@ -334,7 +334,7 @@ public class Game {
      * Command to do nothing
      */
     public void doNothing(int playerId){
-
+        getPlayer(playerId).setShielding(false);
     }
 
     /**
