@@ -53,7 +53,7 @@
                                                 <Font name="System Bold Italic" size="18.0"/>
                                             </font>
                                         </Label>
-                                        <ChoiceButton style="-fx-background-color: #88ffff;" text="If">
+                                        <ChoiceButton fx:id="btnIf" style="-fx-background-color: #88ffff;" text="If">
                                             <VBox.margin>
                                                 <Insets bottom="10.0"/>
                                             </VBox.margin>
@@ -135,7 +135,7 @@
                                                 <Font name="System Bold Italic" size="18.0"/>
                                             </font>
                                         </Label>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Less Than">
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Is Less Than">
                                             <VBox.margin>
                                                 <Insets bottom="10.0"/>
                                             </VBox.margin>
@@ -143,7 +143,7 @@
                                                 <Font size="10.0"/>
                                             </font>
                                         </ChoiceButton>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Greater Than">
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Is Greater Than">
                                             <VBox.margin>
                                                 <Insets bottom="10.0"/>
                                             </VBox.margin>
@@ -151,16 +151,7 @@
                                                 <Font size="10.0"/>
                                             </font>
                                         </ChoiceButton>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Equals">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0"/>
-                                            </VBox.margin>
-                                            <font>
-                                                <Font size="10.0"/>
-                                            </font>
-                                        </ChoiceButton>
-                                        <ChoiceButton style="-fx-background-color: #ffeb3b;"
-                                                      text="Greater Than Or Equal To">
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;" text="Is Equal To">
                                             <VBox.margin>
                                                 <Insets bottom="10.0"/>
                                             </VBox.margin>
@@ -169,7 +160,16 @@
                                             </font>
                                         </ChoiceButton>
                                         <ChoiceButton style="-fx-background-color: #ffeb3b;"
-                                                      text="Less Than Or Equal To">
+                                                      text="Is Greater Than Or Equal To">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
+                                        </ChoiceButton>
+                                        <ChoiceButton style="-fx-background-color: #ffeb3b;"
+                                                      text="Is Less Than Or Equal To">
                                             <VBox.margin>
                                                 <Insets bottom="10.0"/>
                                             </VBox.margin>
@@ -248,12 +248,12 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <ScrollPane fx:id="behaviorsScroll" layoutX="311.0" layoutY="376.0" prefHeight="206.0" prefWidth="866.0">
+        <ScrollPane fx:id="behaviorsScroll" layoutX="310.0" layoutY="376.0" prefHeight="206.0" prefWidth="875.0">
             <content>
-                <AnchorPane fx:id="behaviorPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="865.0">
+                <AnchorPane fx:id="behaviorPane" maxWidth="860" prefWidth="860.0">
                     <children>
                         <BehaviorList id="behaviorList" fx:id="behaviorList" layoutX="6.0" layoutY="5.0"
-                                      prefHeight="359.0" prefWidth="934.0" spacing="10.0">
+                                      prefHeight="359.0" prefWidth="845.0" spacing="10.0">
                             <padding>
                                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
                             </padding>

@@ -33,7 +33,7 @@ public class ScriptingController {
     @FXML
     private VBox choicesPane;
     @FXML
-    private JFXButton add, subtract, submit, deleteWord;
+    private JFXButton add, subtract, submit, deleteWord, btnIf;
 
     @FXML
     private VBox conditionals, data, operators, commands;
@@ -88,6 +88,19 @@ public class ScriptingController {
                 behavior.setToggleGroup(behaviorList.getToggleGroup());
 
                 mouseEventHandler.enableButtons(Collections.emptyList());
+
+                behavior.setSelected(true);
+                behaviorList.getToggleGroup().selectToggle(behavior);
+
+                List<ScriptButton> _script =
+                        behavior.getChildren().stream()
+                                .filter(b -> b instanceof ScriptButton)
+                                .map(b -> (ScriptButton) b)
+                                .collect(Collectors.toList());
+
+                List<String> _allowables = MouseEvents.getAllowableText(_script);
+
+                mouseEventHandler.enableButtons(_allowables);
 
                 behavior.setOnMouseClicked((mouseEvent) -> {
                     behavior.setSelected(behavior.isSelected());
