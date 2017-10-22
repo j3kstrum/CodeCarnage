@@ -1,9 +1,10 @@
-package utilties.entities;
+package utilties.models;
 
 import common.exceptions.LoadMapFailedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mapeditor.io.MapReader;
+import utilties.entities.Player;
 import utilties.models.EntityMap;
 import utilties.models.Game;
 
