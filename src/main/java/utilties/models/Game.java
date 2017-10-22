@@ -18,42 +18,38 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Model for Game.  Execute nextTurn to progress through game.
+ * Model class for Game.
  */
 public class Game {
 
     private EntityMap _entityMap;
+
     private int _numberOfTurnsCompleted = 0;
+
     private ArrayList<Point> _previousLocations = new ArrayList<>();
+
     private ArrayList<Integer> _numberOfStalemateTurns = new ArrayList<>();
+
     private ArrayList<Integer> _previousHealth = new ArrayList<>();
+
     private boolean _isStalemate = false;
+
     private boolean _isGameOver = false;
 
     //Constants
 
     //Directions
-    public static final int DIRECTION_RIGHT = 1;
-    public static final int DIRECTION_LEFT = -1;
-    public static final int DIRECTION_UP = 1;
-    public static final int DIRECTION_DOWN = -1;
-    public static final int DIRECTION_CONSTANT = 0;
+    private static final int DIRECTION_RIGHT = 1;
+    private static final int DIRECTION_LEFT = -1;
+    private static final int DIRECTION_UP = 1;
+    private static final int DIRECTION_DOWN = -1;
+    private static final int DIRECTION_CONSTANT = 0;
 
-    //Vectors for Moving
+    //Vectors for Moving (Represented as a point object)
     private static final Point MOVE_LEFT = new Point(DIRECTION_LEFT, DIRECTION_CONSTANT);
     private static final Point MOVE_RIGHT = new Point(DIRECTION_RIGHT, DIRECTION_CONSTANT);
     private static final Point MOVE_DOWN = new Point(DIRECTION_CONSTANT, DIRECTION_DOWN);
     private static final Point MOVE_UP = new Point(DIRECTION_CONSTANT, DIRECTION_UP);
-
-
-    //List of random directions we can move to.  Will stay constant 50%, and move randomly one direction 50% of time
-    public static final ArrayList<Integer> DIRECTIONS_RANDOM_MOVEMENT = new ArrayList() {{
-        add(DIRECTION_UP);
-        add(DIRECTION_CONSTANT);
-        add(DIRECTION_CONSTANT);
-        add(DIRECTION_CONSTANT);
-        add(DIRECTION_DOWN);
-    }};
 
     //Players
     public static final int HEALTH_DEAD = 0;
@@ -62,6 +58,7 @@ public class Game {
     public static final int PLAYER_ID = 0;
     public static final int OPPONENT_ID = 1;
 
+    //Max turns a game can be played.  A turn is over when a player executes a command
     public static final int MAX_TURN_LIMIT = 240;
 
     //Constant for number of turns to calculate a stalemate
@@ -70,16 +67,23 @@ public class Game {
     private static final BaseLogger LOGGER = new BaseLogger("Game");
 
     /**
-     * @param entityMap
+     * Constructor for Game Object.  Need to pass in a reference to an EntityMap Object.
+     * Initialization of Tiled Map must occur before beginning game
+     * @param entityMap Fully initialized entity map
      */
     public Game(EntityMap entityMap) {
         this._entityMap = entityMap;
+
+        //Initialize stalemate condition detection variables
+        //Stalemate logic
         _previousLocations.add(getPlayer(PLAYER_ID).getLocation());
         _previousLocations.add(getPlayer(OPPONENT_ID).getLocation());
-        _numberOfStalemateTurns.add(1);
-        _numberOfStalemateTurns.add(1);
+
         _previousHealth.add(getPlayer(PLAYER_ID).getHealth());
         _previousHealth.add(getPlayer(OPPONENT_ID).getHealth());
+
+        _numberOfStalemateTurns.add(1);
+        _numberOfStalemateTurns.add(1);
     }
 
     /**
@@ -140,6 +144,7 @@ public class Game {
      */
     public boolean attack(int playerId) {
         stopDefending(playerId);
+
         LOGGER.debug("Attacking location for player ID: " + playerId);
         if (attackLocation(playerId, 0, 1)) {
             return true;
@@ -200,7 +205,7 @@ public class Game {
     }
 
     /**
-     * Evades from opposing player.  Will move in direction that is one space away from player.  Will only evade 87.5% of time
+     * Evades from opposing player.  Will move in direction that is one space away from player.  Will evade 87.5% of time
      *
      * @param playerId
      * @param opponentId
@@ -329,8 +334,7 @@ public class Game {
      * Command to do nothing
      */
     public void doNothing(int playerId){
-        getPlayer(playerId).setShielding(false);
-        return;
+
     }
 
     /**

@@ -19,7 +19,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Map in which Game is Played on.  Represented as a two dimensional array of tiles.
+ * Model class for GameMap.  Represented as a two dimensional array of tiles.
  */
 public class EntityMap {
 
@@ -36,6 +36,8 @@ public class EntityMap {
     private int _numberOfColumns;
 
     private int _numberOfRows;
+
+    private static final int PLAYER_LAYER = 2;
 
     /**
      * Creates Map with a Tiled Map object and list of players on map.  Currently only works with two players
@@ -77,7 +79,7 @@ public class EntityMap {
 //                    System.out.println(_entityTiles[x][y].getEntityType() == Entity.EntityType.PLAYER);
                 } else {
                     //Grab the empty tile reference at that location
-                    TileLayer playerLayer = (TileLayer) this._gameMap.getLayer(2);
+                    TileLayer playerLayer = (TileLayer) this._gameMap.getLayer(PLAYER_LAYER);
                     //Create empty tile in location
                     _entityTiles[x][y] = new EntityTile(currentLocation, new Empty(currentLocation), playerLayer.getTileAt(currentLocation.x, currentLocation.y));
                 }
@@ -94,8 +96,10 @@ public class EntityMap {
      * @return
      */
     private ArrayList<EntityTile> getPlayerTiles(Map map) {
-        ArrayList<Tile> playerTiles = new ArrayList<>();
-        TileLayer playerLayer = (TileLayer) map.getLayer(2);
+
+        //Grab reference to player layer
+        TileLayer playerLayer = (TileLayer) map.getLayer(PLAYER_LAYER);
+
         int height;
         int width;
         try {
@@ -107,7 +111,7 @@ public class EntityMap {
             width = playerLayer.getBounds().width;
         }
 
-
+        ArrayList<Tile> playerTiles = new ArrayList<>();
         Point playerLocation = null;
         Point opponentLocation = null;
 
@@ -213,30 +217,17 @@ public class EntityMap {
         return isInsideMap(location) && _entityTiles[location.x][location.y].getEntityType() == Entity.EntityType.EMPTY;
     }
 
+    /**
+     * Determines whether a point is inside the bounds of the game map
+     * @param point
+     * @return
+     */
     public boolean isInsideMap(Point point) {
         if (point.x >= this._numberOfColumns || point.x < 0
                 || point.y >= this._numberOfRows || point.y < 0) {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Get tile object for Player
-     *
-     * @return
-     */
-    public EntityTile getPlayerTile() {
-        return _playerTile;
-    }
-
-    /**
-     * Get tile object for Opponent
-     *
-     * @return
-     */
-    public EntityTile getOpponentTile() {
-        return _opponentTile;
     }
 
     public ArrayList<EntityTile> getPlayers() {
@@ -251,6 +242,10 @@ public class EntityMap {
         return this._gameMap;
     }
 
+    /**
+     * Removes tile at specified location from map
+     * @param location
+     */
     public void removeTile(Point location){
         EntityTile entityTile = this._entityTiles[location.x][location.y];
         getPlayerLayer().removeTile(entityTile.getTile());
