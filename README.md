@@ -32,33 +32,35 @@ However, should you have difficulties running *CodeCarnage*, please see https://
 3. Double-click the ***CodeCarnage-all.jar*** file.
 4. Play!
 
-### Linux
+### Linux and Mac
 
 1. Clone our git repository (if you are unsure how to clone a git repository, please see https://help.github.com/articles/cloning-a-repository/ .)
-2. Navigate to the folder where you cloned the git repository. Please do this using a terminal window.
-3. Run the ***RUN-LINUX.sh*** file. You can do this by simply executing *./RUN-LINUX.sh* in the terminal window you have opened.
-4. Play!
+2. Navigate to the folder where you cloned the git repository via a terminal window and type the following command:
+    
+        java -jar CodeCarnage-all.jar
+3. Play!
 
-### Mac and Other Devices
-
-Mac and Other Devices are not directly supported by CodeCarnage.
+### Other Devices
 
 If you cannot access a Linux Device, we recommend using a Virtual Environment with Fedora, as this is a tested environment.
 To do this, see http://www.wikihow.com/Install-Fedora-17-in-Virtualbox (while the article is slightly outdated, the procedure is extremely similar).
 
-You could also try to follow the **Linux** instructions at your own risk.
+You could also try to follow the **Linux and Mac** instructions at your own risk.
 
 ## About
 
 ### Who?
-Sean Brais, Jacob Ekstrum, Nick Martin, and David Olsen.
+[Sean Brais](https://www.linkedin.com/in/sean-brais-929733110/), [Jacob Ekstrum](https://www.cse.buffalo.edu/~jacobeks/), 
+[Nick Martin](https://www.linkedin.com/in/nicholas-martin-b79956129/), and David Olsen.
 
 ### What?
-CodeCarnage is an arena battle game where each side indirectly controls a robot. The robot is manipulated through a custom script that the user creates through a drag-and-drop interface, allowing infinite customization.
+CodeCarnage is an arena battle game where each side indirectly controls a robot. The robot is manipulated through a 
+custom script that the user creates through a clickable interface, allowing for a unique  gameplay experience every time!
 
 ### Is there more?
 
-Please see our GitHub Wiki for more information about the core developers and the intended goals.
+Please see our GitHub Wiki for more information about the core developers and the intended goals, and check out
+ [CodeCarnage.ga/me](http://www.codecarnage.ga/me) for planned features and developments!  Anouncements will also appear on[Twitter!](https://twitter.com/codecarnagegame/)
 
 Contributions are always welcome!
 
