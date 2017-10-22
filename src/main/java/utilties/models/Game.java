@@ -447,18 +447,6 @@ public class Game {
     }
 
     /**
-     * Number of tiles to get to opponent using only horizontal and vertical movement
-     * @param playerId
-     * @param opponentId
-     * @return
-     */
-    public int pathDistanceToPlayer(int playerId, int opponentId){
-        //Calculate distances in X and Y directions
-        Point distances = getDeltaDistances(playerId, opponentId);
-        return Math.abs(distances.x) + Math.abs(distances.y);
-    }
-
-    /**
      * Returns a point(should be a vector) of distances in x and y coordinates between player and opponent
      * @param playerId
      * @param opponentId
@@ -476,6 +464,24 @@ public class Game {
         return new Point(distanceX, distanceY);
     }
 
+    /**
+     * Number of tiles to get to opponent using only horizontal and vertical movement
+     * @param playerId
+     * @param opponentId
+     * @return
+     */
+    public int pathDistanceToPlayer(int playerId, int opponentId){
+        //Calculate distances in X and Y directions
+        Point distances = getDeltaDistances(playerId, opponentId);
+        return Math.abs(distances.x) + Math.abs(distances.y);
+    }
+
+    /**
+     * Number of tiles to get to target location using only horizontal and vertical movement
+     * @param location1
+     * @param location2
+     * @return
+     */
     public int pathDistanceToLocation(Point location1, Point location2){
         //Calculate distances in X and Y directions
         int distanceX = location1.x - location2.x;
