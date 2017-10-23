@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2017. Licensed under the Apache License 2.0.
+  ~ For full copyright, licensing, and sourcing information,
+  ~ please refer to the CodeCarnage GitHub repository's README.md file
+  ~ (found on https://github.com/j3kstrum/CodeCarnage).
+  -->
+
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="1600.0"
+            xmlns="http://javafx.com/javafx/8.0.141">
+    <children>
+        <Group fx:id="group" autoSizeChildren="false"/>
+        <Pane fx:id="_imagePane" layoutX="6.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity"
+              minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0">
+            <children>
+                <ProgressBar fx:id="userHeatlh" layoutX="14.0" layoutY="14.0" prefWidth="200.0" progress="0.0"/>
+                <ProgressBar fx:id="opponentHealth" layoutX="580.0" layoutY="9.0" prefWidth="200.0" progress="0.0"/>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>
