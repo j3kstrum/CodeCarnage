@@ -24,83 +24,93 @@
 
   <body>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <header class="masthead clearfix">
+      <!-- Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+          <div class="container">
+              <a class="navbar-brand" href=".."><img src="../img/logo.png" height="48"/></a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                  <ul class="navbar-nav ml-auto">
+                      <li class="nav-item">
+                          <a class="nav-link" href="../about/">About</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="../contribute/">Contribute</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="../contact/">Contact</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="../downloads/">Download</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://twitter.com/codecarnagegame" class="nav-link">
+                              <i class="fa fa-twitter fa-fw"></i>
+                          </a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="https://github.com/j3kstrum/CodeCarnage" class="nav-link">
+                              <i class="fa fa-github fa-fw"></i>
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
+  </header>
+
+  <div class="jumbotron vertical-center">
       <div class="container">
-        <a class="navbar-brand" href="../">CodeCarnage</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="../about/">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../contribute/">Contribute</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../contact/">Contact</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../downloads/">Download</a>
-            </li>
-            <li class="nav-item">
-              <a href="https://twitter.com/codecarnagegame" class="nav-link">
-                <i class="fa fa-twitter fa-fw"></i>
+          <h1 class="display-3">Get in the game.</h1>
+          <p class="lead">Start your scripting adventures today.</p>
+          <p class="my-4">
+              <a href="https://github.com/j3kstrum/CodeCarnage/raw/master/CodeCarnage-all.jar" class="btn btn-secondary btn-lg">
+                  <i class="fa fa-download"></i>
+                  <span class="network-name">Download Game</span>
               </a>
-            </li>
-            <li class="nav-item">
-              <a href="https://github.com/j3kstrum/CodeCarnage" class="nav-link">
-                <i class="fa fa-github fa-fw"></i>
+          </p>
+          <p class="my-4">
+              <a href="https://github.com/j3kstrum/CodeCarnage" class="btn btn-secondary btn-lg">
+                  <i class="fa fa-github fa-fw"></i>
+                  <span class="network-name">Clone From Source</span>
               </a>
-            </li>
+          </p>
+      </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mastfoot">
+      <div class="container">
+          <ul class="list-inline">
+              <li class="list-inline-item">
+                  <a href="..">Home</a>
+              </li>
+              <li class="footer-menu-divider list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                  <a href="../about">About</a>
+              </li>
+              <li class="footer-menu-divider list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                  <a href="../contribute">Contribute</a>
+              </li>
+              <li class="footer-menu-divider list-inline-item">&sdot;</li>
+              <li class="list-inline-item">
+                  <a href="../contact">Contact</a>
+              </li>
           </ul>
-        </div>
+          <p class="copyright text-muted small">Copyright &copy; CodeCarnage 2017. All Rights Reserved under the terms
+              of the LICENSE. See <a href="../legal/">Legal</a> for more information.</p>
       </div>
-    </nav>
-
-    <!-- Header -->
-    <header class="intro-header">
-      <div class="container">
-        <div class="intro-message">
-          <h1>While we love your enthusiasm...</h1>
-          <h3>This page does not yet exist!</h3>
-        </div>
-      </div>
-    </header>
-
-    <!-- Page Content -->
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <ul class="list-inline">
-          <li class="list-inline-item">
-            <a href=".">Home</a>
-          </li>
-          <li class="footer-menu-divider list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="./about">About</a>
-          </li>
-          <li class="footer-menu-divider list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="./contribute">Contribute</a>
-          </li>
-          <li class="footer-menu-divider list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="./contact">Contact</a>
-          </li>
-        </ul>
-	<p class="copyright text-muted small">Copyright &copy; CodeCarnage 2017. All Rights Reserved under the terms of the LICENSE. See <a href="./legal/">Legal</a> for more information.</p>
-      </div>
-    </footer>
+  </footer>
 
     <!-- Bootstrap core JavaScript -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/popper/popper.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-
   </body>
 
 </html>

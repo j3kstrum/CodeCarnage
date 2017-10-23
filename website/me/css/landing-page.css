@@ -20,11 +20,11 @@ body, h1, h2, h3, h4, h5, h6 {
   padding-top: 50px;
   padding-bottom: 50px;
   text-align: left;
-  color: #992222;
+  color: #C92222;
   background:
     linear-gradient(
-      rgba(0, 0, 0, 0.7),
-      rgba(0, 0, 0, 0.7)
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
     ),
     url(../img/codecarnage.png) no-repeat center center;
   background-size: cover;
@@ -38,9 +38,9 @@ body, h1, h2, h3, h4, h5, h6 {
 
 .intro-message>h1 {
   margin: 0;
-  text-shadow: 2px 2px 3px rgba(255, 128, 128, 0.6);
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
   font-size: 5em;
-  color: #992222;
+  color: #C92222;
 }
 
 .intro-divider {
@@ -50,8 +50,8 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 
 .intro-message>h3 {
-  text-shadow: 2px 2px 3px rgba(128, 64, 64, 0.6);
-  color: #992222;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+  color: #C92222;
 }
 
 .intro-social-buttons i {
@@ -120,8 +120,8 @@ body, h1, h2, h3, h4, h5, h6 {
   color: #080808;
   background:
     linear-gradient(
-      rgba(0, 0, 0, 0.7),
-      rgba(0, 0, 0, 0.7)
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
     ),
     url(../img/codecarnage.png) no-repeat center center;
   background-size: cover;
@@ -131,7 +131,7 @@ body, h1, h2, h3, h4, h5, h6 {
   margin: 0;
   text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
   font-size: 3em;
-  color: #881919;
+  color: #C81919;
 }
 
 .banner ul {
@@ -173,4 +173,23 @@ footer {
 
 p.copyright {
   margin: 15px 0 0;
+}
+
+.jumbotron {
+    background-color:#080808;
+    background-opacity: 0.2;
+    text-align: center;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+a i {
+    padding-right: 5px;
+    vertical-align: middle;
 }

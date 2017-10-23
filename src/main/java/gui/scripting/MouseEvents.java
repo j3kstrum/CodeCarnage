@@ -186,7 +186,7 @@ final class MouseEvents {
         for (int i = 0; i < scriptingObjects.size(); i++) {
             String object = scriptingObjects.get(i);
 
-            if (ScriptingTypes.DATA.list().contains(object)) {
+            if (ScriptingTypes.DATA.list().contains(object) || object.matches("\\d+")) {
                 Operator op;
 
                 try {
