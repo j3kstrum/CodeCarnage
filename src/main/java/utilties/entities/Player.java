@@ -10,7 +10,7 @@ package utilties.entities;
 import java.awt.*;
 
 /**
- * Player Entity
+ * Player Entity.
  */
 
 public class Player extends Entity {
