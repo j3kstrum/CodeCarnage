@@ -310,6 +310,7 @@ final class MouseEvents {
             if (b instanceof ChoiceButton) {
                 if (validText.contains(((ChoiceButton) b).getText().trim())) {
                     b.setDisable(false);
+                    b.setFocusTraversable(false);
                 } else {
                     b.setDisable(true);
                 }
