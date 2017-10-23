@@ -44,7 +44,7 @@
                         </Text>
                     </children>
                 </HBox>
-                <HBox layoutX="6.0" layoutY="97.0" prefHeight="53.0" prefWidth="571.0">
+                <HBox layoutX="6.0" layoutY="97.0" prefHeight="53.0" prefWidth="492.0">
                     <children>
                         <Text fill="#88ffff" strokeType="OUTSIDE" strokeWidth="0.0" text="(And ">
                             <font>
@@ -66,7 +66,7 @@
                                 <Font size="36.0"/>
                             </font>
                         </Text>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="..." wrappingWidth="29.4140625">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="..." wrappingWidth="83.4140625">
                             <font>
                                 <Font size="36.0"/>
                             </font>
@@ -351,7 +351,7 @@
         </ScrollPane>
         <Pane fx:id="logoPane" layoutX="844.0" layoutY="68.0" prefHeight="272.0" prefWidth="318.0">
             <children>
-                <ImageView fitHeight="268.0" fitWidth="302.0" layoutX="-27.0" layoutY="-33.0" pickOnBounds="true"
+                <ImageView fitHeight="268.0" fitWidth="302.0" layoutX="-17.0" layoutY="-33.0" pickOnBounds="true"
                            preserveRatio="true">
                     <image>
                         <Image url="@/logo.png"/>
