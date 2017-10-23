@@ -74,7 +74,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">
@@ -85,7 +85,7 @@
 				Please save this page for reference.
             </p>
           </div>
-          <div class="col-lg-5 mr-auto">
+          <div class="col-lg-10 mr-auto">
           </div>
         </div>
 
@@ -98,7 +98,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">
@@ -165,7 +165,7 @@
 		
 		
           </div>
-          <div class="col-lg-5 mr-auto">
+          <div class="col-lg-10 mr-auto">
           </div>
         </div>
 
@@ -177,7 +177,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">
@@ -229,7 +229,7 @@
 				When CodeCarnage is executed, in general, the following program flow occurs:
 					<ol>
 						<li>The main function is called in src/main/java/common/Main.</li>
-						<li>A MenuGUI object is created from src/main/java/gui/menu/MenuGUI, and its start() method is invoked by JavaFX on the JavaFX thread.</li>
+						<li>A MenuGUI object is created from src/main/java/gui/menu/MenuGUI, and its <code>start()</code> method is invoked by JavaFX on the JavaFX thread.</li>
 						<li>The MenuGUI prepares for input.</li>
 						<li>Input is received, and the game creates a new ScriptingGUI from src/main/java/gui/scripting/ScriptingGUI.</li>
 						
@@ -251,50 +251,7 @@
 						<li>"Deltas" are applied. The GameGUI redraws these squares using the new graphical values.</li>
 						<li>"Return to step 14 and repeat.</li>
 					</ol> 
-			</p>
-		
-
-			<br></br>
-			
-			<h5 class="section-heading">
-				Code Details			
-			</h5>
-			
-			<p class="lead">
-				Now that we're more familiar with the overall structure of CodeCarnage, let's dive into the more intricate details of how each section of the program works.
-			</p>
-			
-			<br></br>
-			
-			<h5 class="section-heading">
-				The Test Package			
-			</h5>
-			
-			<p class="lead">
-				This package contains all of the unit testing code for the project, organized in the same structure as the main package.
-			</p>
-
-			<br></br>
-			
-			<h5 class="section-heading">
-				The Main Library Package			
-			</h5>
-			
-			<p class="lead">
-				This sub-package of main contains all local, non-gradle dependencies for CodeCarnage. In particular, this contains our custom version of the Tiled library. Manipulating the Tiled source code should be unnecessary for contributors, and we therefore do not address the tiled package in CodeCarnage.
-			</p>
-
-
-			<br></br>
-			
-			<h5 class="section-heading">
-				Code Details			
-			</h5>
-			
-			<p class="lead">
-				Now that we're more familiar with the overall structure of CodeCarnage, let's dive into the more intricate details of how each section of the program works.
-			</p>			
-			
+			</p>	
           </div>
           <div class="col-lg-5 mr-auto">
           </div>
@@ -309,7 +266,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
 				<h2 class="section-heading">
@@ -411,11 +368,16 @@
 					The GUI Package
 				</h5>
 				
-				<p class="lead">
-					(To fill at a later date)
-					For more information on the GUI package, please contact Nick Martin (nmartin5) by <a href="https://github.com/j3kstrum/CodeCarnage/issues/new?labels=question&assignees=nmartin5">creating a GitHub question.</a>					
-				</p>
-
+				<p class="lead">This package contains the Java FX code for the graphical interfaces and its events.  Each class also has a corresponding fxml file, which is used by Java FX SceneBuilder to make modifications to the UI. This can also be changed directly, and objects can also be accessed via the corresponding Controller class.</p>
+				<p class="lead">game.GameGUI represents the window that appears during gameplay. This window is responsible for the rendering of the tiles on the screen as the gameplay goes on.</p>
+				<p class="lead">menu.MenuController contains all of the event handling required by the menu.</p>
+				<p class="lead">menu.MenuGUI represents the user menu window and its instantiation.</p>
+				<p class="lead">scripting.Behavior, scripting.BehaviorList, scripting.ChoiceButton, and scripting.ScriptButton are all abstractions of existing Java FX elements. These are used for event handling and styling purposes.</p>
+				<p class="lead">scripting.MouseEvents contains the MouseEvent handlers for events that are triggered in scripting.ScriptingController.  These mouse events are used during script creation.</p>
+				<p class="lead">scripting.ScriptingController is used to assign all of the event handlers to the Java FX elements used by scripting.ScriptingGUI.</p>
+				<p class="lead">scripting.ScriptingGUI represents the script creation window. This window contains all of the FXML elements created by the user during script creation. Some of these controls have events that are managed by scripting.ScriptingController.  Some of these events have been moved to scripting.MouseEvents for organization.</p>
+				<p class="lead">For more information on the GUI package, please contact Nick Martin (nmartin5) by <a href="https://github.com/j3kstrum/CodeCarnage/issues/new?labels=question&amp;assignees=nmartin5">creating a GitHub question</a>.</p>
+						
 				<br></br>
 				
 				<h5 class="section-heading">
@@ -455,7 +417,7 @@
 				</p>				
 				
           </div>
-          <div class="col-lg-5 mr-auto">
+          <div class="col-lg-10 mr-auto">
           </div>
         </div>
 
@@ -467,7 +429,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">
@@ -488,7 +450,7 @@
 
 			
           </div>
-          <div class="col-lg-5 mr-auto">
+          <div class="col-lg-10 mr-auto">
           </div>
         </div>
 
@@ -501,7 +463,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">
@@ -556,7 +518,7 @@
 
 			
           </div>
-          <div class="col-lg-5 mr-auto">
+          <div class="col-lg-10 mr-auto">
           </div>
         </div>
 
@@ -569,7 +531,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">
@@ -579,7 +541,7 @@
 				Now that you're familiar with all of the CodeCarnage software, why not <a href="https://github.com/j3kstrum/CodeCarnage/labels/help%20wanted">take a look at our open issues </a> and find one that suits you? We would love your help!
             </p>
           </div>
-          <div class="col-lg-5 mr-auto">
+          <div class="col-lg-10 mr-auto">
           </div>
         </div>
 
@@ -591,7 +553,7 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-5 ml-auto">
+          <div class="col-lg-10 ml-auto">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">
@@ -614,7 +576,7 @@
           </div>
 		  
 		  
-          <div class="col-lg-5 mr-auto">
+          <div class="col-lg-10 mr-auto">
           </div>
         </div>
 
