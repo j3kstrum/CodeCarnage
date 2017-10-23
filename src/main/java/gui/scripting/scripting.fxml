@@ -12,27 +12,114 @@
             minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" style="-fx-background-color: #373737;"
             xmlns="http://javafx.com/javafx/8.0.102" fx:controller="gui.scripting.ScriptingController">
     <children>
-        <AnchorPane fx:id="instructions" layoutX="280.0" layoutY="28.0" prefHeight="285.0" prefWidth="708.0"
-                    style="-fx-background-color: #373737;" AnchorPane.leftAnchor="280.0">
+        <AnchorPane fx:id="instructions" layoutX="310.0" layoutY="23.0" prefHeight="298.0" prefWidth="596.0"
+                    style="-fx-background-color: #373737;" AnchorPane.leftAnchor="310.0">
             <children>
-                <Label layoutX="166.0" text="Create Your Script" textFill="WHITE">
+                <Label layoutX="6.0" prefHeight="70.0" prefWidth="318.0" text="Example Script:" textFill="WHITE">
                     <font>
-                        <Font size="48.0"/>
+                        <Font size="36.0"/>
                     </font>
                 </Label>
-                <Text fill="WHITE" layoutX="11.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="Welcome to the Code Carnage Scripting Menu! Here you will be asked to make several important decisions as you prepare your character for battle.  On the left, you will see 4 categories from which you can construct your AI logic.  Each of these groups will be used in a modular fashion to build your preferred tactics!  To start, click 'Add Behavior' to create a new behavior for your character.  Then simply select the behavior and click words on the left side to create a behavior of the following structure."
-                      textAlignment="JUSTIFY" wrappingWidth="690.0000123977661">
+                <HBox layoutX="6.0" layoutY="50.0" prefHeight="56.0" prefWidth="537.0">
+                    <children>
+                        <Text fill="#88ffff" strokeType="OUTSIDE" strokeWidth="0.0" text="If ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="#b39ddb" strokeType="OUTSIDE" strokeWidth="0.0" text="Data ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="#ffeb3b" strokeType="OUTSIDE" strokeWidth="0.0" text="Operator ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="#b39ddb" strokeType="OUTSIDE" strokeWidth="0.0" text="Data ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+                <HBox layoutX="6.0" layoutY="97.0" prefHeight="53.0" prefWidth="571.0">
+                    <children>
+                        <Text fill="#88ffff" strokeType="OUTSIDE" strokeWidth="0.0" text="(And ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="#b39ddb" strokeType="OUTSIDE" strokeWidth="0.0" text="Data ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="#ffeb3b" strokeType="OUTSIDE" strokeWidth="0.0" text="Operator ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="#b39ddb" strokeType="OUTSIDE" strokeWidth="0.0" text="Data)">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="..." wrappingWidth="29.4140625">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+                <Label layoutX="6.0" layoutY="231.0" prefHeight="30.0" prefWidth="683.0"
+                       text="Add one or more behaviors, then hit Submit Script to Fight!" textAlignment="CENTER"
+                       textFill="WHITE" wrapText="true">
                     <font>
                         <Font size="18.0"/>
                     </font>
-                </Text>
-                <Text fill="WHITE" layoutX="77.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="if &lt;data&gt; &lt;operator&gt; &lt;data&gt; then &lt;command&gt;">
-                    <font>
-                        <Font size="24.0"/>
-                    </font>
-                </Text>
+                </Label>
+                <HBox layoutX="6.0" layoutY="146.0" prefHeight="53.0" prefWidth="484.0">
+                    <children>
+                        <Text fill="#88ffff" strokeType="OUTSIDE" strokeWidth="0.0" text="Then ">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                        <Text fill="#76ff03" strokeType="OUTSIDE" strokeWidth="0.0" text="Command">
+                            <font>
+                                <Font size="36.0"/>
+                            </font>
+                        </Text>
+                    </children>
+                </HBox>
+                <HBox fx:id="horizontalBox" layoutX="6.0" layoutY="305.0" prefHeight="30.0" prefWidth="683.0"
+                      spacing="15.0">
+                    <children>
+                        <JFXButton fx:id="add" buttonType="RAISED" style="-fx-background-color: lightgreen;"
+                                   text="Add Behavior">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="subtract" style="-fx-background-color: #FF9494;" text="Delete Behavior">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="deleteWord" style="-fx-background-color: #FF9494;" text="Delete Last Entry">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="submit" style="-fx-background-color: #ffab00;" text="Submit Script">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </JFXButton>
+                    </children>
+                </HBox>
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
@@ -53,7 +140,7 @@
                                                 <Font name="System Bold Italic" size="18.0"/>
                                             </font>
                                         </Label>
-                                        <ChoiceButton style="-fx-background-color: #88ffff;" text="If">
+                                        <ChoiceButton fx:id="btnIf" style="-fx-background-color: #88ffff;" text="If">
                                             <VBox.margin>
                                                 <Insets bottom="10.0"/>
                                             </VBox.margin>
@@ -248,12 +335,12 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <ScrollPane fx:id="behaviorsScroll" layoutX="311.0" layoutY="376.0" prefHeight="206.0" prefWidth="866.0">
+        <ScrollPane fx:id="behaviorsScroll" layoutX="310.0" layoutY="376.0" prefHeight="206.0" prefWidth="875.0">
             <content>
-                <AnchorPane fx:id="behaviorPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="865.0">
+                <AnchorPane fx:id="behaviorPane" maxWidth="860" prefWidth="860.0">
                     <children>
                         <BehaviorList id="behaviorList" fx:id="behaviorList" layoutX="6.0" layoutY="5.0"
-                                      prefHeight="359.0" prefWidth="934.0" spacing="10.0">
+                                      prefHeight="359.0" prefWidth="845.0" spacing="10.0">
                             <padding>
                                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
                             </padding>
@@ -262,39 +349,15 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <Pane fx:id="logoPane" layoutX="1014.0" layoutY="68.0" prefHeight="194.0" prefWidth="148.0">
+        <Pane fx:id="logoPane" layoutX="844.0" layoutY="68.0" prefHeight="272.0" prefWidth="318.0">
             <children>
-                <ImageView fitHeight="174.0" fitWidth="147.0" layoutX="3.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="268.0" fitWidth="302.0" layoutX="-27.0" layoutY="-33.0" pickOnBounds="true"
+                           preserveRatio="true">
                     <image>
                         <Image url="@/logo.png"/>
                     </image>
                 </ImageView>
             </children>
         </Pane>
-        <HBox fx:id="horizontalBox" layoutX="402.0" layoutY="328.0" spacing="15.0">
-            <children>
-                <JFXButton fx:id="add" buttonType="RAISED" style="-fx-background-color: lightgreen;"
-                           text="Add Behavior">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </JFXButton>
-                <JFXButton fx:id="subtract" style="-fx-background-color: #FF9494;" text="Delete Behavior">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </JFXButton>
-                <JFXButton fx:id="deleteWord" style="-fx-background-color: #FF9494;" text="Delete Last Entry">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </JFXButton>
-                <JFXButton fx:id="submit" style="-fx-background-color: #ffab00;" text="Submit Script">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </JFXButton>
-            </children>
-        </HBox>
     </children>
 </AnchorPane>
