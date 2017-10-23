@@ -174,3 +174,22 @@ footer {
 p.copyright {
   margin: 15px 0 0;
 }
+
+.jumbotron {
+    background-color:#080808;
+    background-opacity: 0.2;
+    text-align: center;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+a i {
+    padding-right: 5px;
+    vertical-align: middle;
+}
