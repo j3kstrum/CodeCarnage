@@ -40,7 +40,7 @@ public void generateCPUScript(){
 
     //TODO Utilize Seed generated from engine
     public boolean getRandomBoolean() {
-        return ThreadLocalRandom.current().nextInt(0, 2) == 1;
+        return ThreadLocalRandom.current().nextInt(0, 5) == 1;
     }
 
 
