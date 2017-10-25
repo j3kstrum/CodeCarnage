@@ -10,7 +10,7 @@ public void generateCPUScript(){
             ScriptCommand approach = new ScriptCommand(checks, Command.APPROACH);
             this.cpuCommands.add(approach);
 
-            checksForAttack.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), Data.DISTANCE_FROM_OPPONENT.text(),             Operator.EQUALS));
+            checksForAttack.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), Data.DISTANCE_FROM_OPPONENT.text(),                         Operator.EQUALS));
             ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
             this.cpuCommands.add(attack);
         }
