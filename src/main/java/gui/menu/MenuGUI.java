@@ -8,8 +8,10 @@
 package gui.menu;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import common.BaseLogger;
 import gui.scripting.ScriptingGUI;
+import interpreter.enumerations.Difficulty;
 import javafx.application.Application;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXMLLoader;
@@ -46,15 +48,26 @@ public class MenuGUI extends Application {
         ObservableMap map = loader.getNamespace();
 
         JFXButton startButton = (JFXButton) map.get("buttonStart");
+        // find the UI element
+        JFXComboBox<String> difficultyComboBox = (JFXComboBox<String>) map.get("comboBoxSelectDiff");
+        // Set items and prompt message
+        difficultyComboBox.setPromptText("Please select difficulty");
+        difficultyComboBox.getItems().addAll("Easy", "Medium", "Hard");
 
         loader.setController(controller);
 
         startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
             (MouseEvent m) -> {
                 LOGGER.debug("You clicked Start!");
-
+                // get the selected difficulty value
+                String difficulty = difficultyComboBox.getValue();
+                // if the player does not select a difficulty, it is Medium by default
+                if(difficulty == null){
+                    difficulty = "Medium";
+                }
+                LOGGER.debug("Difficulty set to: " + difficulty);
                 try {
-                    new ScriptingGUI();
+                    new ScriptingGUI(difficulty);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
