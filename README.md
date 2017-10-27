@@ -76,4 +76,4 @@ Please see [the CodeCarnage GitHub Wiki](https://github.com/j3kstrum/CodeCarnage
 
 Please see The License (LICENSE) for licensing information.
 
-Please see the sources file (SOURCES) for information pertaining to sources used. 
+Please see the sources file (SOURCES) for information pertaining to sources used.
