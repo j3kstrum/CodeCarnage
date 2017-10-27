@@ -10,6 +10,7 @@ package gui.game;
 import common.BaseLogger;
 import common.exceptions.LoadMapFailedException;
 import engine.core.Engine;
+import engine.core.EngineContext;
 import engine.core.TickingService;
 import gui.menu.MenuGUI;
 import interpreter.ScriptCommand;
@@ -69,11 +70,11 @@ public class GameGUI extends Application {
     private int _endGameConditionTicks = 0;
 
 
-    public GameGUI(ArrayList<ScriptCommand> commandObjects) throws Exception {
+    public GameGUI(ArrayList<ScriptCommand> commandObjects, EngineContext engineContext) throws Exception {
         //Create Engine
         this.commandObjects = commandObjects;
         try {
-            _engine = new Engine(this);
+            _engine = new Engine(this, engineContext);
         } catch (LoadMapFailedException lmfe) {
             LOGGER.fatal(lmfe.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR);

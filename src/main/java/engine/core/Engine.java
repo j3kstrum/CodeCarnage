@@ -25,6 +25,7 @@ import utilties.models.Game;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -41,6 +42,8 @@ public class Engine {
 
     private static final BaseLogger ENGINE_LOGGER = new BaseLogger("Engine");
 
+    private EngineContext engineContext;
+
     // Currently holds hardcoded CPU script
     private List<ScriptCommand> cpuCommands;
 
@@ -54,9 +57,9 @@ public class Engine {
     /**
      * Initializes the Engine and performs the main ticking loop.
      */
-    public Engine(GameGUI gameGUI) throws LoadMapFailedException {
+    public Engine(GameGUI gameGUI, EngineContext engineContext) throws LoadMapFailedException {
         generateCPUScript();
-
+        this.engineContext = engineContext;
         this.gameGUI = gameGUI;
         Map mp;
         try {
@@ -112,9 +115,7 @@ public class Engine {
     private Map loadGameMap() throws LoadMapFailedException, ResourceAlreadyLoadedException {
         // EGN-MARKER
         try {
-            URL mapPath = new URL("https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map.tmx");
-            MapReader mr = new MapReader();
-            return mr.readMap(mapPath);
+            return engineContext.getMapFuture().get();
         } catch (Exception ex) {
             throw new LoadMapFailedException(ex.getMessage());
         }

@@ -8,6 +8,7 @@
 package gui.scripting;
 
 import com.jfoenix.controls.JFXButton;
+import engine.core.EngineContext;
 import gui.game.GameGUI;
 import interpreter.ScriptCommand;
 import javafx.event.ActionEvent;
@@ -61,6 +62,8 @@ public class ScriptingController {
      */
     @FXML
     private void initialize() {
+        EngineContext engineContext = new EngineContext();
+        engineContext.loadMapAsync();
         this.mouseEventHandler = new MouseEvents(behaviorList, getAllButtons());
 
         // Assign each ChoiceButton in choicesPane the choiceButtonClick event handler
@@ -175,7 +178,7 @@ public class ScriptingController {
                     return;
                 }
 
-                new GameGUI(commandObjects);
+                new GameGUI(commandObjects, engineContext);
             } catch (Exception e) {
                 e.printStackTrace();
             }
