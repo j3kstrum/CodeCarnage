@@ -589,3 +589,10 @@ public class Game {
     }
 
 }
+
+
+    /**
+     * Teleports player to a random location
+     * @param playerId
+     * @param location
+     */

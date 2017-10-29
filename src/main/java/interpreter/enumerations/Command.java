@@ -7,6 +7,7 @@ public enum Command {
     DODGE("Dodge"),
     EVADE("Evade"),
     HEAL("Heal"),
+    TELEPORT("Teleport"),
     DO_NOTHING("Do Nothing");
 
     private String text;

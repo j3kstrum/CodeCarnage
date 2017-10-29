@@ -86,6 +86,8 @@ public class ScriptCommand {
             case DEFEND:
                 game.defend(id);
                 break;
+            case TELEPORT:
+                game.teleport(id);
             default:
                 game.doNothing(id);
                 break;
