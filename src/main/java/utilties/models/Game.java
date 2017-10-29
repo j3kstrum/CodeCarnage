@@ -588,11 +588,23 @@ public class Game {
         return ThreadLocalRandom.current().nextInt(0, 2) == 1;
     }
 
-}
 
 
     /**
      * Teleports player to a random location
      * @param playerId
-     * @param location
+     * @param health
      */
+
+    public boolean selfDestruct(int playerId, int health) {
+        Player player = this.getPlayer(playerId);
+        player.setHealth(HEALTH_DEAD);
+
+    }
+
+
+
+
+}
+
+
