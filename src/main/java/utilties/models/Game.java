@@ -591,12 +591,12 @@ public class Game {
 
 
     /**
-     * Teleports player to a random location
+     * Player self-destructs because all hope is lost
      * @param playerId
-     * @param health
-     */
+     *
+     * */
 
-    public boolean selfDestruct(int playerId, int health) {
+    public void selfDestruct(int playerId) {
         Player player = this.getPlayer(playerId);
         player.setHealth(HEALTH_DEAD);
 
