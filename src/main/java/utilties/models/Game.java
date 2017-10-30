@@ -588,4 +588,23 @@ public class Game {
         return ThreadLocalRandom.current().nextInt(0, 2) == 1;
     }
 
+
+
+    /**
+     * Player self-destructs because all hope is lost
+     * @param playerId
+     *
+     * */
+
+    public void selfDestruct(int playerId) {
+        Player player = this.getPlayer(playerId);
+        player.setHealth(HEALTH_DEAD);
+
+    }
+
+
+
+
 }
+
+

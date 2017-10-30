@@ -86,6 +86,8 @@ public class ScriptCommand {
             case DEFEND:
                 game.defend(id);
                 break;
+            case SELF_DESTRUCT:
+                game.selfDestruct(id);
             default:
                 game.doNothing(id);
                 break;
