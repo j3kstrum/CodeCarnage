@@ -63,7 +63,7 @@ public class ScriptingController {
     @FXML
     private void initialize() {
         // TODO: @nmartin5 please link the difficulties here from the scriptingGUI.
-        EngineContext engineContext = new EngineContext("hard");
+        EngineContext engineContext = new EngineContext("medium");
         engineContext.loadMapAsync();
         this.mouseEventHandler = new MouseEvents(behaviorList, getAllButtons());
 
