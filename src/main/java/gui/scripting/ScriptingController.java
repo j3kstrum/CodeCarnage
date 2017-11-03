@@ -42,6 +42,8 @@ public class ScriptingController {
 
     private MouseEvents mouseEventHandler;
 
+    private EngineContext engineContext;
+
     /**
      * Get all of the choice button Nodes
      */
@@ -62,8 +64,6 @@ public class ScriptingController {
      */
     @FXML
     private void initialize() {
-        EngineContext engineContext = new EngineContext();
-        engineContext.loadMapAsync();
         this.mouseEventHandler = new MouseEvents(behaviorList, getAllButtons());
 
         // Assign each ChoiceButton in choicesPane the choiceButtonClick event handler
@@ -185,6 +185,17 @@ public class ScriptingController {
 
             submit.getScene().getWindow().hide();
         });
+    }
+
+    /**
+     * Instantiates the engine context after the difficulty is known.
+     *
+     * @param difficulty User-selected difficulty string
+     */
+    void createContext(String difficulty) {
+        EngineContext engineContext = new EngineContext(difficulty);
+        engineContext.loadMapAsync();
+        this.engineContext = engineContext;
     }
 
 }
