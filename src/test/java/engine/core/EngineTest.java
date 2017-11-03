@@ -22,7 +22,7 @@ public class EngineTest {
     @org.junit.Before
     public void setUp() throws Exception {
         GameGUI.ENGINE_TESTING = true;
-        EngineContext ec = new EngineContext();
+        EngineContext ec = new EngineContext("none");
         ec.loadMapAsync();
         e = new Engine(new GameGUI(new ArrayList<>(), ec), ec);
     }
