@@ -277,6 +277,7 @@ public class Engine {
             ArrayList<Check> checksForApproach = new ArrayList<>();
             ArrayList<Check> checksForEvade = new ArrayList<>();
             ArrayList<Check> checksForAttack = new ArrayList<>();
+            ArrayList<check> checksForDefense = new ArrayList<>();
 
             checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "10",  Operator.GREATER_THAN));
             ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
@@ -284,15 +285,21 @@ public class Engine {
             checksForEvade.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(),"5", Operator.GREATER_THAN));
             ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
             this.cpuCommands.add(evade);
+            
+            checksForDefense.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "3",  Operator.GREATER_THAN_OR_EQUAL_TO));
+            ScriptCommand defense = new ScriptCommand(checksForDefense, Command.DEFEND);
+            this.cpuCommands.add(defense);
+            
             checksForAttack.add(new Check("1", "1", Operator.EQUALS));
             ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
             this.cpuCommands.add(attack);
+ +
         }
     }
 
     //TODO Utilize Seed generated from engine
     public boolean getRandomBoolean() {
-        return ThreadLocalRandom.current().nextInt(0, 2) == 1;
+        return ThreadLocalRandom.current().nextInt(origin: 0, bound: 3) == 1;
     }
 
 }
