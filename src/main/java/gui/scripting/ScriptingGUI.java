@@ -51,6 +51,11 @@ public class ScriptingGUI extends Application {
 
         Parent root = loader.load();
 
+        // Get instance of controller in order to pass the difficulty
+        ScriptingController controller = loader.getController();
+
+        controller.createContext(this.difficulty);
+
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
