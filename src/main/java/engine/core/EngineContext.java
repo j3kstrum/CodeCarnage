@@ -20,11 +20,27 @@ import java.util.concurrent.Future;
 public class EngineContext {
 
     private static final BaseLogger CTX_LOGGER = new BaseLogger("EngineContext");
-    private static final String MAP_URL = "https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map.tmx";
+    private static final String[] ALL_MAP_URL = {
+            "https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map-easy.tmx",
+            "https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map.tmx",
+            "https://www.cse.buffalo.edu/~jacobeks/codecarnage/me/r/game-map-hard.tmx"
+    };
+    private static String MAP_URL = ALL_MAP_URL[1];
 
     private Future<Map> mapFuture;
 
-    public EngineContext() {
+    public EngineContext(String difficulty) {
+        switch (difficulty.toLowerCase()) {
+            case "easy":
+                MAP_URL = ALL_MAP_URL[0];
+                break;
+            case "hard":
+                MAP_URL = ALL_MAP_URL[2];
+                break;
+            case "medium":
+            default:
+                MAP_URL = ALL_MAP_URL[1];
+        }
     }
 
     public String getMapUrl() {
