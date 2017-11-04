@@ -27,25 +27,35 @@ public class EngineContext {
     };
     private static String MAP_URL = ALL_MAP_URL[1];
 
+    private String difficulty;
+
     private Future<Map> mapFuture;
 
     public EngineContext(String difficulty) {
         switch (difficulty.toLowerCase()) {
             case "easy":
                 MAP_URL = ALL_MAP_URL[0];
+                this.difficulty = "easy";
                 break;
             case "hard":
                 MAP_URL = ALL_MAP_URL[2];
+                this.difficulty = "hard";
                 break;
             case "medium":
             default:
                 MAP_URL = ALL_MAP_URL[1];
+                this.difficulty = "medium";
         }
     }
 
     public String getMapUrl() {
         return MAP_URL;
     }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
 
     public Future<Map> getMapFuture() {
         if (mapFuture == null) {

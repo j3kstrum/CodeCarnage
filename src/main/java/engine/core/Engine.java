@@ -58,8 +58,8 @@ public class Engine {
      * Initializes the Engine and performs the main ticking loop.
      */
     public Engine(GameGUI gameGUI, EngineContext engineContext) throws LoadMapFailedException {
-        generateCPUScript();
         this.engineContext = engineContext;
+        generateCPUScript();
         this.gameGUI = gameGUI;
         Map mp;
         try {
@@ -258,7 +258,7 @@ public class Engine {
 
     public void generateCPUScript(){
 
-        String difficulty = "easy";
+        String difficulty = engineContext.getDifficulty();
         this.cpuCommands = new ArrayList<>();
         boolean choose = getRandomBoolean();
 
@@ -274,12 +274,12 @@ public class Engine {
                     ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
                     this.cpuCommands.add(approach);
 
-                    checksForAttack.add(new Check(Data.OPPONENT_HEALTH.text(), "50", Operator.GREATER_THAN));
-                    checksForAttack.add(new Check(Data.USER_HEALTH.text(), "20", Operator.GREATER_THAN));
+                    checksForAttack.add(new Check(Data.USER_HEALTH.text(), "50", Operator.GREATER_THAN));
+                    checksForAttack.add(new Check(Data.OPPONENT_HEALTH.text(), "20", Operator.GREATER_THAN));
                     ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
                     this.cpuCommands.add(attack);
 
-                    checksForHeal.add(new Check(Data.OPPONENT_HEALTH.text(), "20", Operator.LESS_THAN));
+                    checksForHeal.add(new Check(Data.USER_HEALTH.text(), "20", Operator.LESS_THAN));
                     ScriptCommand heal = new ScriptCommand(checksForAttack, Command.HEAL);
                     this.cpuCommands.add(heal);
                 }
@@ -297,7 +297,7 @@ public class Engine {
                     this.cpuCommands.add(attack);
                 }
             }
-            case "middle":{
+            case "medium":{
                 if(choose){
                     //Starts combat, but flees at half health
                     ArrayList<Check> checksForApproach = new ArrayList<>();
@@ -305,11 +305,11 @@ public class Engine {
                     ArrayList<Check> checksForEvade = new ArrayList<>();
 
                     checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1",  Operator.GREATER_THAN));
-                    checksForApproach.add(new Check(Data.OPPONENT_HEALTH.text(), "50",  Operator.GREATER_THAN));
+                    checksForApproach.add(new Check(Data.USER_HEALTH.text(), "50",  Operator.GREATER_THAN));
                     ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
                     this.cpuCommands.add(approach);
                     
-                    checksForAttack.add(new Check(Data.OPPONENT_HEALTH.text(),"50", Operator.GREATER_THAN));
+                    checksForAttack.add(new Check(Data.USER_HEALTH.text(),"50", Operator.GREATER_THAN));
                     ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
                     this.cpuCommands.add(attack);
                     
@@ -331,7 +331,7 @@ public class Engine {
                     this.cpuCommands.add(evade);
                 }
             }
-            case "difficulty":{
+            case "hard":{
                 if(choose){
                     //Stays away until you enter combat. Then, fights you until low health. At low health, runs away and heals
                     ArrayList<Check> checksForEvade1 = new ArrayList<>();
@@ -341,16 +341,16 @@ public class Engine {
                     ArrayList<Check> checksForHeal = new ArrayList<>();
 
                     checksForEvade1.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "5",  Operator.GREATER_THAN));
-                    checksForEvade1.add(new Check(Data.OPPONENT_HEALTH.text(), "90",  Operator.GREATER_THAN));
+                    checksForEvade1.add(new Check(Data.USER_HEALTH.text(), "90",  Operator.GREATER_THAN));
                     ScriptCommand evade = new ScriptCommand(checksForEvade1, Command.EVADE);
                     this.cpuCommands.add(evade);
 
                     checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(),"2", Operator.GREATER_THAN));
-                    checksForApproach.add(new Check(Data.OPPONENT_HEALTH.text(),"50", Operator.GREATER_THAN));
+                    checksForApproach.add(new Check(Data.USER_HEALTH.text(),"50", Operator.GREATER_THAN));
                     ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
                     this.cpuCommands.add(approach);
 
-                    checksForAttack.add(new Check(Data.OPPONENT_HEALTH.text(), "50", Operator.GREATER_THAN));
+                    checksForAttack.add(new Check(Data.USER_HEALTH.text(), "50", Operator.GREATER_THAN));
                     ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
                     this.cpuCommands.add(attack);
 
@@ -378,7 +378,7 @@ public class Engine {
                     ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
                     this.cpuCommands.add(evade);
 
-                    checksForHeal.add(new Check(Data.OPPONENT_HEALTH.text(), "50", Operator.LESS_THAN));
+                    checksForHeal.add(new Check(Data.USER_HEALTH.text(), "50", Operator.LESS_THAN));
                     ScriptCommand heal = new ScriptCommand(checksForAttack, Command.HEAL);
                     this.cpuCommands.add(heal);
 
