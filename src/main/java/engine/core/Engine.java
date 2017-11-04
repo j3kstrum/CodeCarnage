@@ -259,7 +259,6 @@ public class Engine {
     public void generateCPUScript(){
 
         String difficulty = engineContext.getDifficulty();
-
         this.cpuCommands = new ArrayList<>();
         boolean choose = getRandomBoolean();
 
