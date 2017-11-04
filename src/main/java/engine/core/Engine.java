@@ -245,7 +245,7 @@ public class Engine {
 
         this.cpuCommands = new ArrayList<>();
 
-        if(getRandomBoolean()){
+        if(!getRandomBoolean()){
             ArrayList<Check> checks = new ArrayList<>();
             ArrayList<Check> checksForAttack = new ArrayList<>();
 
@@ -278,13 +278,13 @@ public class Engine {
             checksForAttack.add(new Check("1", "1", Operator.EQUALS));
             ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
             this.cpuCommands.add(attack);
- +
+
         }
     }
 
     //TODO Utilize Seed generated from engine
     public boolean getRandomBoolean() {
-        return ThreadLocalRandom.current().nextInt(origin: 0, bound: 3) == 1;
+        return ThreadLocalRandom.current().nextInt(0, 3) == 1;
     }
 
 }
