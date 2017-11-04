@@ -262,7 +262,7 @@ public class Engine {
             ArrayList<Check> checksForApproach = new ArrayList<>();
             ArrayList<Check> checksForEvade = new ArrayList<>();
             ArrayList<Check> checksForAttack = new ArrayList<>();
-            ArrayList<check> checksForDefense = new ArrayList<>();
+            ArrayList<Check> checksForDefense = new ArrayList<>();
 
             checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "10",  Operator.GREATER_THAN));
             ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
