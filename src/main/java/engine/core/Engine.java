@@ -17,16 +17,12 @@ import interpreter.ScriptCommand;
 import interpreter.enumerations.Command;
 import interpreter.enumerations.Data;
 import interpreter.enumerations.Operator;
-import javafx.scene.effect.Light;
 import org.mapeditor.core.Map;
-import org.mapeditor.io.MapReader;
 import utilties.models.EntityMap;
 import utilties.models.Game;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
