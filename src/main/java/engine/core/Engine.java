@@ -266,35 +266,19 @@ public class Engine {
             case "easy":{
                 if(choose){
                     //Attacks you until either of you is low health. if you're low health then it stops fighting you. When it's low health it starts healing
-                    ArrayList<Check> checksForApproach = new ArrayList<>();
-                    ArrayList<Check> checksForAttack = new ArrayList<>();
                     ArrayList<Check> checksForHeal = new ArrayList<>();
 
-                    checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1",  Operator.GREATER_THAN));
-                    ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
-                    this.cpuCommands.add(approach);
-
-                    checksForAttack.add(new Check(Data.USER_HEALTH.text(), "50", Operator.GREATER_THAN));
-                    checksForAttack.add(new Check(Data.OPPONENT_HEALTH.text(), "20", Operator.GREATER_THAN));
-                    ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-                    this.cpuCommands.add(attack);
-
-                    checksForHeal.add(new Check(Data.USER_HEALTH.text(), "20", Operator.LESS_THAN));
-                    ScriptCommand heal = new ScriptCommand(checksForAttack, Command.HEAL);
+                    checksForHeal.add(new Check("1", "1", Operator.EQUALS));
+                    ScriptCommand heal = new ScriptCommand(checksForHeal, Command.HEAL);
                     this.cpuCommands.add(heal);
                 }
                 else {
-                    //Charges at you and attacks when in range
-                    ArrayList<Check> checksForApproach = new ArrayList<>();
-                    ArrayList<Check> checksForAttack = new ArrayList<>();
+                    //Defends
+                    ArrayList<Check> checksForDefend = new ArrayList<>();
 
-                    checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1",  Operator.GREATER_THAN));
-                    ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
-                    this.cpuCommands.add(approach);
-
-                    checksForAttack.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), Data.DISTANCE_FROM_OPPONENT.text(), Operator.EQUALS));
-                    ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-                    this.cpuCommands.add(attack);
+                    checksForDefend.add(new Check("1", "1",  Operator.EQUALS));
+                    ScriptCommand defend = new ScriptCommand(checksForDefend, Command.DEFEND);
+                    this.cpuCommands.add(defend);
                 }
             }
             case "medium":{

@@ -32,7 +32,7 @@ public class Player extends Entity {
         this.location = location;
         entityType = EntityType.PLAYER;
         this.isShielding = false;
-        this.shieldStrength = 5;
+        this.shieldStrength = 7;
     }
 
     /**
