@@ -257,113 +257,97 @@ public class Engine {
 
         String difficulty = engineContext.getDifficulty();
         this.cpuCommands = new ArrayList<>();
-        boolean choose = getRandomBoolean();
 
         switch (difficulty){
             case "easy":{
-                if(choose){
-                    //Heals
-                    ArrayList<Check> checksForHeal = new ArrayList<>();
-
-                    checksForHeal.add(new Check("1", "1", Operator.EQUALS));
-                    ScriptCommand heal = new ScriptCommand(checksForHeal, Command.HEAL);
-                    this.cpuCommands.add(heal);
-                }
-                else {
-                    //Defends
-                    ArrayList<Check> checksForDefend = new ArrayList<>();
-
-                    checksForDefend.add(new Check("1", "1",  Operator.EQUALS));
-                    ScriptCommand defend = new ScriptCommand(checksForDefend, Command.DEFEND);
-                    this.cpuCommands.add(defend);
-                }
+                //Defends
+                ArrayList<Check> checksForDefend = new ArrayList<>();
+                checksForDefend.add(new Check("1", "1",  Operator.EQUALS));
+                ScriptCommand defend = new ScriptCommand(checksForDefend, Command.DEFEND);
+                this.cpuCommands.add(defend);
             }
-            case "medium":{
-                if(choose){
-                    //Approaches and then attacks
-                    ArrayList<Check> checksForApproach = new ArrayList<>();
+            case "medium": {
 
-                    checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "5",  Operator.GREATER_THAN));
-                    ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
-                    this.cpuCommands.add(approach);
-
-                    ArrayList<Check> checksForAttack = new ArrayList<>();
-                    checksForAttack.add(new Check("1", "1",  Operator.EQUALS));
-                    ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-                    this.cpuCommands.add(attack);
-                }
-                else{
-                    //Evades if health is less than 50 and distance from opponent is less than 3
-                    //Heals if health is less than 50
-                    //Approaches and attacks once healed up.
-
-                    //Evade
-                    ArrayList<Check> checksForEvade = new ArrayList<>();
-                    checksForEvade.add(new Check(Data.USER_HEALTH.text(), "50",  Operator.LESS_THAN));
-                    checksForEvade.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "3", Operator.LESS_THAN));
-                    ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
-                    this.cpuCommands.add(evade);
-
-                    //Heal
-                    ArrayList<Check> checksForHeal = new ArrayList<>();
-                    checksForHeal.add(new Check(Data.USER_HEALTH.text(), "50",  Operator.LESS_THAN));
-                    ScriptCommand heal = new ScriptCommand(checksForHeal, Command.HEAL);
-                    this.cpuCommands.add(heal);
-
-                    //Approaches
-                    ArrayList<Check> checksForApproach = new ArrayList<>();
-                    checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "5",  Operator.GREATER_THAN));
-                    ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
-                    this.cpuCommands.add(approach);
-
-                    //Attack
-                    ArrayList<Check> checksForAttack = new ArrayList<>();
-                    checksForAttack.add(new Check("1", "1",  Operator.EQUALS));
-                    ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-                    this.cpuCommands.add(attack);
-                }
+                //Always attacks
+                ArrayList<Check> checksForAttack = new ArrayList<>();
+                checksForAttack.add(new Check("1", "1", Operator.EQUALS));
+                ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
+                this.cpuCommands.add(attack);
             }
-            case "hard":{
-                if(choose){
-                    //Always attacks
-                    ArrayList<Check> checksForAttack = new ArrayList<>();
-                    checksForAttack.add(new Check("1", "1",  Operator.EQUALS));
-                    ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-                    this.cpuCommands.add(attack);
-                }
-                else{
-                    //Evades if health is less than 40 and distance is less than 2.
-                    //Heals if distance is greater than 2 and health is less than 40
-                    //Attacks otherwise
+            case "hard": {
+                //Evades if health is less than 50 and distance from opponent is less than 3
+                //Heals if health is less than 50
+                //Approaches and attacks once healed up.
 
-                    //Evade
-                    ArrayList<Check> checksForEvade = new ArrayList<>();
-                    checksForEvade.add(new Check(Data.USER_HEALTH.text(), "40",  Operator.LESS_THAN));
-                    checksForEvade.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "2", Operator.LESS_THAN));
-                    ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
-                    this.cpuCommands.add(evade);
+                //Evade
+                ArrayList<Check> checksForEvade = new ArrayList<>();
+                checksForEvade.add(new Check(Data.USER_HEALTH.text(), "40",  Operator.LESS_THAN));
+                checksForEvade.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "3", Operator.LESS_THAN));
+                ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
+                this.cpuCommands.add(evade);
 
-                    //Heal
-                    ArrayList<Check> checksForHeal = new ArrayList<>();
-                    checksForHeal.add(new Check(Data.USER_HEALTH.text(), "40",  Operator.LESS_THAN));
-                    ScriptCommand heal = new ScriptCommand(checksForHeal, Command.HEAL);
-                    this.cpuCommands.add(heal);
+                //Heal
+                ArrayList<Check> checksForHeal = new ArrayList<>();
+                checksForHeal.add(new Check(Data.USER_HEALTH.text(), "70",  Operator.LESS_THAN));
+                checksForHeal.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1", Operator.GREATER_THAN));
+                ScriptCommand heal = new ScriptCommand(checksForHeal, Command.HEAL);
+                this.cpuCommands.add(heal);
 
-                    //Attacks
-                    ArrayList<Check> checksForAttack = new ArrayList<>();
-                    checksForAttack.add(new Check("1", "1",  Operator.EQUALS));
-                    ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
-                    this.cpuCommands.add(attack);
+                //Approaches
+                ArrayList<Check> checksForApproach = new ArrayList<>();
+                checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1",  Operator.GREATER_THAN));
+                ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
+                this.cpuCommands.add(approach);
 
-                }
+                //Attack
+                ArrayList<Check> checksForAttack = new ArrayList<>();
+                checksForAttack.add(new Check("1", "1",  Operator.EQUALS));
+                ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
+                this.cpuCommands.add(attack);
             }
+                /*
+                //Heals
+                ArrayList<Check> checksForHeal = new ArrayList<>();
+
+                checksForHeal.add(new Check("1", "1", Operator.EQUALS));
+                ScriptCommand heal = new ScriptCommand(checksForHeal, Command.HEAL);
+                this.cpuCommands.add(heal);
+
+                //Approaches and then attacks
+
+                ArrayList<Check> checksForApproach = new ArrayList<>();
+                checksForApproach.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "1",  Operator.GREATER_THAN));
+                ScriptCommand approach = new ScriptCommand(checksForApproach, Command.APPROACH);
+                this.cpuCommands.add(approach);
+                ArrayList<Check> checksForAttack = new ArrayList<>();
+                checksForAttack.add(new Check("1", "1",  Operator.EQUALS));
+                ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
+                this.cpuCommands.add(attack);
+
+                //Evades if health is less than 40 and distance is less than 2.
+                //Heals if distance is greater than 2 and health is less than 40
+                //Attacks otherwise
+
+                //Evade
+                ArrayList<Check> checksForEvade = new ArrayList<>();
+                checksForEvade.add(new Check(Data.USER_HEALTH.text(), "40",  Operator.LESS_THAN));
+                checksForEvade.add(new Check(Data.DISTANCE_FROM_OPPONENT.text(), "2", Operator.LESS_THAN));
+                ScriptCommand evade = new ScriptCommand(checksForEvade, Command.EVADE);
+                this.cpuCommands.add(evade);
+
+                //Heal
+                ArrayList<Check> checksForHeal = new ArrayList<>();
+                checksForHeal.add(new Check(Data.USER_HEALTH.text(), "40",  Operator.LESS_THAN));
+                ScriptCommand heal = new ScriptCommand(checksForHeal, Command.HEAL);
+                this.cpuCommands.add(heal);
+
+                //Attacks
+                ArrayList<Check> checksForAttack = new ArrayList<>();
+                checksForAttack.add(new Check("1", "1",  Operator.EQUALS));
+                ScriptCommand attack = new ScriptCommand(checksForAttack, Command.ATTACK);
+                this.cpuCommands.add(attack);
+                */
         }
 
     }
-
-    //TODO Utilize Seed generated from engine
-    public boolean getRandomBoolean() {
-        return ThreadLocalRandom.current().nextInt(0, 2) == 1;
-    }
-
 }
