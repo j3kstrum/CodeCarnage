@@ -44,6 +44,9 @@ However, should you have difficulties running *CodeCarnage*, please see https://
         java -jar CodeCarnage-all.jar
 3. Play!
 
+## A note for Mac users
+In order to run the program, you may have to enable a setting to "Allow apps downloaded from Anywhere".  See [this](https://mac-how-to.gadgethacks.com/how-to/open-third-party-apps-from-unidentified-developers-mac-os-x-0158095/) for more information.
+
 ### Other Devices
 
 If you cannot access a Linux Device, we recommend using a Virtual Environment with Fedora, as this is a tested environment.
@@ -64,7 +67,7 @@ custom script that the user creates through a clickable interface, allowing for 
 ### Is there more?
 
 Please see our GitHub Wiki for more information about the core developers and the intended goals, and check out
- [CodeCarnage.ga/me](http://www.codecarnage.ga/me) for planned features and developments!  Anouncements will also appear on[Twitter](https://twitter.com/codecarnagegame/).
+ [CodeCarnage.ga/me](http://www.codecarnage.ga/me) for planned features and developments!  Anouncements will also appear on [Twitter](https://twitter.com/codecarnagegame/).
 
 Contributions are always welcome.
 

@@ -8,6 +8,7 @@
 package gui.scripting;
 
 import com.jfoenix.controls.JFXButton;
+import engine.core.EngineContext;
 import gui.game.GameGUI;
 import interpreter.ScriptCommand;
 import javafx.event.ActionEvent;
@@ -40,6 +41,8 @@ public class ScriptingController {
     //endregion
 
     private MouseEvents mouseEventHandler;
+
+    private EngineContext engineContext;
 
     /**
      * Get all of the choice button Nodes
@@ -175,13 +178,24 @@ public class ScriptingController {
                     return;
                 }
 
-                new GameGUI(commandObjects);
+                new GameGUI(commandObjects, engineContext);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             submit.getScene().getWindow().hide();
         });
+    }
+
+    /**
+     * Instantiates the engine context after the difficulty is known.
+     *
+     * @param difficulty User-selected difficulty string
+     */
+    void createContext(String difficulty) {
+        EngineContext engineContext = new EngineContext(difficulty);
+        engineContext.loadMapAsync();
+        this.engineContext = engineContext;
     }
 
 }

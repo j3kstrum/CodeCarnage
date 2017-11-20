@@ -7,6 +7,7 @@
 
 package gui.scripting;
 
+import common.BaseLogger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,11 +23,18 @@ import javafx.stage.Stage;
  */
 public class ScriptingGUI extends Application {
 
-    public ScriptingGUI() throws Exception {
+    private static final BaseLogger LOGGER = new BaseLogger("ScriptingGUI");
+    private String difficulty;
+
+    // Modified the original constructor, not sure if it is acceptable?
+    public ScriptingGUI(String difficulty) throws Exception {
+        this.difficulty = difficulty;
+        LOGGER.debug("default constructor with difficulty: " + this.difficulty);
         start(new Stage());
     }
 
     public ScriptingGUI(String[] args) {
+        LOGGER.debug("args constructor");
         new Thread(
                 () -> launch(args)
         ).start();
@@ -42,6 +50,11 @@ public class ScriptingGUI extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("scripting.fxml"));
 
         Parent root = loader.load();
+
+        // Get instance of controller in order to pass the difficulty
+        ScriptingController controller = loader.getController();
+
+        controller.createContext(this.difficulty);
 
         primaryStage.setTitle("Code Carnage");
         primaryStage.setScene(new Scene(root));
