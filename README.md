@@ -67,7 +67,7 @@ custom script that the user creates through a clickable interface, allowing for 
 ### Is there more?
 
 Please see our GitHub Wiki for more information about the core developers and the intended goals, and check out
- [CodeCarnage.ga/me](http://www.codecarnage.ga/me) for planned features and developments!  Anouncements will also appear on[Twitter](https://twitter.com/codecarnagegame/).
+ [CodeCarnage.ga/me](http://www.codecarnage.ga/me) for planned features and developments!  Anouncements will also appear on [Twitter](https://twitter.com/codecarnagegame/).
 
 Contributions are always welcome.
 
